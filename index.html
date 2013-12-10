@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/typeahead.js/dist/typeahead.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.min.js"></script>
+
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
+    <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css" media="all">
+
+    <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+
+    <script src="src/jquery.drugsearch.js"></script>
+    <script src="src/jquery.formsearch.js"></script>
+
+    <script>
+      $(function () {
+        $('#drug-search').drugSearch({
+          apiId: '1234567890',
+          version: 1
+        });
+
+        $('#form-search').formSearch({
+          apiId: '1234567890',
+          version: 1,
+          drug_id: function () {
+            return $('#drug-search').data('drug-id')
+          },
+          state: function (){
+            return $('#state').val();
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <form action="#">
+      <p>
+        <label for="patient-fname">Patient First Name</label>
+        <input type="text" id="patient-fname">
+      </p>
+      <p>
+        <label for="patient-lname">Patient Last Name</label>
+        <input type="text" id="patient-lname">
+      </p>
+      <p>
+        <label for="patient-dob">Patient Date of Birth</label>
+        <input type="text" id="patient-dob">
+      </p>
+      <p>
+        <label for="state">Patient State</label>
+        <select id="state">
+          <option>Select a state</option>
+          <option value="OH">Ohio</option>
+        </select>
+      </p>
+      <p>
+        <label for="drug-search">Drug</label>
+        <input type="text" id="drug-search">
+      </p>
+      <p>
+        <label for="form-search">Form</label>
+        <input type="text" id="form-search">
+      </p>
+      <p>
+        <button type="submit" id="start-request" class="btn btn-primary btn-lg">Start PA Request</button>
+      </p>
+    </form>
+  </body>
+</html>

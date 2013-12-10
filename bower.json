@@ -1,0 +1,34 @@
+{
+  "name": "js-api-consumer",
+  "version": "0.1.0",
+  "authors": [
+    "Nathan Demick <ndemick@covermymeds.com> & Larry Scott <lscott@covermymeds.com>"
+  ],
+  "description": "Some jQuery plugins to facilitate working with the CMM API.",
+  "main": "src/jquery.cmm-api.js",
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "bootstrap": "~3.0.3",
+    "typeahead.js": "~0.9.3",
+    "hogan" : "~3.0.0"
+  },
+  "keywords": [
+    "CoverMyMeds",
+    "CMM",
+    "API",
+    "Prior",
+    "Authorization"
+  ],
+  "license": "MIT",
+  "homepage": "https://git.innova-partners.com/ndemick/js-api-consumer",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "jquery": "~2.0.3"
+  }
+}
