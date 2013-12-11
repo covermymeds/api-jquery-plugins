@@ -17,12 +17,20 @@ describe('Drug search input field', function () {
     });
 
     it('suggests drugs based on user input', function () {
-        var element = $('#drug-search');
 
-        element.typeahead("setQuery","nexium").focus();
-        setTimeout(function () {
+        var input = 'nexium';
+
+        runs(function () {
+            $('#drug-search').typeahead('setQuery', input).focus();
+        });
+
+        waitsFor(function () {
+            return $('.tt-suggestion:visible').length > 0;
+        }, 'autocomplete to return results', 1000);
+
+        runs(function () {
             $('.tt-suggestion:first').trigger('click');
-            expect(element.val()).toBe('NexIUM 10MG packets');
-        }, 1000);
+            expect($('#drug-search').val()).not.toBe(input);
+        });
     });
 });
