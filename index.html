@@ -13,6 +13,7 @@
 
     <script src="src/jquery.drugsearch.js"></script>
     <script src="src/jquery.formsearch.js"></script>
+    <script src="src/jquery.createrequest.js"></script>
 
     <script>
       $(function () {
@@ -31,6 +32,18 @@
             return $('#state').val();
           }
         });
+
+        $('#start-request').createRequest({
+          apiId: '8bxnaotv2f5q7wvxvalj',
+          version: 1,
+          //drug_id: function () {
+          //  return $('#drug-search').data('drug-id')
+          //},
+          state: function (){
+            return $('#state').val();
+          }
+        });
+
       });
     </script>
   </head>
@@ -38,30 +51,30 @@
     <form action="#">
       <p>
         <label for="patient-fname">Patient First Name</label>
-        <input type="text" id="patient-fname">
+        <input type="text" id="patient-fname" name="request[patient][first_name]">
       </p>
       <p>
         <label for="patient-lname">Patient Last Name</label>
-        <input type="text" id="patient-lname">
+        <input type="text" id="patient-lname" name="request[patient][last_name]">
       </p>
       <p>
         <label for="patient-dob">Patient Date of Birth</label>
-        <input type="text" id="patient-dob">
+        <input type="text" id="patient-dob" name="request[patient][date_of_birth]">
       </p>
       <p>
         <label for="state">Patient State</label>
-        <select id="state">
+        <select id="state" name="request[state]">
           <option>Select a state</option>
           <option value="OH">Ohio</option>
         </select>
       </p>
       <p>
         <label for="drug-search">Drug</label>
-        <input type="text" id="drug-search">
+        <input type="text" id="drug-search" name="request[drug_id]">
       </p>
       <p>
         <label for="form-search">Form</label>
-        <input type="text" id="form-search">
+        <input type="text" id="form-search" name="request[form_id]">
       </p>
       <p>
         <button type="submit" id="start-request" class="btn btn-primary btn-lg">Start PA Request</button>

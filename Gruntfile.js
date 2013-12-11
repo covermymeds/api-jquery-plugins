@@ -27,7 +27,8 @@ module.exports = function (grunt) {
             customTemplate: {
                 src: [
                     'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js'
+                    'src/jquery.drugsearch.js',
+                    'src/jquery.createrequest.js'
                 ],
                 options: {
                     specs: 'spec/*Spec.js',
@@ -36,7 +37,8 @@ module.exports = function (grunt) {
                         'bower_components/typeahead.js/dist/typeahead.js',
                         'bower_components/bootstrap/dist/js/bootstrap.js',
                         'bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.min.js'
-                    ]
+                    ],
+                    keepRunner: true
                 }
             }
         }
