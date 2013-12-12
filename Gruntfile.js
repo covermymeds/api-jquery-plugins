@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                 src: [
                     'src/jquery.formsearch.js',
                     'src/jquery.drugsearch.js',
-                    'src/jquery.createrequest.js'
+                    'src/jquery.createrequest.js',
+                    'src/jquery.dashboard.js'
                 ],
                 options: {
                     specs: 'spec/*Spec.js',
@@ -38,19 +39,29 @@ module.exports = function (grunt) {
                         'bower_components/jquery/jquery.js',
                         'bower_components/typeahead.js/dist/typeahead.js',
                         'bower_components/bootstrap/dist/js/bootstrap.js',
-                        'bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.min.js'
+                        'bower_components/underscore/underscore.js'
                     ],
                     keepRunner: true
                 }
             }
+        },
+        jslint: {
+          client: {
+            src: [
+              'src/*.js',
+              'spec/*.js'
+            ]
+          }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    grunt.loadNpmTasks('grunt-jslint');
 
     // Default task
     grunt.registerTask('default', ['jasmine']);
     grunt.registerTask('distribute', ['concat', 'uglify']);
+    grunt.registerTask('lint', 'jslint');
 };
