@@ -18,30 +18,18 @@
     <script>
       $(function () {
         $('#drug-search').drugSearch({
-          apiId: '1234567890',
+          apiId: '8bxnaotv2f5q7wvxvalj',
           version: 1
         });
 
         $('#form-search').formSearch({
-          apiId: '1234567890',
-          version: 1,
-          drug_id: function () {
-            return $('#drug-search').data('drug-id')
-          },
-          state: function (){
-            return $('#state').val();
-          }
+          apiId: '8bxnaotv2f5q7wvxvalj',
+          version: 1
         });
 
         $('#start-request').createRequest({
           apiId: '8bxnaotv2f5q7wvxvalj',
-          version: 1,
-          //drug_id: function () {
-          //  return $('#drug-search').data('drug-id')
-          //},
-          state: function (){
-            return $('#state').val();
-          }
+          version: 1
         });
 
       });

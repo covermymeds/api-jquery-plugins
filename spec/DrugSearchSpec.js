@@ -5,7 +5,7 @@ describe('Drug search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="drug-search">');
         $('#drug-search').drugSearch({
-          apiId: '1234567890',
+          apiId: '8bxnaotv2f5q7wvxvalj',
           version: 1
         });
     });

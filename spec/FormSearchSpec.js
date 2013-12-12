@@ -5,9 +5,9 @@ describe('Form search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="form-search">');
         $('#form-search').formSearch({
-          apiId: '1234567890',
+          apiId: '8bxnaotv2f5q7wvxvalj',
           version: 1,
-          drug_id: 131079,
+          drugId: 131079,
           state: 'OH'
         });
     });

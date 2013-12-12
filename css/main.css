@@ -27,6 +27,10 @@ html {
   color: #333;
 }
 
+body {
+  padding: 20px;
+}
+
 .title,
 .example-name {
   font-family: Prociono;
