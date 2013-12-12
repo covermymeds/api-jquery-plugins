@@ -1,6 +1,8 @@
 # TODO
 
-1. Change form/drug search to have actual IDs stored in a hidden input field,
-   the naming of which corresponds to convention so it can be auto found
-2. Append server error messages to "Create Request" failure modal window
-3. Create basic implementation of "Dashboard"
+1. Append server error messages to "Create Request" failure modal window
+2. Add CSS styles to typeahead results
+3. Add CSS styles to dashboard
+4. Add pagination to dashboard
+5. Show a 'no results' message in form/drug search if there are no results
+6. Show a spinner in the form/drug search input field (low priority)
