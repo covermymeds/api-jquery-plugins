@@ -1,5 +1,5 @@
-/*jslint sloppy: true, unparam: true, todo: true */
-/*global Hogan: false, jQuery: false, CMM_API_CONFIG: false, Base64: false */
+/*jslint sloppy: true, unparam: true, todo: true, nomen: true */
+/*global Hogan: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, _: false */
 (function ($) {
     $.fn.extend({
         formSearch: function (options) {
@@ -23,11 +23,19 @@
                 $(this).typeahead({
                     name: 'form_api',
                     header: 'Results',
-                    template: '<p style="overflow: auto;"><img src="{{thumbnail_url}}" style="float: left;">{{value}}</p>',
-                    engine: Hogan,
+                    template: '<p style="overflow: auto;"><img src="<%= thumbnail_url %>" style="float: left;"><%= value %></p>',
+                    engine: {
+                        compile: function (template) {
+                            var compiled = _.template(template);
+
+                            return {
+                                render: function (context) { return compiled(context); }
+                            };
+                        }
+                    },
                     remote: {
                         url: options.url ? options.url + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID' : defaultUrl + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID',
-                        replace: function(url, uriEncodedQuery) {
+                        replace: function (url, uriEncodedQuery) {
                             var state,
                                 drugId;
 
