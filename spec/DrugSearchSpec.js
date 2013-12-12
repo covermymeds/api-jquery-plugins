@@ -1,13 +1,10 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false */
+/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
 
 describe('Drug search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="drug-search">');
-        $('#drug-search').drugSearch({
-          apiId: '8bxnaotv2f5q7wvxvalj',
-          version: 1
-        });
+        $('#drug-search').drugSearch();
     });
 
     afterEach(function () {
@@ -26,7 +23,7 @@ describe('Drug search input field', function () {
 
         waitsFor(function () {
             return $('.tt-suggestion:visible').length > 0;
-        }, 'autocomplete to return results', 1000);
+        }, 'autocomplete to return results', 2000);
 
         runs(function () {
             $('.tt-suggestion:first').trigger('click');

@@ -11,27 +11,18 @@
 
     <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
 
+    <script src="lib/base64.js"></script>
+
+    <script src="src/config.js"></script>
     <script src="src/jquery.drugsearch.js"></script>
     <script src="src/jquery.formsearch.js"></script>
     <script src="src/jquery.createrequest.js"></script>
 
     <script>
       $(function () {
-        $('#drug-search').drugSearch({
-          apiId: '8bxnaotv2f5q7wvxvalj',
-          version: 1
-        });
-
-        $('#form-search').formSearch({
-          apiId: '8bxnaotv2f5q7wvxvalj',
-          version: 1
-        });
-
-        $('#start-request').createRequest({
-          apiId: '8bxnaotv2f5q7wvxvalj',
-          version: 1
-        });
-
+        $('#drug-search').drugSearch();
+        $('#form-search').formSearch();
+        $('#start-request').createRequest();
       });
     </script>
   </head>

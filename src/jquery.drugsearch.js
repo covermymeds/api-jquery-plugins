@@ -1,5 +1,5 @@
 /*jslint sloppy: true, unparam: true, todo: true */
-/*global alert: false, jQuery: false */
+/*global alert: false, jQuery: false, CMM_API_CONFIG: false, Base64: false */
 (function ($) {
     $.fn.extend({
         drugSearch: function (options) {
@@ -14,16 +14,17 @@
             }
 
             return this.each(function () {
-                var onSelected;
+                var onSelected,
+                    defaultUrl;
 
-                // TODO: Determine endpoint URL
+                defaultUrl = 'https://staging.api.covermymeds.com/drugs?v=' + CMM_API_CONFIG.version;
 
                 // Initialize typeahead.js
                 $(this).typeahead({
                     name: 'drug_api',
                     header: 'Results',
                     remote: {
-                        url: "https://staging.api.covermymeds.com/drugs?api_id=" + options.apiId + "&v=" + options.version + "&q=%QUERY",
+                        url: options.url ? options.url + '&q=%QUERY' : defaultUrl + '&q=%QUERY',
                         filter: function (response) {
                             var i, j, data = [];
 
@@ -35,6 +36,13 @@
                             }
 
                             return data;
+                        },
+                        beforeSend: function (xhr, settings) {
+                            if (options.url) {
+                                return;
+                            }
+
+                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
                         }
                     }
                 });

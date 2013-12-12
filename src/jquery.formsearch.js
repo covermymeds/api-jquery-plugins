@@ -1,5 +1,5 @@
 /*jslint sloppy: true, unparam: true, todo: true */
-/*global Hogan: false, alert: false, jQuery: false */
+/*global Hogan: false, jQuery: false, CMM_API_CONFIG: false, Base64: false */
 (function ($) {
     $.fn.extend({
         formSearch: function (options) {
@@ -14,7 +14,10 @@
             }
 
             return this.each(function () {
-                var onSelected;
+                var onSelected,
+                    defaultUrl;
+
+                defaultUrl = 'https://staging.api.covermymeds.com/forms?v=' + CMM_API_CONFIG.version;
 
                 // Initialize typeahead.js
                 $(this).typeahead({
@@ -23,7 +26,7 @@
                     template: '<p style="overflow: auto;"><img src="{{thumbnail_url}}" style="float: left;">{{value}}</p>',
                     engine: Hogan,
                     remote: {
-                        url: "https://staging.api.covermymeds.com/forms?api_id=%API_ID&v=%VERSION&q=%QUERY&state=%STATE&drug_id=%DRUG_ID",
+                        url: options.url ? options.url + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID' : defaultUrl + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID',
                         replace: function(url, uriEncodedQuery) {
                             var state,
                                 drugId;
@@ -31,7 +34,7 @@
                             state = options.state || $('select[name="request[state]"]').val();
                             drugId = options.drugId || $('input[name="request[drug_id]"]').data('drug-id');
 
-                            return url.replace('%API_ID', options.apiId).replace('%VERSION', options.version).replace('%QUERY', uriEncodedQuery).replace('%STATE', state).replace('%DRUG_ID', drugId);
+                            return url.replace('%QUERY', uriEncodedQuery).replace('%STATE', state).replace('%DRUG_ID', drugId);
                         },
                         filter: function (response) {
                             var i, j, data = [];
@@ -45,6 +48,13 @@
                             }
 
                             return data;
+                        },
+                        beforeSend: function (xhr, settings) {
+                            if (options.url) {
+                                return;
+                            }
+
+                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
                         }
                     }
                 });

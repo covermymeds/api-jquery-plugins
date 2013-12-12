@@ -33,6 +33,8 @@ module.exports = function (grunt) {
                 options: {
                     specs: 'spec/*Spec.js',
                     vendor: [
+                        'src/config.js',
+                        'lib/base64.js',
                         'bower_components/jquery/jquery.js',
                         'bower_components/typeahead.js/dist/typeahead.js',
                         'bower_components/bootstrap/dist/js/bootstrap.js',
