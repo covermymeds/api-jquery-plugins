@@ -15,8 +15,10 @@
 
             return this.each(function () {
                 var onSelected,
-                    defaultUrl;
+                    defaultUrl,
+                    self;
 
+                self = this;
                 defaultUrl = 'https://staging.api.covermymeds.com/forms?v=' + CMM_API_CONFIG.version;
 
                 // Initialize typeahead.js
@@ -60,6 +62,11 @@
                         beforeSend: function (xhr, settings) {
                             if (options.url) {
                                 return;
+                            }
+
+                            // Prevent typeahead from sending data if less than 4 chars
+                            if ($(self).val().length < 4) {
+                                return false;
                             }
 
                             xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
