@@ -4,7 +4,7 @@
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/typeahead.js/dist/typeahead.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/hogan/web/builds/2.0.0/hogan-2.0.0.min.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
 
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet" type="text/css" media="all">
@@ -17,12 +17,18 @@
     <script src="src/jquery.drugsearch.js"></script>
     <script src="src/jquery.formsearch.js"></script>
     <script src="src/jquery.createrequest.js"></script>
+    <script src="src/jquery.dashboard.js"></script>
 
     <script>
       $(function () {
         $('#drug-search').drugSearch();
         $('#form-search').formSearch();
         $('#start-request').createRequest();
+        $('#show-dashboard').on('click', function () {
+          $('#dashboard').dashboard({
+            ids: ['AY3MY7', 'PR6RY6', 'EY9BD9']
+          });
+        });
       });
     </script>
   </head>
@@ -59,5 +65,7 @@
         <button type="submit" id="start-request" class="btn btn-primary btn-lg">Start PA Request</button>
       </p>
     </form>
+    <button id="show-dashboard" class="btn btn-default">Show Dashboard</button>
+    <div id="dashboard"></div>
   </body>
 </html>
