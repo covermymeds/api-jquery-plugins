@@ -34,7 +34,7 @@
                                                         '<li><%= request.workflow_status %></li>' +
                                                         '<li><%= request.patient.first_name %> <%= request.patient.last_name %></li>' +
                                                         '<li><%= request.created_at %></li>' +
-                                                        '<li><a href="<%= request.html_url %>">View</a></li>' +
+                                                        '<li><a href="<%= request.tokens[0].html_url %>">View</a></li>' +
                                                    '</ul>' +
                                                 '</div>' +
                                               '</div><% }); %>');
