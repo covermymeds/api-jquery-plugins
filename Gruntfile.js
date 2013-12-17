@@ -7,7 +7,10 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js'
+                    'src/jquery.drugsearch.js',
+                    'src/jquery.createrequest.js',
+                    'src/jquery.dashboard.js',
+                    'lib/base64.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
             }
