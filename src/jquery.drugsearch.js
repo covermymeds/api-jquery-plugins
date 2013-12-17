@@ -22,7 +22,7 @@
                 // Initialize typeahead.js
                 $(this).typeahead({
                     name: 'drug_api',
-                    header: 'Results',
+                    header: '<span class="dropdown-header">Results</span>',
                     remote: {
                         url: options.url ? options.url + '&q=%QUERY' : defaultUrl + '&q=%QUERY',
                         filter: function (response) {

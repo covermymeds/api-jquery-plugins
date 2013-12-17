@@ -6,12 +6,6 @@ html {
   *overflow-x: hidden;
 }
 
-.container {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .tt-dropdown-menu,
 .gist {
   text-align: left;
@@ -64,18 +58,18 @@ p {
 }
 
 .typeahead,
-.tt-query,
 .tt-hint {
-  width: 396px;
-  height: 30px;
-  padding: 4px 1px;
-  font-size: 16px;
-  line-height: 30px;
-  border: 2px solid #ccc;
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  outline: none;
+  display: block;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  border: 1px solid transparent;
+  border-radius:4px;
+}
+
+.twitter-typeahead {
+  display: block !important;
 }
 
 .typeahead {
@@ -86,20 +80,12 @@ p {
   border: 2px solid #0097cf;
 }
 
-.tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
-
 .tt-hint {
   color: #999
 }
 
 .tt-dropdown-menu {
   width: 422px;
-  margin-top: 12px;
-  padding: 8px 0;
   background-color: #fff;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -119,12 +105,12 @@ p {
 
 .tt-suggestion.tt-is-under-cursor {
   color: #fff;
-  background-color: #0097cf;
-
+  background-color: #428bca;
 }
 
 .tt-suggestion p {
   margin: 0;
+  font-size: 0.8em;
 }
 
 .gist {
@@ -165,3 +151,24 @@ p {
   text-align: right;
 }
 
+/* Pending Styles */
+.request {
+  background: #f7f7f9;
+  border-top: 1px solid #dddddd;
+  padding: 10px 0;
+}
+.request:nth-child(even) {
+  background: #ffffff;
+}
+.request:last-child {
+  border-bottom: 1px solid #dddddd;
+}
+#dashboard ul {
+  list-style-type: none;
+}
+.dropdown-header {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #222222;
+  padding: 10px 0 10px 20px;
+}

@@ -25,15 +25,15 @@
 
                         compiled = _.template('<% _.each(requests, function (request) { %>' +
                                               '<div class="request row">' +
-                                                '<div class="thumbnail col-lg-2">' +
+                                                '<div class="col-lg-2">' +
                                                     '<img src="<%= request.thumbnail_urls %>" />' +
                                                 '</div>' +
                                                 '<div class="col-lg-4">' +
                                                     '<ul>' +
-                                                        '<li><%= request.id %></li>' +
-                                                        '<li><%= request.workflow_status %></li>' +
-                                                        '<li><%= request.patient.first_name %> <%= request.patient.last_name %></li>' +
-                                                        '<li><%= request.created_at %></li>' +
+                                                        '<li><h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4></li>' +
+                                                        '<li><strong>Status:</strong> <span class="label label-info"><%= request.workflow_status %></span>' +
+                                                        '<li>Drug Name Here</li>' +
+                                                        '<li><strong>Created:</strong> <%= request.created_at %></li>' +
                                                         '<li><a href="<%= request.tokens[0].html_url %>">View</a></li>' +
                                                    '</ul>' +
                                                 '</div>' +
