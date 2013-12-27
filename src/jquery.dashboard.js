@@ -10,7 +10,7 @@
                     self;
 
                 self = this;
-                defaultUrl = 'https://staging.api.covermymeds.com/requests/search?v=' + CMM_API_CONFIG.version + '&api_id=' + CMM_API_CONFIG.apiId + '&api_secret=' + CMM_API_CONFIG.apiSecret;
+                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + CMM_API_CONFIG.version + '&api_id=' + CMM_API_CONFIG.apiId + '&api_secret=' + CMM_API_CONFIG.apiSecret;
                 // headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
 
                 $.ajax({

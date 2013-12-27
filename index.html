@@ -23,12 +23,21 @@
 
     <script>
       $(function () {
-        $('#drug-search').drugSearch();
-        $('#form-search').formSearch();
-        $('#start-request').createRequest();
+        $('#drug-search').drugSearch({ staging: true });
+        $('#form-search').formSearch({ staging: true });
+        $('#start-request').createRequest({
+          staging: true,
+          success: function (data, status, xhr) {
+            alert('PA request created successfully!');
+          },
+          error: function (data, status, xhr) {
+            alert('There was a problem creating your PA request.');
+          }
+        });
         $('#show-dashboard').on('click', function () {
           $('#dashboard').dashboard({
-            ids: ['AY3MY7', 'PR6RY6', 'EY9BD9']
+            ids: ['AY3MY7', 'PR6RY6', 'EY9BD9'],
+            staging: true
           });
         });
       });

@@ -16,7 +16,7 @@
                 var defaultUrl,
                     headers;
 
-                defaultUrl = 'https://staging.api.covermymeds.com/requests?v=' + CMM_API_CONFIG.version;
+                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + CMM_API_CONFIG.version;
                 headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
 
                 // Attach event handler
