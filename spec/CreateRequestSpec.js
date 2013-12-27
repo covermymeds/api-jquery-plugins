@@ -5,6 +5,7 @@ describe('"Create Request" button', function () {
     beforeEach(function () {
         $('body').append('<button id="create-pa">Create PA</button><div class="success"></div>');
         $('#create-pa').createRequest({
+            staging: true,
             data: {
                 request: {
                     form_id: 'anthem_ppi_quantity_limit_15636',

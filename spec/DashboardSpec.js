@@ -10,7 +10,8 @@ describe('PA Dashboard', function () {
 
         runs(function () {
             $('#dashboard').dashboard({
-                ids: ['AY3MY7', 'PR6RY6', 'EY9BD9']
+                ids: ['AY3MY7', 'PR6RY6', 'EY9BD9'],
+                staging: true
             });
         });
 

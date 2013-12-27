@@ -6,7 +6,8 @@ describe('Form search input field', function () {
         $('body').append('<input type="text" id="form-search">');
         $('#form-search').formSearch({
             drugId: 131079,
-            state: 'OH'
+            state: 'OH',
+            staging: true
         });
     });
 

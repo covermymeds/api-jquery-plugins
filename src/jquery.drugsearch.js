@@ -17,7 +17,7 @@
                 var onSelected,
                     defaultUrl;
 
-                defaultUrl = 'https://staging.api.covermymeds.com/drugs?v=' + CMM_API_CONFIG.version;
+                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + CMM_API_CONFIG.version;
 
                 // Initialize select2
                 $(this).select2({

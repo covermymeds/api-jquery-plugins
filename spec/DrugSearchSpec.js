@@ -4,7 +4,7 @@
 describe('Drug search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="drug-search">');
-        $('#drug-search').drugSearch();
+        $('#drug-search').drugSearch({ staging: true });
     });
 
     afterEach(function () {
