@@ -11,7 +11,7 @@ describe('"Create Request" button', function () {
             first_name: 'Test',
             last_name: 'User',
             date_of_birth: '10/16/1985',
-            success: function (data) {
+            success: function () {
                 $('.success').text('Your request was created.');
             }
         });
@@ -23,7 +23,6 @@ describe('"Create Request" button', function () {
         });
 
         waitsFor(function () {
-            console.info($('.success').text());
             return $('.success').text() === 'Your request was created.';
         }, 'request to be created', 9000);
 
