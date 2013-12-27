@@ -32,14 +32,12 @@
                         data: {
                             request: {
                                 form_id: options.form_id || $('input[name="request[form_id]"]').data('form-id'),
+                                drug_id: options.drug_id || $('input[name="request[prescription][drug_id]"]').data('drug-id'),
                                 state: options.state || $('select[name="request[state]"]').val(),
                                 patient: {
                                     first_name: options.first_name || $('input[name="request[patient][first_name]"]').val(),
                                     last_name: options.last_name || $('input[name="request[patient][last_name]"]').val(),
                                     date_of_birth: options.date_of_birth || $('input[name="request[patient][date_of_birth]"]').val()
-                                },
-                                prescription: {
-                                    drug_id: options.drug_id || $('input[name="request[prescription][drug_id]"]').data('drug-id')
                                 }
                             }
                         }

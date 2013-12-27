@@ -3,14 +3,17 @@
 
 describe('"Create Request" button', function () {
     beforeEach(function () {
-        $('body').append('<button id="create-pa">Create PA</button>');
+        $('body').append('<button id="create-pa">Create PA</button><div class="success"></div>');
         $('#create-pa').createRequest({
             drug_id: 131079,
             form_id: 'anthem_ppi_quantity_limit_15636',
             state: 'OH',
             first_name: 'Test',
             last_name: 'User',
-            date_of_birth: '10/16/1985'
+            date_of_birth: '10/16/1985',
+            success: function (data) {
+                $('.success').text('Your request was created.');
+            }
         });
     });
 
@@ -20,11 +23,12 @@ describe('"Create Request" button', function () {
         });
 
         waitsFor(function () {
-            return $('.modal-body').text() === 'Your request was created.';
-        }, 'request to be created', 5000);
+            console.info($('.success').text());
+            return $('.success').text() === 'Your request was created.';
+        }, 'request to be created', 9000);
 
         runs(function () {
-            expect($('.modal-body').text()).toBe('Your request was created.');
+            expect($('.success').text()).toBe('Your request was created.');
         });
     });
 });
