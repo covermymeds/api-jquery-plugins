@@ -5,6 +5,7 @@
         createRequest: function (options) {
             options = options || { request: {} };
 
+            // Remove plugins/event handlers
             if (options === 'destroy') {
                 return this.each(function () {
                     $(this).off('click');
@@ -41,7 +42,7 @@
                                     drug_id: options.drug_id || $('input[name="request[prescription][drug_id]"]').data('drug-id')
                                 }
                             }
-                        },
+                        }
                         // data: {
                         //     "request": {
                         //         "urgent": "false",

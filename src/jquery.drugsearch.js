@@ -5,6 +5,7 @@
         drugSearch: function (options) {
             options = options || {};
 
+            // Remove plugins/event handlers
             if (options === 'destroy') {
                 return this.each(function () {
                     $(this).select2('destroy');
@@ -24,13 +25,14 @@
                     minimumInputLength: 4,
                     quietMillis: 250,
                     ajax: {
-                        url: options.url ? options.url : defaultUrl,
+                        url: options.url || defaultUrl,
                         transport: function (params) {
-                            if (options.url) {
-                                return;
-                            }
-                            params.beforeSend = function (xhr) {
-                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
+                            // Add authorization header if directly querying API;
+                            // otherwise we assume our custom URL will handle authorization
+                            if (!options.url) {
+                                params.beforeSend = function (xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
+                                };
                             }
 
                             return $.ajax(params);
@@ -41,17 +43,25 @@
                             };
                         },
                         results: function (data, page) {
-                            var results = [], more;
+                            var results = [],
+                                more,
+                                i,
+                                j;
 
                             more = (page * 10) < data.total;
+
                             for (i = 0, j = data.drugs.length; i < j; i += 1) {
                                 results.push({
                                     text: data.drugs[i].full_name,
                                     id: data.drugs[i].id
                                 });
                             }
-                            return { results: results, more: more };
-                        },
+
+                            return {
+                                results: results,
+                                more: more
+                            };
+                        }
                     }
                 });
 
