@@ -5,12 +5,20 @@ describe('"Create Request" button', function () {
     beforeEach(function () {
         $('body').append('<button id="create-pa">Create PA</button><div class="success"></div>');
         $('#create-pa').createRequest({
-            drug_id: 131079,
-            form_id: 'anthem_ppi_quantity_limit_15636',
-            state: 'OH',
-            first_name: 'Test',
-            last_name: 'User',
-            date_of_birth: '10/16/1985',
+            data: {
+                request: {
+                    form_id: 'anthem_ppi_quantity_limit_15636',
+                    state: 'OH',
+                    prescription: {
+                        drug_id: 131079
+                    },
+                    patient: {
+                        first_name: 'Test',
+                        last_name: 'User',
+                        date_of_birth: '10/16/1985'
+                    }
+                }
+            },
             success: function () {
                 $('.success').text('Your request was created.');
             }
