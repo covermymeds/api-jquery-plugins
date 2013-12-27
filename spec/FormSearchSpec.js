@@ -1,5 +1,5 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
+/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
 
 describe('Form search input field', function () {
     beforeEach(function () {
@@ -27,7 +27,6 @@ describe('Form search input field', function () {
             press.ctrlKey = false;
             press.which = 40;
             $('.select2-input').trigger(press);
-            //$('#form-search').select2().focus().val(input);
         });
 
         waitsFor(function () {
