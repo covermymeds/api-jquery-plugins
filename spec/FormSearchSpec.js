@@ -21,15 +21,21 @@ describe('Form search input field', function () {
         var input = 'bcbs';
 
         runs(function () {
-            $('#form-search').typeahead('setQuery', input).focus();
+            var press;
+            $('#form-search').select2('open');
+            press = jQuery.Event("keypress");
+            press.ctrlKey = false;
+            press.which = 40;
+            $('.select2-input').trigger(press);
+            //$('#form-search').select2().focus().val(input);
         });
 
         waitsFor(function () {
-            return $('.tt-suggestion:visible').length > 0;
+            return $('.select2-results li').length > 0;
         }, 'autocomplete to return results', 2000);
 
         runs(function () {
-            $('.tt-suggestion:first').trigger('click');
+            $('.select2-results li:first').trigger('click');
             expect($('#form-search').val()).not.toBe(input);
         });
     });
