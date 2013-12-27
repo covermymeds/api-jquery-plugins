@@ -1,5 +1,5 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
+/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
 
 describe('Drug search input field', function () {
     beforeEach(function () {
@@ -18,15 +18,20 @@ describe('Drug search input field', function () {
         var input = 'nexium';
 
         runs(function () {
-            $('#drug-search').typeahead('setQuery', input).focus();
+            var press;
+            $('#drug-search').select2('open');
+            press = jQuery.Event("keypress");
+            press.ctrlKey = false;
+            press.which = 40;
+            $('.select2-input').trigger(press);
         });
 
         waitsFor(function () {
-            return $('.tt-suggestion:visible').length > 0;
+            return $('.select2-results li').length > 0;
         }, 'autocomplete to return results', 2000);
 
         runs(function () {
-            $('.tt-suggestion:first').trigger('click');
+            $('.select2-results li:first').trigger('click');
             expect($('#drug-search').val()).not.toBe(input);
         });
     });

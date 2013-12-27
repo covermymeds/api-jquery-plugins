@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                         'src/config.js',
                         'lib/base64.js',
                         'bower_components/jquery/jquery.js',
-                        'bower_components/typeahead.js/dist/typeahead.js',
+                        'bower_components/select2/select2.min.js',
                         'bower_components/bootstrap/dist/js/bootstrap.js',
                         'bower_components/underscore/underscore.js'
                     ],

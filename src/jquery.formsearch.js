@@ -1,88 +1,99 @@
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
-/*global Hogan: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, _: false */
+/*global jQuery: false, CMM_API_CONFIG: false, Base64: false, _: false */
 (function ($) {
     $.fn.extend({
         formSearch: function (options) {
             options = options || {};
 
+            // Remove plugins/event handlers
             if (options === 'destroy') {
                 return this.each(function () {
-                    $(this).typeahead('destroy');
-                    $(this).off('typeahead:selected');
-                    $(this).off('typeahead:autocompleted');
+                    $(this).select2('destroy');
+                    $(this).off('select2-selecting');
                 });
             }
 
             return this.each(function () {
                 var onSelected,
-                    defaultUrl,
-                    self;
+                    defaultUrl;
 
-                self = this;
                 defaultUrl = 'https://staging.api.covermymeds.com/forms?v=' + CMM_API_CONFIG.version;
 
-                // Initialize typeahead.js
-                $(this).typeahead({
-                    name: 'form_api',
-                    header: 'Results',
-                    template: '<p style="overflow: auto;"><img src="<%= thumbnail_url %>" style="float: left;"><%= value %></p>',
-                    engine: {
-                        compile: function (template) {
-                            var compiled = _.template(template);
+                // Initialize select2
+                $(this).select2({
+                    placeholder: 'Plan, PBM, Form name, BIN, or Contract ID',
+                    minimumInputLength: 4,
+                    quietMillis: 250,
+                    ajax: {
+                        url: options.url || defaultUrl,
+                        transport: function (params) {
+                            // Add authorization header if directly querying API;
+                            // otherwise we assume our custom URL will handle authorization
+                            if (!options.url) {
+                                params.beforeSend = function (xhr) {
+                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
+                                };
+                            }
 
-                            return {
-                                render: function (context) { return compiled(context); }
-                            };
-                        }
-                    },
-                    remote: {
-                        url: options.url ? options.url + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID' : defaultUrl + '&q=%QUERY&state=%STATE&drug_id=%DRUG_ID',
-                        replace: function (url, uriEncodedQuery) {
+                            return $.ajax(params);
+                        },
+                        data: function (term, page) {
                             var state,
                                 drugId;
 
+                            // Values are either passed in to plugin constructor, or
+                            // taken from input fields that conform to naming convention
                             state = options.state || $('select[name="request[state]"]').val();
                             drugId = options.drugId || $('input[name="request[drug_id]"]').data('drug-id');
 
-                            return url.replace('%QUERY', uriEncodedQuery).replace('%STATE', state).replace('%DRUG_ID', drugId);
+                            return {
+                                q: term,
+                                state: state,
+                                drug_id: drugId
+                            };
                         },
-                        filter: function (response) {
-                            var i, j, data = [];
+                        results: function (data, page) {
+                            var results = [],
+                                more,
+                                i,
+                                j;
 
-                            for (i = 0, j = response.forms.length; i < j; i += 1) {
-                                data.push({
-                                    id: response.forms[i].request_form_id,
-                                    value: response.forms[i].description,
-                                    thumbnail_url: response.forms[i].thumbnail_url
+                            more = (page * 10) < data.total;
+                            for (i = 0, j = data.forms.length; i < j; i += 1) {
+                                results.push({
+                                    id: data.forms[i].request_form_id,
+                                    text: data.forms[i].description,
+                                    thumbnail_url: data.forms[i].thumbnail_url
                                 });
                             }
 
-                            return data;
-                        },
-                        beforeSend: function (xhr, settings) {
-                            if (options.url) {
-                                return;
-                            }
-
-                            // Prevent typeahead from sending data if less than 4 chars
-                            if ($(self).val().length < 4) {
-                                return false;
-                            }
-
-                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
+                            return {
+                                results: results,
+                                more: more
+                            };
                         }
+                    },
+                    formatResult: function (form) {
+                        var markup;
+
+                        markup = "<table class='table'>";
+                        markup += "<tr>";
+                        markup += "<td><img src='" + form.thumbnail_url + "' /></td>";
+                        markup += "<td>" + form.text + "</td>";
+                        markup += "</tr>";
+                        markup += "</table>";
+
+                        return markup;
                     }
                 });
 
                 // Event callback for selecting/autocompleting a form
-                onSelected = function (event, datum, name) {
-                    $(this).attr('data-form-name', datum.value);
-                    $(this).attr('data-form-id', datum.id);
+                onSelected = function (event) {
+                    $(this).attr('data-form-name', event.object.text);
+                    $(this).attr('data-form-id', event.object.id);
                 };
 
-                $(this).on('typeahead:selected', onSelected);
-                $(this).on('typeahead:autocompleted', onSelected);
-
+                $(this).on('select2-selecting', onSelected);
             });
         }
     });

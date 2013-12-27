@@ -2,14 +2,14 @@
   "name": "js-api-consumer",
   "version": "0.1.0",
   "authors": [
-    "Nathan Demick <ndemick@covermymeds.com> & Larry Scott <lscott@covermymeds.com>"
+    "Nathan Demick <ndemick@covermymeds.com>, Larry Scott <lscott@covermymeds.com>, Ryan Kowalick <rkowalick@covermymeds.com>"
   ],
   "description": "Some jQuery plugins to facilitate working with the CMM API.",
   "main": "src/jquery.cmm-api.js",
   "dependencies": {
     "jquery": "~2.0.3",
     "bootstrap": "~3.0.3",
-    "typeahead.js": "~0.9.3",
+    "select2": "~3.4.5",
     "underscore" : "~1.5.2"
   },
   "keywords": [
