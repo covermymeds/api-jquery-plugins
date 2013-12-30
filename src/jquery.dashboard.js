@@ -13,6 +13,8 @@
                 defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + CMM_API_CONFIG.version + '&api_id=' + CMM_API_CONFIG.apiId + '&api_secret=' + CMM_API_CONFIG.apiSecret;
                 // headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
 
+                $(this).html('<h1>Loading...</h1>');
+
                 $.ajax({
                     url: options.url || defaultUrl,
                     type: 'POST',
@@ -39,11 +41,12 @@
                                                 '</div>' +
                                               '</div><% }); %>');
 
-                        $(self).append(compiled(data));
+                        $(self).empty().append(compiled(data));
                     },
                     error: function (data, status, xhr) {
                         $('.modal-body').text('There was an error processing your request.');
                         $('.modal').modal();
+                        $(self).empty();
                     }
                 });
             });
