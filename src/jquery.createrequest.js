@@ -14,14 +14,27 @@
 
             return this.each(function () {
                 var defaultUrl,
-                    headers;
+                    headers,
+                    button,
+                    active;
 
                 defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + CMM_API_CONFIG.version;
                 headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
 
+                button = $(this);
+                active = false;
+
                 // Attach event handler
-                $(this).on('click', function (event) {
+                button.on('click', function (event) {
                     event.preventDefault();
+
+                    // Prevent duplicate/multiple clicks
+                    if (active === true) {
+                        return;
+                    }
+
+                    button.attr('disabled', 'disabled');
+                    active = true;
 
                     // To create a PA request, either pass a "data" attribute in the options object,
                     // or create form elements that conform to the API data naming convention
@@ -108,8 +121,26 @@
                         url: options.url || defaultUrl,
                         type: 'POST',
                         headers: headers,
-                        success: options.success,
-                        error: options.error,
+                        success: function (data, status, xhr) {
+                            // Re-enable button
+                            button.removeAttr('disabled');
+                            active = false;
+
+                            // Run user-defined callback
+                            if (typeof options.success === 'function') {
+                                options.success(data, status, xhr);
+                            }
+                        },
+                        error: function (data, status, xhr) {
+                            // Re-enable button
+                            button.removeAttr('disabled');
+                            active = false;
+
+                            // Run user-defined callback
+                            if (typeof options.error === 'function') {
+                                options.error(data, status, xhr);
+                            }
+                        },
                         data: options.data || dataFromFormElements
                     });
                 });
