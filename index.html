@@ -20,11 +20,14 @@
     <script src="src/jquery.formsearch.js"></script>
     <script src="src/jquery.createrequest.js"></script>
     <script src="src/jquery.dashboard.js"></script>
+    <script src="src/jquery.cmmhelp.js"></script>
 
     <script>
       $(function () {
         $('#drug-search').drugSearch({ staging: true });
+
         $('#form-search').formSearch({ staging: true });
+
         $('#start-request').createRequest({
           staging: true,
           success: function (data, status, xhr) {
@@ -34,12 +37,15 @@
             alert('There was a problem creating your PA request.');
           }
         });
+
         $('#show-dashboard').on('click', function () {
           $('#dashboard').dashboard({
             ids: ['AY3MY7', 'PR6RY6', 'EY9BD9'],
             staging: true
           });
         });
+
+        $('#help').showHelp();
       });
     </script>
   </head>
@@ -76,7 +82,11 @@
         <button type="submit" id="start-request" class="btn btn-primary btn-lg">Start PA Request</button>
       </p>
     </form>
+
     <button id="show-dashboard" class="btn btn-default">Show Dashboard</button>
     <div id="dashboard" class="col-lg-12"></div>
+
+    <div id="help" class="col-lg-12">
+    </div>
   </body>
 </html>

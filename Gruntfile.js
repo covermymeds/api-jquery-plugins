@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',
                     'src/jquery.dashboard.js',
+                    'src/jquery.cmmhelp.js',
                     'lib/base64.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
@@ -32,7 +33,8 @@ module.exports = function (grunt) {
                     'src/jquery.formsearch.js',
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',
-                    'src/jquery.dashboard.js'
+                    'src/jquery.dashboard.js',
+                    'src/jquery.cmmhelp.js'
                 ],
                 options: {
                     specs: 'spec/*Spec.js',
@@ -64,7 +66,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jslint');
 
     // Default task
-    grunt.registerTask('default', ['jasmine']);
+    grunt.registerTask('default', 'jasmine');
     grunt.registerTask('distribute', ['concat', 'uglify']);
     grunt.registerTask('lint', 'jslint');
+    grunt.registerTask('test', 'jasmine');
 };
