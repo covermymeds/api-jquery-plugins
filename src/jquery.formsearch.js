@@ -23,8 +23,8 @@
                 $(this).select2({
                     placeholder: 'Plan, PBM, Form name, BIN, or Contract ID',
                     minimumInputLength: 4,
-                    quietMillis: 250,
                     ajax: {
+                        quietMillis: 250,
                         url: options.url || defaultUrl,
                         transport: function (params) {
                             // Add authorization header if directly querying API;

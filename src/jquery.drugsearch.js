@@ -23,8 +23,8 @@
                 $(this).select2({
                     placeholder: 'Begin typing the medication name and select from list',
                     minimumInputLength: 4,
-                    quietMillis: 250,
                     ajax: {
+                        quietMillis: 250,
                         url: options.url || defaultUrl,
                         transport: function (params) {
                             // Add authorization header if directly querying API;
