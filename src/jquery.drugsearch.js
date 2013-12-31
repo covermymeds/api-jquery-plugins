@@ -9,7 +9,6 @@
             if (options === 'destroy') {
                 return this.each(function () {
                     $(this).select2('destroy');
-                    $(this).off('select2-selecting');
                 });
             }
 
@@ -64,14 +63,6 @@
                         }
                     }
                 });
-
-                // Event callback for selecting/autocompleting a drug
-                onSelected = function (event) {
-                    $(this).attr('data-drug-name', event.object.text);
-                    $(this).attr('data-drug-id', event.object.id);
-                };
-
-                $(this).on('select2-selecting', onSelected);
             });
         }
     });

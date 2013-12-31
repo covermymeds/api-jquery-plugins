@@ -9,7 +9,6 @@
             if (options === 'destroy') {
                 return this.each(function () {
                     $(this).select2('destroy');
-                    $(this).off('select2-selecting');
                 });
             }
 
@@ -44,7 +43,7 @@
                             // Values are either passed in to plugin constructor, or
                             // taken from input fields that conform to naming convention
                             state = options.state || $('select[name="request[state]"]').val();
-                            drugId = options.drugId || $('input[name="request[drug_id]"]').data('drug-id');
+                            drugId = options.drugId || $('input[name="request[drug_id]"]').val();
 
                             return {
                                 q: term,
@@ -86,14 +85,6 @@
                         return markup;
                     }
                 });
-
-                // Event callback for selecting/autocompleting a form
-                onSelected = function (event) {
-                    $(this).attr('data-form-name', event.object.text);
-                    $(this).attr('data-form-id', event.object.id);
-                };
-
-                $(this).on('select2-selecting', onSelected);
             });
         }
     });

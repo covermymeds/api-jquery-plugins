@@ -41,7 +41,7 @@
                     var dataFromFormElements = {
                         "request": {
                             "urgent": $('input[name="request[urgent]"]').attr('checked'),
-                            "form_id": $('input[name="request[form_id]"]').data('form-id'),
+                            "form_id": $('input[name="request[form_id]"]').val(),
                             "state": $('select[name="request[state]"]').val(),
                             "patient": {
                                 "first_name": $('input[name="request[patient][first_name]"]').val(),
@@ -78,7 +78,7 @@
                                 "phone_number": $('input[name="request[prescriber][phone_number]"]').val()
                             },
                             "prescription": {
-                                "drug_id": $('input[name="request[prescription][drug_id]"]').data('drug-id'),
+                                "drug_id": $('input[name="request[prescription][drug_id]"]').val(),
                                 "strength": $('input[name="request[prescription][strength]"]').val(),
                                 "frequency": $('input[name="request[prescription][frequency]"]').val(),
                                 "enumerated_fields": $('input[name="request[prescription][enumerated_fields]"]').val(),
