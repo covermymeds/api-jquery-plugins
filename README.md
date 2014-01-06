@@ -37,6 +37,8 @@ way to do this is to create a simple "middleman" server-side app which accepts C
 requests, uses your API key/secret to append a Basic Authentication header, then forwards
 the request to CoverMyMeds and returns the response to your front-end application.
 
+-------------------------------
+
 #### Drug Search - $.drugSearch(options)
 
 Create an HTML text input field, and attach the drug search widget:
@@ -66,6 +68,8 @@ instead of an object:
 $('#drug_search').drugSearch('destroy');
 ```
 
+-------------------------------
+
 #### Form Search - $.formSearch(options)
 
 Create an HTML text input field, and attach the form search widget:
@@ -88,10 +92,10 @@ __Options__
 * `staging` - If the value is set to `true`, the drug search widget will use `staging.api.covermymeds.com`
 instead of `api.covermymeds.com`
 * `state` - The form search requires a two-character state abbreviation. You can either
-pass it explicitly when initializing the widget, or else the widget will search for a &gt;select&lt; tag
+pass it explicitly when initializing the widget, or else the widget will search for a &lt;select&gt; tag
 with a "name" attribute of `request[state]`
 * `drugId` - The form search also requires the numeric ID of a drug in the CMM system. You can either
-pass it explicitly when initializing the widget, or else the widget will search for an &gt;input&lt; tag
+pass it explicitly when initializing the widget, or else the widget will search for an &lt;input&gt; tag
 with a "name" attribute of `request[drug_id]`
 
 
@@ -138,6 +142,8 @@ instead of an object:
 $('#create_request').createRequest('destroy');
 ```
 
+-------------------------------
+
 #### "Show Dashboard" widget - $.dashboard(options)
 
 Given a list of CoverMyMeds request IDs, creates a basic "dashboard," which allows a user to
@@ -162,6 +168,7 @@ __Options__
 instead of `api.covermymeds.com`.
 * `ids` - an array of IDs that will be displayed by the dashboard.
 
+-------------------------------
 
 #### "Show Help" widget - $.showHelp()
 
