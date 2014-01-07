@@ -7,7 +7,15 @@
 
             return this.each(function () {
                 var defaultUrl,
+                    requests,
+                    currentPage,
+                    totalPages,
+                    perPage,
+                    headers,
                     self;
+
+                currentPage = 0;
+                perPage = 10;
 
                 self = this;
                 defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + CMM_API_CONFIG.version;
@@ -25,6 +33,10 @@
                     success: function (data, status, xhr) {
                         var compiled;
 
+                        requests = data.requests;
+                        console.log("requests length: ", requests.length);
+                        totalPages = Math.ceil(requests.length / perPage);
+
                         compiled = _.template('<% _.each(requests, function (request) { %>' +
                                               '<div class="request row">' +
                                                 '<div class="col-lg-2">' +
@@ -39,9 +51,35 @@
                                                         '<li><a href="<%= request.tokens[0].html_url %>">View</a></li>' +
                                                    '</ul>' +
                                                 '</div>' +
-                                              '</div><% }); %>');
+                                              '</div><% }); %>' +
+                                                // Pagination
+                                                '<% if (totalPages > 1) { %>' +
+                                                '<ul class="pagination">' +
+                                                '<% for (var i = 0; i < totalPages; i += 1) { %>' +
+                                                '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
+                                                '<% } %>' +
+                                                '</ul>' +
+                                                '<% } %>');
 
-                        $(self).empty().append(compiled(data));
+                        $(self).empty().append(compiled({ requests: requests.slice(0, perPage), currentPage: currentPage, totalPages: totalPages }));
+
+                        function callback(event) {
+                            var begin,
+                                end;
+
+                            event.preventDefault();
+
+                            currentPage = parseInt($(event.target).attr('href'), 10);
+
+                            // Get beginning/end of results to display
+                            begin = currentPage * perPage;
+                            end = begin + perPage;
+
+                            $(self).empty().append(compiled({ requests: requests.slice(begin, end), currentPage: currentPage, totalPages: totalPages }));
+                            $('.pagination a').on('click', callback);
+                        }
+
+                        $('.pagination a').on('click', callback);
                     },
                     error: function (data, status, xhr) {
                         $('.modal-body').text('There was an error processing your request.');
