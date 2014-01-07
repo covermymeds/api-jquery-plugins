@@ -8,6 +8,7 @@
             return this.each(function () {
                 var defaultUrl,
                     requests,
+                    compiledTemplate,
                     currentPage,
                     totalPages,
                     perPage,
@@ -23,70 +24,70 @@
 
                 $(this).html('<h1>Loading...</h1>');
 
-                $.ajax({
-                    url: options.url || defaultUrl,
-                    type: 'POST',
-                    headers: headers,
-                    data: {
-                        ids: options.ids
-                    },
-                    success: function (data, status, xhr) {
-                        var compiled;
+                compiledTemplate = _.template('<% _.each(requests, function (request) { %>' +
+                                      '<div class="request row">' +
+                                        '<div class="col-lg-2">' +
+                                            '<img src="<%= request.thumbnail_urls %>" />' +
+                                        '</div>' +
+                                        '<div class="col-lg-4">' +
+                                            '<ul>' +
+                                                '<li><h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4></li>' +
+                                                '<li><strong>Status:</strong> <span class="label label-info"><%= request.workflow_status %></span>' +
+                                                '<li>Drug Name Here</li>' +
+                                                '<li><strong>Created:</strong> <%= request.created_at %></li>' +
+                                                '<li><a href="<%= request.tokens[0].html_url %>">View</a></li>' +
+                                           '</ul>' +
+                                        '</div>' +
+                                      '</div><% }); %>' +
+                                        // Pagination
+                                        '<% if (totalPages > 1) { %>' +
+                                        '<ul class="pagination">' +
+                                        '<% for (var i = 0; i < totalPages; i += 1) { %>' +
+                                        '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
+                                        '<% } %>' +
+                                        '</ul>' +
+                                        '<% } %>');
 
-                        requests = data.requests;
-                        console.log("requests length: ", requests.length);
-                        totalPages = Math.ceil(requests.length / perPage);
+                function paginationCallback(event) {
+                    var begin,
+                        end;
 
-                        compiled = _.template('<% _.each(requests, function (request) { %>' +
-                                              '<div class="request row">' +
-                                                '<div class="col-lg-2">' +
-                                                    '<img src="<%= request.thumbnail_urls %>" />' +
-                                                '</div>' +
-                                                '<div class="col-lg-4">' +
-                                                    '<ul>' +
-                                                        '<li><h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4></li>' +
-                                                        '<li><strong>Status:</strong> <span class="label label-info"><%= request.workflow_status %></span>' +
-                                                        '<li>Drug Name Here</li>' +
-                                                        '<li><strong>Created:</strong> <%= request.created_at %></li>' +
-                                                        '<li><a href="<%= request.tokens[0].html_url %>">View</a></li>' +
-                                                   '</ul>' +
-                                                '</div>' +
-                                              '</div><% }); %>' +
-                                                // Pagination
-                                                '<% if (totalPages > 1) { %>' +
-                                                '<ul class="pagination">' +
-                                                '<% for (var i = 0; i < totalPages; i += 1) { %>' +
-                                                '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
-                                                '<% } %>' +
-                                                '</ul>' +
-                                                '<% } %>');
+                    event.preventDefault();
 
-                        $(self).empty().append(compiled({ requests: requests.slice(0, perPage), currentPage: currentPage, totalPages: totalPages }));
+                    currentPage = parseInt($(event.target).attr('href'), 10);
 
-                        function callback(event) {
-                            var begin,
-                                end;
+                    // Get beginning/end of results to display
+                    begin = currentPage * perPage;
+                    end = begin + perPage;
 
-                            event.preventDefault();
+                    $(self).empty().append(compiledTemplate({ requests: requests.slice(begin, end), currentPage: currentPage, totalPages: totalPages }));
+                    $('.pagination a').on('click', paginationCallback);
+                }
 
-                            currentPage = parseInt($(event.target).attr('href'), 10);
+                function displayResults(data) {
+                    requests = data.requests;
+                    totalPages = Math.ceil(requests.length / perPage);
+                    $(self).empty().append(compiledTemplate({ requests: requests.slice(0, perPage), currentPage: currentPage, totalPages: totalPages }));
+                    $('.pagination a').on('click', paginationCallback);
+                }
 
-                            // Get beginning/end of results to display
-                            begin = currentPage * perPage;
-                            end = begin + perPage;
-
-                            $(self).empty().append(compiled({ requests: requests.slice(begin, end), currentPage: currentPage, totalPages: totalPages }));
-                            $('.pagination a').on('click', callback);
+                // Don't make Ajax request if data is pre-supplied
+                if (options.data !== undefined) {
+                    displayResults(options.data);
+                } else {
+                    $.ajax({
+                        url: options.url || defaultUrl,
+                        type: 'POST',
+                        headers: headers,
+                        data: {
+                            ids: options.ids
+                        },
+                        success: displayResults,
+                        error: function (data, status, xhr) {
+                            $(self).empty().text('There was an error processing your request. Please try again.');
                         }
-
-                        $('.pagination a').on('click', callback);
-                    },
-                    error: function (data, status, xhr) {
-                        $('.modal-body').text('There was an error processing your request.');
-                        $('.modal').modal();
-                        $(self).empty();
-                    }
-                });
+                    });
+                }
             });
         }
     });
