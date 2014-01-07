@@ -167,6 +167,8 @@ __Options__
 * `staging` - If the value is set to `true`, the drug search widget will use `staging.api.covermymeds.com`
 instead of `api.covermymeds.com`.
 * `ids` - an array of IDs that will be displayed by the dashboard.
+* `data` - a static object representing the returned results from the CoverMyMeds `/requests/search` API (e.g. `{ "requests": [{ id: 'AB1CD2', ...}, {...}] }`).
+Use this if you'd like to pre-fetch data and simply use this widget to display it.
 
 -------------------------------
 
