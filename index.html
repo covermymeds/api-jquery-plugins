@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8">
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/select2/select2.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -31,6 +32,11 @@
         $('#start-request').createRequest({
           staging: true,
           success: function (data, status, xhr) {
+            // Temporarily store data in localstorage, to be accessed later
+            var ids = JSON.parse(localStorage.getItem('ids')) || [];
+            ids.push(data.request.id);
+            localStorage.setItem('ids', JSON.stringify(ids));
+
             alert('PA request created successfully!');
           },
           error: function (data, status, xhr) {
@@ -41,7 +47,8 @@
         $('#show-dashboard').on('click', function () {
           $('#dashboard').dashboard({
             staging: true,
-            ids: ['PM4EM4', 'WM9QN7', 'FK9HU3']
+            // Use the stored IDs from earlier ^
+            ids: JSON.parse(localStorage.getItem('ids')) || ['PM4EM4', 'WM9QN7', 'FK9HU3']
          });
         });
 
