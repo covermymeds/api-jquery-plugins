@@ -23,7 +23,16 @@ Load `_SpecRunner.html` in a browser window.
 ### Distribution
 
 `grunt distribute` will concatenate all the source files and put a compressed
-and uncompressed version in the `dist` directory.
+and uncompressed version in the `dist` directory. To add to your project, include
+the `js-api-consumer.js` file, as well as the `src/config.js` and copies of Underscore.js
+and jQuery. In total, you will need:
+
+```
+underscore.js
+js-api-consumer.js
+config.js
+jquery.js
+```
 
 ### Usage
 
