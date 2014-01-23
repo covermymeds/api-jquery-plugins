@@ -13,40 +13,51 @@
                     totalPages,
                     perPage,
                     headers,
+                    thumbnailUrl,
+                    noFormUrl,
                     self;
 
                 currentPage = 0;
                 perPage = 10;
 
                 self = this;
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + CMM_API_CONFIG.version;
-                headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
+                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
 
-                $(this).html('<h1>Loading...</h1>');
+                $(this).html('<h3>Loading...</h3>');
 
-                compiledTemplate = _.template('<% _.each(requests, function (request) { %>' +
-                                      '<div class="request row">' +
-                                        '<div class="col-lg-1">' +
-                                            '<img src="https://www.covermymeds.com/forms/pdf/thumbs/90/highmark_west_virginia_prescription_drug_medication_6827.jpg" />' +
-                                        '</div>' +
-                                        '<div class="col-lg-4">' +
-                                            '<ul>' +
-                                                '<li><h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4></li>' +
-                                                '<li><strong>Status:</strong> <span class="label label-info"><%= request.workflow_status %></span>' +
-                                                '<li>Drug ID: <%= request.prescription.drug_id || "(Missing)" %></li>' +
-                                                '<li><strong>Created:</strong> <%= new Date(Date.parse(request.created_at)).toLocaleDateString() %></li>' +
-                                                '<li><a href="<%= request.tokens[0].html_url %>">View &rarr;</a></li>' +
-                                           '</ul>' +
-                                        '</div>' +
-                                      '</div><% }); %>' +
-                                        // Pagination
-                                        '<% if (totalPages > 1) { %>' +
-                                        '<ul class="pagination">' +
-                                        '<% for (var i = 0; i < totalPages; i += 1) { %>' +
-                                        '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
-                                        '<% } %>' +
-                                        '</ul>' +
-                                        '<% } %>');
+                thumbnailUrl = 'https://www.covermymeds.com/forms/pdf/thumbs/90/highmark_west_virginia_prescription_drug_medication_6827.jpg';
+                noFormUrl = 'https://www.covermymeds.com/styles_r2/images/pick_the_form.png';
+
+                compiledTemplate = _.template('<table class="table table-striped requests">' +
+                                    '<% _.each(requests, function (request) { %>' +
+                                      '<tr>' +
+                                        '<td class="form-thumbnail">' +
+                                            '<% if (request.form_id) { %>' +
+                                            '<img src="' + thumbnailUrl + '">' +
+                                            '<% } else { %>' +
+                                            '<img src="' + noFormUrl + '">' +
+                                            '<% } %>' +
+                                        '</td>' +
+                                        '<td>' +
+                                            '<h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4>' +
+                                            '<dl class="dl-horizontal request-details">' +
+                                                '<dt>Status</dt><dd><span class="label label-info"><%= request.workflow_status %></span></dd>' +
+                                                '<dt>Drug</dt><dd><%= request.prescription.name || "(Missing)" %></dd>' +
+                                                '<dt>Created</dt><dd><%= new Date(Date.parse(request.created_at)).toLocaleDateString() %></dd>' +
+                                                '<dt>Link</dt><dd><a href="<%= request.tokens[0].html_url %>">View on CoverMyMeds.com &rarr;</a></dd>' +
+                                           '</dl>' +
+                                        '</td>' +
+                                      '</tr>' +
+                                    '<% }); %>' +
+                                    '</table>' +
+                                    // Pagination
+                                    '<% if (totalPages > 1) { %>' +
+                                    '<ul class="pagination">' +
+                                    '<% for (var i = 0; i < totalPages; i += 1) { %>' +
+                                    '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
+                                    '<% } %>' +
+                                    '</ul>' +
+                                    '<% } %>');
 
                 function paginationCallback(event) {
                     var begin,
@@ -72,15 +83,19 @@
                 }
 
                 // Don't make Ajax request if data is pre-supplied
-                if (options.data !== undefined) {
+                if (options.data) {
                     displayResults(options.data);
                 } else {
                     $.ajax({
                         url: options.url || defaultUrl,
                         type: 'POST',
-                        headers: headers,
                         data: {
                             ids: options.ids
+                        },
+                        beforeSend: function (xhr, settings) {
+                            if (!options.url) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':' + options.apiSecret));
+                            }
                         },
                         success: displayResults,
                         error: function (data, status, xhr) {
