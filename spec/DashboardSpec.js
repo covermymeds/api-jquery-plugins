@@ -1,26 +1,32 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
+/*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
 
 describe('PA Dashboard', function () {
     beforeEach(function () {
         $('body').append('<div id="dashboard"></div>');
     });
 
+    afterEach(function () {
+        $('#dashboard').remove();
+    });
+
     it('displays a list of PAs', function () {
 
         runs(function () {
             $('#dashboard').dashboard({
-                ids: ['PM4EM4', 'WM9QN7', 'FK9HU3'],
-                staging: true
+                apiId: config.apiId,
+                apiSecret: config.apiSecret,
+                version: 1,
+                ids: ['PH3GV7', 'KV9FV2', 'NT2DE7']
             });
         });
 
         waitsFor(function () {
-            return $('#dashboard').children('.request').length > 0;
-        }, 'dashboard to return results', 2000);
+            return $('table.requests').find('tr').length > 0;
+        }, 'dashboard to return results', 9000);
 
         runs(function () {
-            expect($('#dashboard').children('.request').length).not.toBe(0);
+            expect($('table.requests').find('tr').length).not.toBe(0);
         });
     });
 });

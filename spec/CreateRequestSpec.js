@@ -1,11 +1,13 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
+/*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
 
 describe('"Create Request" button', function () {
     beforeEach(function () {
         $('body').append('<button id="create-pa">Create PA</button><div class="success"></div>');
         $('#create-pa').createRequest({
-            staging: true,
+            apiId: config.apiId,
+            apiSecret: config.apiSecret,
+            version: 1,
             data: {
                 request: {
                     form_id: 'anthem_ppi_quantity_limit_15636',
