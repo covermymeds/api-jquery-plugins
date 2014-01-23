@@ -13,10 +13,9 @@
             }
 
             return this.each(function () {
-                var onSelected,
-                    defaultUrl;
+                var defaultUrl;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + CMM_API_CONFIG.version;
+                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
 
                 // Initialize select2
                 $(this).select2({
@@ -30,7 +29,7 @@
                             // otherwise we assume our custom URL will handle authorization
                             if (!options.url) {
                                 params.beforeSend = function (xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret));
+                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':' + options.apiSecret));
                                 };
                             }
 
