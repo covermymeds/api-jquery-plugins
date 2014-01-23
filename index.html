@@ -25,12 +25,22 @@
 
     <script>
       $(function () {
-        $('#drug-search').drugSearch({ staging: true });
+        $('#drug-search').drugSearch({
+          apiId: config.apiId,                // Specified in src/config.js
+          apiSecret: config.apiSecret,        // Specified in src/config.js
+          version: 1
+        });
 
-        $('#form-search').formSearch({ staging: true });
+        $('#form-search').formSearch({
+          apiId: config.apiId,
+          apiSecret: config.apiSecret,
+          version: 1
+        });
 
         $('#start-request').createRequest({
-          staging: true,
+          apiId: config.apiId,
+          apiSecret: config.apiSecret,
+          version: 1,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
             var ids = JSON.parse(localStorage.getItem('ids')) || [];
@@ -46,8 +56,10 @@
 
         $('#show-dashboard').on('click', function () {
           $('#dashboard').dashboard({
-            staging: true,
-            // Use the stored IDs from earlier ^
+            apiId: config.apiId,
+            apiSecret: config.apiSecret,
+            version: 1
+            // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
             ids: JSON.parse(localStorage.getItem('ids')) || ['PM4EM4', 'WM9QN7', 'FK9HU3']
          });
         });
