@@ -1,4 +1,4 @@
-JavaScript CMM API Consumer
+CMM API jQuery Plugins
 ===============
 
 Some jQuery plugins to facilitate working with the CMM API.
@@ -36,17 +36,24 @@ jquery.js
 
 ### Usage
 
-Using the CoverMyMeds API requires an API key and API secret. [Contact us](mailto:developers@covermymeds.com)
-in order to obtain them. For quick testing, enter your key/secret in the `src/config.js`
+The CoverMyMeds API requires an API ID/secret. [Contact us](mailto:developers@covermymeds.com)
+in order to obtain them. For quick testing, enter your ID/secret in the `src/config.js`
 file, then load the `index.html` file.
 
-While this example file contains an API key/secret in a user-accessible location,
+While this example file contains an API ID/secret in a user-accessible location,
 it's recommended to keep those values hidden for the sake of security. The
 way to do this is to create a simple "middleman" server-side app which accepts CoverMyMeds API
-requests, uses your API key/secret to append a Basic Authentication header, then forwards
+requests, uses your API ID/secret to append a Basic Authentication header, then forwards
 the request to CoverMyMeds and returns the response to your front-end application. Pass each
 widget an `url` parameter when you initialize it, which will point to your own
 server-side application.
+
+The basic workflow to create a new Prior Authorization request:
+
+1. Search for a drug using the `drugSearch` autocomplete plugin
+2. Search for a form using the `formSearch` autocomplete plugin
+3. Fill in some extra data about the patient (name, birthday, etc.), then submit
+the request using the `createRequest` plugin
 
 -------------------------------
 
@@ -71,7 +78,7 @@ __Options__
 * `url` - The URL of an "API middleman" app (see "Usage" above)
 * `staging` - If the value is set to `true`, the drug search widget will use `staging.api.covermymeds.com`
 instead of `api.covermymeds.com`
-* `apiKey` - Your API key
+* `apiId` - Your API ID
 * `apiSecret` - Your API secret
 * `version` - Version of the CoverMyMeds API you want to access
 
@@ -111,7 +118,7 @@ with a "name" attribute of `request[state]`
 * `drugId` - The form search also requires the numeric ID of a drug in the CMM system. You can either
 pass it explicitly when initializing the widget, or else the widget will search for an &lt;input&gt; tag
 with a "name" attribute of `request[drug_id]`
-* `apiKey` - Your API key
+* `apiId` - Your API ID
 * `apiSecret` - Your API secret
 * `version` - Version of the CoverMyMeds API you want to access
 
@@ -151,7 +158,7 @@ those values.
 * `success` - a callback which is executed when the request is successfully created.
 * `error` - a callback which is executed when there is an error creating the request. The callback method takes the
 following 3 arguments: the data returned from the server, a string describing the request status, and a jQuery `jqXHR` object.
-* `apiKey` - Your API key
+* `apiId` - Your API ID
 * `apiSecret` - Your API secret
 * `version` - Version of the CoverMyMeds API you want to access
 
@@ -189,7 +196,7 @@ instead of `api.covermymeds.com`.
 * `ids` - an array of IDs that will be displayed by the dashboard.
 * `data` - a static object representing the returned results from the CoverMyMeds `/requests/search` API (e.g. `{ "requests": [{ id: 'AB1CD2', ...}, {...}] }`).
 Use this if you'd like to pre-fetch data and simply use this widget to display it.
-* `apiKey` - Your API key
+* `apiId` - Your API ID
 * `apiSecret` - Your API secret
 * `version` - Version of the CoverMyMeds API you want to access
 
