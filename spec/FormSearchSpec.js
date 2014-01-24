@@ -1,5 +1,5 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
+/*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
 
 describe('Form search input field', function () {
     beforeEach(function () {
@@ -7,7 +7,9 @@ describe('Form search input field', function () {
         $('#form-search').formSearch({
             drugId: 131079,
             state: 'OH',
-            staging: true
+            apiId: config.apiId,
+            apiSecret: config.apiSecret,
+            version: 1
         });
     });
 

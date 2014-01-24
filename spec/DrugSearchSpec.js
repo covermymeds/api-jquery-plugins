@@ -1,10 +1,14 @@
 /*jslint sloppy: true */
-/*global describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
+/*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
 
 describe('Drug search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="drug-search">');
-        $('#drug-search').drugSearch({ staging: true });
+        $('#drug-search').drugSearch({
+            apiId: config.apiId,
+            apiSecret: config.apiSecret,
+            version: 1
+        });
     });
 
     afterEach(function () {

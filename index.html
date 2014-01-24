@@ -13,6 +13,9 @@
     <link href="bower_components/select2/select2-bootstrap.css" rel="stylesheet" type="text/css" media="all">
 
     <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+    <style type="text/css">
+      body { padding: 20px; }
+    </style>
 
     <script src="lib/base64.js"></script>
 
@@ -25,17 +28,34 @@
 
     <script>
       $(function () {
-        $('#drug-search').drugSearch({ staging: true });
+        // Store some example PA IDs
+        var ids = JSON.parse(localStorage.getItem('cmm_plugin_api_ids')) || [];
+        if (ids.length === 0) {
+          ids = ['DJ8BX3', 'MU4AK9', 'MH8YJ8'];
+          localStorage.setItem('cmm_plugin_api_ids', JSON.stringify(ids));
+        }
 
-        $('#form-search').formSearch({ staging: true });
+        $('#drug-search').drugSearch({
+          apiId: config.apiId,                // Specified in src/config.js
+          apiSecret: config.apiSecret,        // Specified in src/config.js
+          version: 1
+        });
+
+        $('#form-search').formSearch({
+          apiId: config.apiId,
+          apiSecret: config.apiSecret,
+          version: 1
+        });
 
         $('#start-request').createRequest({
-          staging: true,
+          apiId: config.apiId,
+          apiSecret: config.apiSecret,
+          version: 1,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
-            var ids = JSON.parse(localStorage.getItem('ids')) || [];
+            var ids = JSON.parse(localStorage.getItem('cmm_plugin_api_ids'));
             ids.push(data.request.id);
-            localStorage.setItem('ids', JSON.stringify(ids));
+            localStorage.setItem('cmm_plugin_api_ids', JSON.stringify(ids));
 
             alert('PA request created successfully!');
           },
@@ -46,9 +66,11 @@
 
         $('#show-dashboard').on('click', function () {
           $('#dashboard').dashboard({
-            staging: true,
-            // Use the stored IDs from earlier ^
-            ids: JSON.parse(localStorage.getItem('ids')) || ['PM4EM4', 'WM9QN7', 'FK9HU3']
+            apiId: config.apiId,
+            apiSecret: config.apiSecret,
+            version: 1,
+            // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
+            ids: JSON.parse(localStorage.getItem('cmm_plugin_api_ids'))
          });
         });
 
@@ -57,43 +79,56 @@
     </script>
   </head>
   <body>
-    <form action="#">
-      <p>
-        <label for="patient-fname">Patient First Name</label>
-        <input type="text" id="patient-fname" name="request[patient][first_name]" class="form-control">
-      </p>
-      <p>
-        <label for="patient-lname">Patient Last Name</label>
-        <input type="text" id="patient-lname" name="request[patient][last_name]" class="form-control">
-      </p>
-      <p>
-        <label for="patient-dob">Patient Date of Birth</label>
-        <input type="text" id="patient-dob" name="request[patient][date_of_birth]" class="form-control">
-      </p>
-      <p>
-        <label for="state">Patient State</label>
-        <select id="state" name="request[state]" class="form-control">
-          <option>Select a state</option>
-          <option value="OH">Ohio</option>
-        </select>
-      </p>
-      <p>
-        <label for="drug-search">Drug</label>
-        <input type="hidden" id="drug-search" name="request[drug_id]" class="form-control">
-      </p>
-      <p>
-        <label for="form-search">Form</label>
-        <input type="hidden" id="form-search" name="request[form_id]" class="form-control">
-      </p>
-      <p>
-        <button type="submit" id="start-request" class="btn btn-primary btn-lg">Start PA Request</button>
-      </p>
-    </form>
+    <fieldset>
+      <legend>Start a new PA request</legend>
+      <form action="#">
+        <p>
+          <label for="patient-fname">Patient First Name</label>
+          <input type="text" id="patient-fname" name="request[patient][first_name]" class="form-control">
+        </p>
+        <p>
+          <label for="patient-lname">Patient Last Name</label>
+          <input type="text" id="patient-lname" name="request[patient][last_name]" class="form-control">
+        </p>
+        <p>
+          <label for="patient-dob">Patient Date of Birth</label>
+          <input type="text" id="patient-dob" name="request[patient][date_of_birth]" class="form-control">
+        </p>
+        <p>
+          <label for="state">Patient State</label>
+          <select id="state" name="request[state]" class="form-control">
+            <option>Select a state</option>
+            <option value="OH">Ohio</option>
+          </select>
+        </p>
+        <p>
+          <label for="drug-search">Drug</label>
+          <input type="hidden" id="drug-search" name="request[drug_id]" class="form-control">
+        </p>
+        <p>
+          <label for="form-search">Form</label>
+          <input type="hidden" id="form-search" name="request[form_id]" class="form-control">
+        </p>
+        <p>
+          <button type="submit" id="start-request" class="btn btn-primary">Start Request</button>
+        </p>
+      </form>
+    </fieldset>
 
-    <button id="show-dashboard" class="btn btn-default">Show Dashboard</button>
-    <div id="dashboard" class="col-lg-12"></div>
+    <br><br>
 
-    <div id="help" class="col-lg-12">
-    </div>
+    <fieldset>
+      <legend>Dashboard</legend>
+      <div id="dashboard" class="col-lg-12"></div>
+      <button id="show-dashboard" class="btn btn-default">Show Dashboard</button>
+    </fieldset>
+
+    <br><br>
+
+    <fieldset>
+      <legend>Help!</legend>
+      <div id="help" class="col-lg-12"></div>
+    </fieldset>
+
   </body>
 </html>

@@ -14,12 +14,10 @@
 
             return this.each(function () {
                 var defaultUrl,
-                    headers,
                     button,
                     active;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + CMM_API_CONFIG.version;
-                headers = options.url ? {} : { 'Authorization': 'Basic ' + Base64.encode(CMM_API_CONFIG.apiId + ':' + CMM_API_CONFIG.apiSecret) };
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
 
                 button = $(this);
                 active = false;
@@ -120,7 +118,11 @@
                     $.ajax({
                         url: options.url || defaultUrl,
                         type: 'POST',
-                        headers: headers,
+                        beforeSend: function (xhr, settings) {
+                            if (!options.url) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':' + options.apiSecret));
+                            }
+                        },
                         success: function (data, status, xhr) {
                             // Re-enable button
                             button.removeAttr('disabled');
