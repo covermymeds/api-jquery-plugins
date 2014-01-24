@@ -61,7 +61,7 @@
           $('#dashboard').dashboard({
             apiId: config.apiId,
             apiSecret: config.apiSecret,
-            version: 1
+            version: 1,
             // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
             ids: JSON.parse(localStorage.getItem('ids')) || ['PM4EM4', 'WM9QN7', 'FK9HU3']
          });
