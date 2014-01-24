@@ -15,7 +15,7 @@
             return this.each(function () {
                 var defaultUrl;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
 
                 // Initialize select2
                 $(this).select2({
@@ -106,7 +106,7 @@
             return this.each(function () {
                 var defaultUrl;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
 
                 // Initialize select2
                 $(this).select2({
@@ -177,7 +177,7 @@
                     button,
                     active;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
 
                 button = $(this);
                 active = false;
@@ -334,7 +334,7 @@
                 perPage = 10;
 
                 self = this;
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
 
                 $(this).html('<h3>Loading...</h3>');
 
