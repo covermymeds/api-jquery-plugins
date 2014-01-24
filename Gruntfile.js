@@ -6,6 +6,7 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: [
+                    'src/templates.js',
                     'src/jquery.formsearch.js',
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',
@@ -30,6 +31,7 @@ module.exports = function (grunt) {
         jasmine: {
             customTemplate: {
                 src: [
+                    'src/templates.js',
                     'src/jquery.formsearch.js',
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',

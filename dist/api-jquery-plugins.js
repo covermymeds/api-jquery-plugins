@@ -1,3 +1,65 @@
+/*jslint sloppy: true, nomen: true, white: true */
+/*global window: false, _: false */
+(function() {
+    window.JST = {};
+
+    window.JST.dashboard = _.template([
+        '<table class="table table-striped requests">',
+        '<% _.each(requests, function (request) { %>',
+            '<tr>',
+                '<td class="form-thumbnail">',
+                    '<% if (request.form_id) { %>',
+                    '<img src="https://www.covermymeds.com/forms/pdf/thumbs/90/highmark_west_virginia_prescription_drug_medication_6827.jpg">',
+                    '<% } else { %>',
+                    '<img src="https://www.covermymeds.com/styles_r2/images/pick_the_form.png">',
+                    '<% } %>',
+                '</td>',
+                '<td>',
+                    '<h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4>',
+                    '<dl class="dl-horizontal request-details">',
+                        '<dt>Status</dt><dd><span class="label label-info"><%= request.workflow_status %></span></dd>',
+                        '<dt>Drug</dt><dd><%= request.prescription.name || "(Missing)" %></dd>',
+                        '<dt>Created</dt><dd><%= new Date(Date.parse(request.created_at)).toLocaleDateString() %></dd>',
+                        '<dt>Link</dt><dd><a href="<%= request.tokens[0].html_url %>">View on CoverMyMeds.com &rarr;</a></dd>',
+                   '</dl>',
+                '</td>',
+            '</tr>',
+        '<% }); %>',
+        '</table>',
+        '<% if (totalPages > 0) { %>',
+            '<ul class="pagination">',
+                '<% function insideWindow(page, currentPage) {',
+                    'var window = 2;',
+                    'return Math.abs(currentPage - page) <= window;',
+                '} %>',
+                '<% i = 0; %>',
+                '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>',
+                '<% if (!insideWindow(i + 1, currentPage)) { %>',
+                    '<li><a href="#">&hellip;</a></li>',
+                '<% } %>',
+                '<% for (i = 1; i <= totalPages - 1; i += 1) {',
+                    'if (insideWindow(i, currentPage)) { %>',
+                        '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>',
+                    '<% }',
+                '} %>',
+                '<% i = totalPages; %>',
+                '<% if (!insideWindow(i - 1, currentPage)) { %>',
+                    '<li><a href="#">&hellip;</a></li>',
+                '<% } %>',
+                '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>',
+            '</ul>',
+        '<% } %>'
+    ].join(''));
+
+    window.JST.formsearch = _.template([
+        '<table class="table">',
+            '<tr>',
+                '<td><img src="<%= form.thumbnail_url %>"></td>',
+                '<td><%= form.text %></td>',
+            '</tr>',
+        '</table>'
+        ].join(''));
+}(window));
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global jQuery: false, CMM_API_CONFIG: false, Base64: false, _: false */
 (function ($) {
@@ -72,16 +134,7 @@
                         }
                     },
                     formatResult: function (form) {
-                        var markup;
-
-                        markup = "<table class='table'>";
-                        markup += "<tr>";
-                        markup += "<td><img src='" + form.thumbnail_url + "' /></td>";
-                        markup += "<td>" + form.text + "</td>";
-                        markup += "</tr>";
-                        markup += "</table>";
-
-                        return markup;
+                        return JST.formsearch({ form: form });
                     }
                 });
             });
@@ -312,7 +365,7 @@
 }(jQuery));
 
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
-/*global alert: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, _: false */
+/*global alert: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, JST: false */
 (function ($) {
     $.fn.extend({
         dashboard: function (options) {
@@ -321,13 +374,9 @@
             return this.each(function () {
                 var defaultUrl,
                     requests,
-                    compiledTemplate,
                     currentPage,
                     totalPages,
                     perPage,
-                    headers,
-                    thumbnailUrl,
-                    noFormUrl,
                     self;
 
                 currentPage = 0;
@@ -338,40 +387,6 @@
 
                 $(this).html('<h3>Loading...</h3>');
 
-                thumbnailUrl = 'https://www.covermymeds.com/forms/pdf/thumbs/90/highmark_west_virginia_prescription_drug_medication_6827.jpg';
-                noFormUrl = 'https://www.covermymeds.com/styles_r2/images/pick_the_form.png';
-
-                compiledTemplate = _.template('<table class="table table-striped requests">' +
-                                    '<% _.each(requests, function (request) { %>' +
-                                      '<tr>' +
-                                        '<td class="form-thumbnail">' +
-                                            '<% if (request.form_id) { %>' +
-                                            '<img src="' + thumbnailUrl + '">' +
-                                            '<% } else { %>' +
-                                            '<img src="' + noFormUrl + '">' +
-                                            '<% } %>' +
-                                        '</td>' +
-                                        '<td>' +
-                                            '<h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4>' +
-                                            '<dl class="dl-horizontal request-details">' +
-                                                '<dt>Status</dt><dd><span class="label label-info"><%= request.workflow_status %></span></dd>' +
-                                                '<dt>Drug</dt><dd><%= request.prescription.name || "(Missing)" %></dd>' +
-                                                '<dt>Created</dt><dd><%= new Date(Date.parse(request.created_at)).toLocaleDateString() %></dd>' +
-                                                '<dt>Link</dt><dd><a href="<%= request.tokens[0].html_url %>">View on CoverMyMeds.com &rarr;</a></dd>' +
-                                           '</dl>' +
-                                        '</td>' +
-                                      '</tr>' +
-                                    '<% }); %>' +
-                                    '</table>' +
-                                    // Pagination
-                                    '<% if (totalPages > 1) { %>' +
-                                    '<ul class="pagination">' +
-                                    '<% for (var i = 0; i < totalPages; i += 1) { %>' +
-                                    '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>' +
-                                    '<% } %>' +
-                                    '</ul>' +
-                                    '<% } %>');
-
                 function paginationCallback(event) {
                     var begin,
                         end;
@@ -380,18 +395,22 @@
 
                     currentPage = parseInt($(event.target).attr('href'), 10);
 
+                    if (isNaN(currentPage)) {
+                        return;
+                    }
+
                     // Get beginning/end of results to display
                     begin = currentPage * perPage;
                     end = begin + perPage;
 
-                    $(self).empty().append(compiledTemplate({ requests: requests.slice(begin, end), currentPage: currentPage, totalPages: totalPages }));
+                    $(self).empty().append(JST.dashboard({ requests: requests.slice(begin, end), currentPage: currentPage, totalPages: totalPages }));
                     $('.pagination a').on('click', paginationCallback);
                 }
 
                 function displayResults(data) {
                     requests = data.requests;
-                    totalPages = Math.ceil(requests.length / perPage);
-                    $(self).empty().append(compiledTemplate({ requests: requests.slice(0, perPage), currentPage: currentPage, totalPages: totalPages }));
+                    totalPages = Math.ceil(requests.length / perPage) - 1; // 0-index based
+                    $(self).empty().append(JST.dashboard({ requests: requests.slice(0, perPage), currentPage: currentPage, totalPages: totalPages }));
                     $('.pagination a').on('click', paginationCallback);
                 }
 
