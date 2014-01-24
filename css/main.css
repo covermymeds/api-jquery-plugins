@@ -1,4 +1,4 @@
 /* Dashboard styles */
-#dashboard dt { width: 75px; }
-#dashboard dd { margin-left: 90px; }
+#dashboard dt { width: 60px; }
+#dashboard dd { margin-left: 75px; }
 #dashboard td.form-thumbnail { width: 120px; padding-top: 16px; }
