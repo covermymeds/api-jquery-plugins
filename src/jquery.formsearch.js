@@ -72,16 +72,7 @@
                         }
                     },
                     formatResult: function (form) {
-                        var markup;
-
-                        markup = "<table class='table'>";
-                        markup += "<tr>";
-                        markup += "<td><img src='" + form.thumbnail_url + "' /></td>";
-                        markup += "<td>" + form.text + "</td>";
-                        markup += "</tr>";
-                        markup += "</table>";
-
-                        return markup;
+                        return JST.formsearch({ form: form });
                     }
                 });
             });
