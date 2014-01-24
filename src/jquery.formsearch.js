@@ -15,7 +15,7 @@
             return this.each(function () {
                 var defaultUrl;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
 
                 // Initialize select2
                 $(this).select2({

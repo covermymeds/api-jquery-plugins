@@ -17,7 +17,7 @@
                     button,
                     active;
 
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
 
                 button = $(this);
                 active = false;

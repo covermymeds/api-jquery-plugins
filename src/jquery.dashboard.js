@@ -21,7 +21,7 @@
                 perPage = 10;
 
                 self = this;
-                defaultUrl = 'https://' + (options.staging ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
+                defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
 
                 $(this).html('<h3>Loading...</h3>');
 
