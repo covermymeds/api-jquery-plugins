@@ -4,6 +4,25 @@
     window.JST = {};
 
     window.JST.dashboard = _.template([
+        '<div class="row">',
+        '<div class="col-md-3">',
+            '<form action="#" class="well" method="get" role="form">',
+            '<fieldset>',
+                '<legend>Search</legend>',
+                '<div class="form-group"><input class="form-control" name="patient_first_name" placeholder="First Name" size="30" type="text" value="<%= filters.firstName %>"></div>',
+                '<div class="form-group"><input class="form-control" name="patient_last_name" placeholder="Last Name" size="30" type="text" value="<%= filters.lastName %>"></div>',
+                '<div class="form-group"><input class="form-control" data-behavior="datepicker" name="patient_date_of_birth" placeholder="Date of Birth" size="30" type="text" value="<%= filters.dob %>"></div>',
+                '<div class="form-group"><input class="form-control" name="drug_name" placeholder="Drug" size="30" type="text" value="<%= filters.drug %>"></div>',
+                '<div class="form-group"><input class="form-control" name="request_id" placeholder="Key" size="30" type="text" value="<%= filters.key %>"></div>',
+                '<div class="form-group">',
+                    '<button class="btn btn-primary search" type="submit">Search</button> ',
+                    '<button class="btn search clear">Clear</button>',
+
+                '</div>',
+              '</fieldset>',
+            '</form>',
+        '</div>',
+        '<div class="col-md-9">',
         '<table class="table table-striped requests">',
         '<% _.each(requests, function (request) { %>',
             '<tr>',
@@ -48,7 +67,9 @@
                 '<% } %>',
                 '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>',
             '</ul>',
-        '<% } %>'
+        '<% } %>',
+        '</div> <!-- /.span9 -->',
+        '</div> <!-- /.row -->'
     ].join(''));
 
     window.JST.formsearch = _.template([
