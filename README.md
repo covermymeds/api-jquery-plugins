@@ -68,7 +68,12 @@ Create an HTML text input field, and attach the drug search widget:
 
 <script>
   $(function () {
-    $('#drug_search').drugSearch();
+    var options = {
+      apiId: '<Your API ID>',
+      apiSecret: '<Your API Secret>',
+      version: 1
+    };
+    $('#drug_search').drugSearch(options);
   });
 </script>
 ```
@@ -102,7 +107,14 @@ Create an HTML text input field, and attach the form search widget:
 
 <script>
   $(function () {
-    $('#form_search').formSearch();
+    var options = {
+      apiId: '<Your API ID>',
+      apiSecret: '<Your API Secret>',
+      version: 1,
+      drugId: 12345,
+      state: 'OH'
+    };
+    $('#form_search').formSearch(options);
   });
 </script>
 ```
@@ -140,7 +152,15 @@ Create an HTML button, and attach the "create request" widget:
 
 <script>
   $(function () {
-    $('#create_request').createRequest();
+    var options = {
+      apiId: '<Your API ID>',
+      apiSecret: '<Your API Secret>',
+      version: 1,
+      data: {
+        request: { ... } 
+      }
+    };
+    $('#create_request').createRequest(options);
   });
 </script>
 ```
@@ -182,7 +202,13 @@ view high-level request details, and click through to access the request on the 
 
 <script>
   $(function () {
-    $('#dashboard').dashboard({ ids: ['AB1CD2', 'BA3DC4'] });
+    var options = {
+      apiId: '<Your API ID>',
+      apiSecret: '<Your API Secret>',
+      version: 1,
+      ids: ['AB1CD2', 'BA3DC4']
+    };
+    $('#dashboard').dashboard(options);
   });
 </script>
 ```
