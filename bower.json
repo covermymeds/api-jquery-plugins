@@ -1,6 +1,6 @@
 {
-  "name": "js-api-consumer",
-  "version": "0.1.0",
+  "name": "api-jquery-plugins",
+  "version": "1.0.0",
   "authors": [
     "Nathan Demick <ndemick@covermymeds.com>, Larry Scott <lscott@covermymeds.com>, Ryan Kowalick <rkowalick@covermymeds.com>"
   ],
@@ -20,7 +20,7 @@
     "Authorization"
   ],
   "license": "MIT",
-  "homepage": "https://git.innova-partners.com/ndemick/js-api-consumer",
+  "homepage": "https://github.com/covermymeds/api-jquery-plugins",
   "ignore": [
     "**/.*",
     "node_modules",
