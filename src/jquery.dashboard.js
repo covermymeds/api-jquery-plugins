@@ -1,5 +1,13 @@
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true, plusplus: true, continue: true */
 /*global alert: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, JST: false, _: false */
+
+/*
+TODO:
+    1. Add folders by "status," with counts on each one
+    2. Add sort order by date
+    3. Single "live" search field
+*/
+
 (function ($) {
     // String.trim() polyfill
     if (!String.prototype.trim) {
@@ -33,11 +41,14 @@
 
         if (options.data === undefined) {
             this.load(_.bind(function () {
+                this.sort();
                 this.filteredData = this.data;
                 this.render();
             }, this));
         } else {
-            this.data = this.filteredData = options.data;
+            this.data = options.data;
+            this.sort();
+            this.filteredData = this.data;
             this.render();
         }
     };
@@ -71,65 +82,51 @@
         });
     };
 
+    // Sort by "created_at" timestamp - newer first
+    // Only have to do this once, really - to change, just reverse the array
+    CmmDashboard.prototype.sort = function () {
+        this.data.sort(function (a, b) {
+            if (a.created_at === b.created_at) {
+                return 0;
+            }
+
+            return a.created_at < b.created_at ? 1 : -1;
+        });
+    };
+
     // Transform this.data -> this.filteredData
     CmmDashboard.prototype.filter = function (clear) {
         var request,
-            i;
+            i,
+            j;
 
         if (clear === true) {
-            this.filters.firstName = this.filters.lastName = this.filters.dob = this.filters.drug = this.filters.key = null;
-
+            this.searchQuery = null;
             this.filteredData = this.data;
-
             return;
         }
 
         // Clear out previous filtered values
         this.filteredData = [];
+        this.searchQuery = $('input[name=q]').val().trim();
 
-        this.filters.firstName = $('input[name="patient_first_name"]').val().trim();
-        this.filters.lastName = $('input[name="patient_last_name"]').val().trim();
-        this.filters.dob = $('input[name="patient_date_of_birth"]').val().trim();
-        this.filters.drug = $('input[name="drug_name"]').val().trim();
-        this.filters.key = $('input[name="request_id"]').val().trim();
-
-        i = this.data.length;
-        while (i--) {
-            // determine if this.data[i] fits curent criteria
+        for (i = 0, j = this.data.length; i < j; i += 1) {
             request = this.data[i];
+            console.log(request.prescription.name);
 
-            if (this.filters.firstName) {
-                if (request.patient.first_name.toLowerCase().indexOf(this.filters.firstName.toLowerCase()) === -1) {
-                    continue;
-                }
+            // determine if request matches any of the searchable fields - first/last name, dob, drug name, or PA key (id)
+            // Only add the request one time if there's any kind of match
+            if (request.patient.first_name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1) {
+                this.filteredData.push(request);
+            } else if (request.patient.last_name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1) {
+                this.filteredData.push(request);
+            } else if (request.patient.date_of_birth.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1) {
+                this.filteredData.push(request);
+            } else if (request.prescription.name && request.prescription.name.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1) {
+                this.filteredData.push(request);
+            } else if (request.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1) {
+                this.filteredData.push(request);
             }
-
-            if (this.filters.lastName) {
-                if (request.patient.last_name.toLowerCase().indexOf(this.filters.lastName.toLowerCase()) === -1) {
-                    continue;
-                }
-            }
-
-            if (this.filters.dob) {
-                if (request.patient.date_of_birth.toLowerCase().indexOf(this.filters.dob.toLowerCase()) === -1) {
-                    continue;
-                }
-            }
-
-            if (this.filters.drug) {
-                if (request.prescription.drug_name.toLowerCase().indexOf(this.filters.drug.toLowerCase()) === -1) {
-                    continue;
-                }
-            }
-
-            if (this.filters.key) {
-                if (request.id.toLowerCase().indexOf(this.filters.key.toLowerCase()) === -1) {
-                    continue;
-                }
-            }
-
-            // If still here, that means the request passed all filters
-            this.filteredData.push(request);
         }
     };
 
@@ -147,7 +144,7 @@
         $('button.search', this.elem).off('click');
 
         // Draw to DOM
-        this.elem.empty().append(JST.dashboard({ requests: this.filteredData.slice(begin, end), currentPage: this.currentPage, totalPages: totalPages, filters: this.filters }));
+        this.elem.empty().append(JST.dashboard({ requests: this.filteredData.slice(begin, end), currentPage: this.currentPage, totalPages: totalPages, q: this.searchQuery }));
 
         // Add event handlers
         $('.pagination a', this.elem).on('click', this.paginate);
