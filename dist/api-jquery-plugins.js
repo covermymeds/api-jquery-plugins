@@ -498,20 +498,20 @@ TODO:
     CmmDashboard.prototype.sort = function () {
         var self = this;
 
-        _.each(this.data, function sortIntoFolders(request) {
-            _.each(self.folders, function (folder, name) {
-                if (folder.workflow_statuses.indexOf(request.workflow_status) !== -1) {
-                    folder.data.push(request);
-                }
-            });
-        });
-
         this.data.sort(function sortByDate(a, b) {
             if (a.created_at === b.created_at) {
                 return 0;
             }
 
             return a.created_at < b.created_at ? 1 : -1;
+        });
+
+        _.each(this.data, function sortIntoFolders(request) {
+            _.each(self.folders, function (folder, name) {
+                if (folder.workflow_statuses.indexOf(request.workflow_status) !== -1) {
+                    folder.data.push(request);
+                }
+            });
         });
     };
 
