@@ -5,21 +5,42 @@
 
     window.JST.dashboard = _.template([
         '<div class="row">',
-        '<div class="col-md-3">',
+        '<div class="navigation col-md-3">',
+            '<div class="order btn-group btn-group-justified">',
+                '<div class="btn-group"><button type="button" data-direction="desc" class="btn btn-default active">Newest First</button></div>',
+                '<div class="btn-group"><button type="button" data-direction="asc" class="btn btn-default">Oldest First</button></div>',
+            '</div>',
+            '<hr>',
+            '<ul class="folders nav nav-pills nav-stacked">',
+                '<% _.each(folders, function (folder, name) { %>',
+                '<li class="<%= name === currentFolder ? "active" : "" %>"><a href="#<%= name %>"><span class="glyphicon glyphicon-folder-close"></span> <%= name %> <span class="badge pull-right"><%= folder.data.length %></span></a></li>',
+                '<% }); %>',
+            '</ul>',
+            '<hr>',
             '<form action="#" class="well" method="get" role="form">',
             '<fieldset>',
                 '<legend>Search</legend>',
-                '<div class="form-group"><input class="form-control" name="q" placeholder="Search" type="search" value="<%= q %>"></div>',
-                '<div class="form-group">',
-                    '<button class="btn btn-primary search" type="submit">Search</button> ',
-                    '<button class="btn search clear">Clear</button>',
-
+                '<div class="input-group">',
+                    '<input class="form-control search" name="q" placeholder="Search" type="search">',
+                    '<span class="input-group-btn">',
+                        '<button class="clear btn btn-default" type="button"><span class="clear glyphicon glyphicon-remove"></span></button>',
+                    '</span>',
                 '</div>',
               '</fieldset>',
             '</form>',
         '</div>',
-        '<div class="col-md-9">',
+        '<div class="content col-md-9">',
+        '</div> <!-- /.content -->',
+        '</div> <!-- /.row -->'
+    ].join(''));
+
+    window.JST.dashboardContent = _.template([
         '<table class="table table-striped requests">',
+        '<% if (requests.length === 0) { %>',
+        '<tr>',
+            '<td><h4>No Results</h4></td>',
+        '</tr>',
+        '<% } %>',
         '<% _.each(requests, function (request) { %>',
             '<tr>',
                 '<td class="form-thumbnail">',
@@ -63,9 +84,7 @@
                 '<% } %>',
                 '<li class="<%= (i === currentPage) ? "active" : "" %>"><a href="<%= i %>"><%= (i + 1) %></a></li>',
             '</ul>',
-        '<% } %>',
-        '</div> <!-- /.span9 -->',
-        '</div> <!-- /.row -->'
+        '<% } %>'
     ].join(''));
 
     window.JST.formsearch = _.template([
