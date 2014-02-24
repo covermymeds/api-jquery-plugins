@@ -1,13 +1,6 @@
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global alert: false, jQuery: false, CMM_API_CONFIG: false, Base64: false, JST: false, _: false */
 
-/*
-TODO:
-    1. Add folders by "status," with counts on each one
-    2. Add sort order by date
-    3. Single "live" search field
-*/
-
 (function ($) {
     // String.trim() polyfill
     if (!String.prototype.trim) {
@@ -27,9 +20,8 @@ TODO:
         this.url = options.url;
         this.defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
 
-        this.ids = options.ids || [];
+        this.token_ids = options.token_ids || [];
         this.apiId = options.apiId || '';
-        this.apiSecret = options.apiSecret || '';
 
         this.currentPage = 0;
         this.perPage = 10;
@@ -69,11 +61,11 @@ TODO:
             url: this.url || this.defaultUrl,
             type: 'POST',
             data: {
-                ids: this.ids
+                token_ids: this.token_ids
             },
             beforeSend: function (xhr, settings) {
                 if (self.url === undefined) {
-                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(self.apiId + ':' + self.apiSecret));
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + self.apiId + '+');
                 }
             },
             success: function (data, status, xhr) {

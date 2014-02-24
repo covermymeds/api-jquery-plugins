@@ -29,33 +29,30 @@
     <script>
       $(function () {
         // Store some example PA IDs
-        var ids = JSON.parse(localStorage.getItem('cmm_plugin_api_ids')) || [];
-        if (ids.length === 0) {
-          ids = ['DJ8BX3', 'MU4AK9', 'MH8YJ8'];
-          localStorage.setItem('cmm_plugin_api_ids', JSON.stringify(ids));
+        var token_ids = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
+        if (token_ids.length === 0) {
+          token_ids = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
+          localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(token_ids));
         }
 
         $('#drug-search').drugSearch({
           apiId: config.apiId,                // Specified in src/config.js
-          apiSecret: config.apiSecret,        // Specified in src/config.js
           version: 1
         });
 
         $('#form-search').formSearch({
           apiId: config.apiId,
-          apiSecret: config.apiSecret,
           version: 1
         });
 
         $('#start-request').createRequest({
           apiId: config.apiId,
-          apiSecret: config.apiSecret,
           version: 1,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
-            var ids = JSON.parse(localStorage.getItem('cmm_plugin_api_ids'));
-            ids.push(data.request.id);
-            localStorage.setItem('cmm_plugin_api_ids', JSON.stringify(ids));
+            var token_ids = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'));
+            token_ids.push(data.request.tokens[0].id);
+            localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(token_ids));
 
             alert('PA request created successfully!');
           },
@@ -66,10 +63,9 @@
 
         $('#dashboard').dashboard({
           apiId: config.apiId,
-          apiSecret: config.apiSecret,
           version: 1,
           // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
-          ids: JSON.parse(localStorage.getItem('cmm_plugin_api_ids'))
+          token_ids: JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'))
         });
 
         $('#help').showHelp();

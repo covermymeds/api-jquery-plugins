@@ -48,9 +48,7 @@
                                 "date_of_birth": $('input[name="request[patient][date_of_birth]"]').val(),
                                 "gender": $('select[name="request[patient][gender]"]').val(),
                                 "email": $('input[name="request[patient][email]"]').val(),
-                                "health_plan_name": $('input[name="request[patient][health_plan_name]"]').val(),
                                 "member_id": $('input[name="request[patient][member_id]"]').val(),
-                                "group_id": $('input[name="request[patient][group_id]"]').val(),
                                 "phone_number": $('input[name="request[patient][phone_number]"]').val(),
                                 "address": {
                                     "street_1": $('input[name="request[patient][address][street_1]"]').val(),
@@ -59,6 +57,14 @@
                                     "state": $('select[name="request[patient][address][state]"]').val(),
                                     "zip": $('input[name="request[patient][address][zip]"]').val()
                                 }
+                            },
+                            "payer": {
+                                "form_search_text": $('input[name="request[payer][form_search_text]"]').val(),
+                                "bin": $('input[name="request[payer][bin]"]').val(),
+                                "pcn": $('input[name="request[payer][pcn]"]').val(),
+                                "group_id": $('input[name="request[payer][group_id]"]').val(),
+                                "medical_benefit_name": $('input[name="request[payer][medical_benefit_name]"]').val(),
+                                "drug_benefit_name": $('input[name="request[payer][drug_benefit_name]"]').val(),
                             },
                             "prescriber": {
                                 "npi": $('input[name="request[prescriber][npi]"]').val(),
@@ -120,7 +126,7 @@
                         type: 'POST',
                         beforeSend: function (xhr, settings) {
                             if (!options.url) {
-                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':' + options.apiSecret));
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
                             }
                         },
                         success: function (data, status, xhr) {

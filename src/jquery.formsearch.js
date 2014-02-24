@@ -29,7 +29,7 @@
                             // otherwise we assume our custom URL will handle authorization
                             if (!options.url) {
                                 params.beforeSend = function (xhr) {
-                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':' + options.apiSecret));
+                                    xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
                                 };
                             }
 
