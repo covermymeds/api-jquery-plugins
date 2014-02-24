@@ -29,10 +29,10 @@
     <script>
       $(function () {
         // Store some example PA IDs
-        var token_ids = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
-        if (token_ids.length === 0) {
-          token_ids = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
-          localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(token_ids));
+        var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
+        if (tokenIds.length === 0) {
+          tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
+          localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
         }
 
         $('#drug-search').drugSearch({
@@ -50,9 +50,9 @@
           version: 1,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
-            var token_ids = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'));
-            token_ids.push(data.request.tokens[0].id);
-            localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(token_ids));
+            var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'));
+            tokenIds.push(data.request.tokens[0].id);
+            localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
 
             alert('PA request created successfully!');
           },
@@ -65,7 +65,7 @@
           apiId: config.apiId,
           version: 1,
           // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
-          token_ids: JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'))
+          tokenIds: JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'))
         });
 
         $('#help').showHelp();

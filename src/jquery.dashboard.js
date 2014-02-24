@@ -20,7 +20,7 @@
         this.url = options.url;
         this.defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
 
-        this.token_ids = options.token_ids || [];
+        this.tokenIds = options.tokenIds || [];
         this.apiId = options.apiId || '';
 
         this.currentPage = 0;
@@ -61,7 +61,7 @@
             url: this.url || this.defaultUrl,
             type: 'POST',
             data: {
-                token_ids: this.token_ids
+                token_ids: this.tokenIds
             },
             beforeSend: function (xhr, settings) {
                 if (self.url === undefined) {

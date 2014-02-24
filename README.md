@@ -192,7 +192,7 @@ view high-level request details, and click through to access the request on the 
     var options = {
       apiId: '<Your API ID>',
       version: 1,
-      token_ids: ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o']
+      tokenIds: ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o']
     };
     $('#dashboard').dashboard(options);
   });
@@ -205,7 +205,7 @@ __Options__
 
 * `apiId` (required) - Your API ID
 * `version` (required) - Version of the CoverMyMeds API you want to access
-* `token_ids` (required) - an array of token_ids for requests that will be displayed by the dashboard.
+* `tokenIds` (required) - an array of tokenIds for requests that will be displayed by the dashboard.
 * `url` (optional) - The URL of an "API middleman" app (see "Usage" above).
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
 instead of production.
