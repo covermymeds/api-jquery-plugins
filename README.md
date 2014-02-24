@@ -38,17 +38,9 @@ main.css
 
 ### Usage
 
-The CoverMyMeds API requires an API ID/secret. [Contact us](mailto:developers@covermymeds.com)
-in order to obtain them. For quick testing, enter your ID/secret in the `src/config.js`
+The CoverMyMeds API requires an API ID. [Contact us](mailto:developers@covermymeds.com)
+in order to obtain them. For quick testing, enter your ID in the `src/config.js`
 file, then load the `index.html` file.
-
-While this example file contains an API ID/secret in a user-accessible location,
-it's recommended to keep those values hidden for the sake of security. The
-way to do this is to create a simple "middleman" server-side app which accepts CoverMyMeds API
-requests, uses your API ID/secret to append a Basic Authentication header, then forwards
-the request to CoverMyMeds and returns the response to your front-end application. Pass each
-widget an `url` parameter when you initialize it, which will point to your own
-server-side application.
 
 The basic workflow to create a new Prior Authorization request:
 
@@ -70,7 +62,6 @@ Create an HTML text input field, and attach the drug search widget:
   $(function () {
     var options = {
       apiId: '<Your API ID>',
-      apiSecret: '<Your API Secret>',
       version: 1
     };
     $('#drug_search').drugSearch(options);
@@ -83,7 +74,6 @@ __Options__
 `options` is an object with the following keys:
 
 * `apiId` (required) - Your API ID
-* `apiSecret` (required) - Your API secret
 * `version` (required) - Version of the CoverMyMeds API you want to access
 * `url` (optional) - The URL of an "API middleman" app (see "Usage" above)
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
@@ -109,7 +99,6 @@ Create an HTML text input field, and attach the form search widget:
   $(function () {
     var options = {
       apiId: '<Your API ID>',
-      apiSecret: '<Your API Secret>',
       version: 1,
       drugId: 12345,
       state: 'OH'
@@ -124,7 +113,6 @@ __Options__
 `options` is an object with the following keys:
 
 * `apiId` (required) - Your API ID
-* `apiSecret` (required) - Your API secret
 * `version` (required) - Version of the CoverMyMeds API you want to access
 * `drugId` (required) - The form search also requires the numeric ID of a drug in the CMM system. You can either
 pass it explicitly when initializing the widget, or else the widget will search for an &lt;input&gt; tag
@@ -154,7 +142,6 @@ Create an HTML button, and attach the "create request" widget:
   $(function () {
     var options = {
       apiId: '<Your API ID>',
-      apiSecret: '<Your API Secret>',
       version: 1,
       data: {
         request: { ... } 
@@ -170,16 +157,16 @@ __Options__
 `options` is an object with the following keys:
 
 * `apiId` (required) - Your API ID
-* `apiSecret` (required) - Your API secret
 * `version` (required) - Version of the CoverMyMeds API you want to access
 * `url` (optional) - The URL of an "API middleman" app (see "Usage" above).
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
 instead of production.
 * `data` (optional) - an object that contains all necessary data to create a PA request. The object
-should conform to the [API documentation](https://api.covermymeds.com/#part-4). Alternately, you can create
+should conform to the [API documentation](https://api.covermymeds.com/). Alternately, you can create
 form fields with name attributes that conform to the documentation, and the widget will automatically find and use
 those values.
-* `success` (optional) - a callback which is executed when the request is successfully created.
+* `success` (optional) - a callback which is executed when the request is successfully created. In order to
+view the request again later, store the `id` of one of the request's tokens and pass it to the `dashboard` plugin.
 * `error` (optional) - a callback which is executed when there is an error creating the request. The callback method takes the
 following 3 arguments: the data returned from the server, a string describing the request status, and a jQuery `jqXHR` object.
 
@@ -204,9 +191,8 @@ view high-level request details, and click through to access the request on the 
   $(function () {
     var options = {
       apiId: '<Your API ID>',
-      apiSecret: '<Your API Secret>',
       version: 1,
-      ids: ['AB1CD2', 'BA3DC4']
+      token_ids: ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o']
     };
     $('#dashboard').dashboard(options);
   });
@@ -218,9 +204,8 @@ __Options__
 `options` is an object with the following keys:
 
 * `apiId` (required) - Your API ID
-* `apiSecret` (required) - Your API secret
 * `version` (required) - Version of the CoverMyMeds API you want to access
-* `ids` (required) - an array of IDs that will be displayed by the dashboard.
+* `token_ids` (required) - an array of token_ids for requests that will be displayed by the dashboard.
 * `url` (optional) - The URL of an "API middleman" app (see "Usage" above).
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
 instead of production.
