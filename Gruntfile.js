@@ -3,18 +3,16 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        concat: {
+        browserify: {
+            options: {
+                bundleOptions: {
+                    standalone: 'CoverMyMeds'
+                }
+            },
             dist: {
-                src: [
-                    'src/templates.js',
-                    'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js',
-                    'src/jquery.createrequest.js',
-                    'src/jquery.dashboard.js',
-                    'src/jquery.cmmhelp.js',
-                    'lib/base64.js'
-                ],
-                dest: 'dist/<%= pkg.name %>.js'
+                files: {
+                    'distribution/plugins.js': ['app/plugins.js']
+                }
             }
         },
         uglify: {
@@ -24,52 +22,42 @@ module.exports = function (grunt) {
                 compress: true
             },
             dist: {
-                src: 'dist/<%= pkg.name %>.js',
-                dest: 'dist/<%= pkg.name %>.min.js'
+                // src: 'dist/<%= pkg.name %>.js',
+                // dest: 'dist/<%= pkg.name %>.min.js'
+                src: 'distribution/plugins.js',
+                dest: 'distribution/plugins.min.js'
             }
         },
         jasmine: {
             customTemplate: {
-                src: [
-                    'src/templates.js',
-                    'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js',
-                    'src/jquery.createrequest.js',
-                    'src/jquery.dashboard.js',
-                    'src/jquery.cmmhelp.js'
-                ],
+                src: ['distribution/plugins.js'],
                 options: {
                     specs: 'spec/*Spec.js',
                     vendor: [
-                        'src/config.js',
-                        'lib/base64.js',
-                        'bower_components/jquery/jquery.js',
-                        'bower_components/select2/select2.min.js',
-                        'bower_components/bootstrap/dist/js/bootstrap.js',
-                        'bower_components/underscore/underscore.js'
+                        'node_modules/jquery/dist/jquery.min.js',
+                        'node_modules/underscore/underscore-min.js',
+                        'node_modules/select2/select2.js',
+                        'node_modules/bootstrap/dist/js/bootstrap.js'
                     ],
                     keepRunner: true
                 }
             }
         },
-        jslint: {
-          client: {
-            src: [
-              'src/*.js',
-              'spec/*.js'
-            ]
-          }
+        jst: {
+            'app/templates/compiled.js': ['app/templates/*.html']
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-browserify');
+    // grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-contrib-jst');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task
-    grunt.registerTask('default', 'jasmine');
-    grunt.registerTask('distribute', ['concat', 'uglify']);
-    grunt.registerTask('lint', 'jslint');
+    // grunt.registerTask('default', 'browserify');
+    grunt.registerTask('default', ['jst', 'browserify'/*, 'uglify'*/]);
     grunt.registerTask('test', 'jasmine');
 };
