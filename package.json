@@ -1,10 +1,23 @@
 {
   "name": "api-jquery-plugins",
   "version": "1.1.0",
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browserify-shim": {
+    "./node_modules/jquery/dist/jquery.min.js": "$",
+    "./node_modules/select2/select2.js": {
+      "depends": ["./node_modules/jquery/dist/jquery.min.js"]
+    }
+  },
+  "dependencies": {
+    "browserify-shim": "~3.2.0"
+  },
   "devDependencies": {
     "bootstrap": "^3.2.0",
     "bower": "~1.2.8",
     "browserify": "^4.2.0",
+    "browserify-shim": "^3.6.0",
     "grunt": "~0.4.2",
     "grunt-browserify": "^2.1.1",
     "grunt-contrib-concat": "~0.1.3",

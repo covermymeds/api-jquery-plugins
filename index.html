@@ -16,8 +16,16 @@
 
     <script>
       $(function () {
+        var tokenIds,
+            config;
+
+        config = {
+          apiId: '1vd9o4427lyi0ccb2uem',
+          version: 1
+        };
+
         // Store some example PA IDs
-        var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
+        tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
         if (tokenIds.length === 0) {
           tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
           localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
@@ -25,17 +33,17 @@
 
         $('#drug-search').drugSearch({
           apiId: config.apiId,                // Specified in src/config.js
-          version: 1
+          version: config.version
         });
 
         $('#form-search').formSearch({
           apiId: config.apiId,
-          version: 1
+          version: config.version
         });
 
         $('#start-request').createRequest({
           apiId: config.apiId,
-          version: 1,
+          version: config.version,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
             var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'));
@@ -51,7 +59,7 @@
 
         $('#dashboard').dashboard({
           apiId: config.apiId,
-          version: 1,
+          version: config.version,
           // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
           tokenIds: JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'))
         });

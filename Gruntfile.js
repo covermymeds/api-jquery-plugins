@@ -4,6 +4,7 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         browserify: {
+            // transform: ['browserify-shim'],
             options: {
                 bundleOptions: {
                     standalone: 'CoverMyMeds'
@@ -45,6 +46,15 @@ module.exports = function (grunt) {
         },
         jst: {
             'app/templates/compiled.js': ['app/templates/*.html']
+        },
+        watch: {
+            scripts: {
+                files: ['app/**/*.js', 'app/**/*.html', 'spec/*.js'],
+                tasks: ['jst', 'browserify'],
+                options: {
+                    interrupt: true
+                }
+            }
         }
     });
 
