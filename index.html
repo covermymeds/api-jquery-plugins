@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="distribution/cover-my-meds-api-plugins.js"></script>
+    <link rel="stylesheet" type="text/css" href="distribution/stylesheet.css">
   <!--
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
     <link href="bower_components/select2/select2.css" rel="stylesheet" type="text/css" media="all">
@@ -32,7 +33,7 @@
         }
 
         $('#drug-search').drugSearch({
-          apiId: config.apiId,                // Specified in src/config.js
+          apiId: config.apiId,
           version: config.version
         });
 

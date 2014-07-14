@@ -33,6 +33,29 @@ module.exports = function (grunt) {
                 }
             }
         },
+        less: {
+            development: {
+                options: {
+                    paths: ["app/stylesheets"]
+                },
+                files: {
+                    "distribution/stylesheet.css": "app/stylesheets/main.less"
+                }
+            }
+            // production: {
+            //     options: {
+            //         paths: ["app/stylesheets"],
+            //         cleancss: true
+            //         // modifyVars: {
+            //         //     imgPath: '"http://mycdn.com/path/to/images"',
+            //         //     bgColor: 'red'
+            //         // }
+            //     },
+            //     files: {
+            //         "distribution/stylesheet.css": "app/stylesheets/main.less"
+            //     }
+            // }
+        },
         watch: {
             scripts: {
                 files: ['app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
@@ -52,6 +75,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', 'watch');
-    grunt.registerTask('distribute', ['browserify', 'uglify']);
+    grunt.registerTask('distribute', ['less', 'browserify', 'uglify']);
     grunt.registerTask('test', ['browserify', 'jasmine']);
 };
