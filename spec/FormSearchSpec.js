@@ -1,6 +1,11 @@
 /*jslint sloppy: true */
 /*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false, jQuery: false */
 
+var config = {
+    apiId: '1vd9o4427lyi0ccb2uem',
+    version: 1
+};
+
 describe('Form search input field', function () {
     beforeEach(function () {
         $('body').append('<input type="text" id="form-search">');

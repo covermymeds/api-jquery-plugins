@@ -1,10 +1,12 @@
 /*jslint sloppy: true, unparam: true, todo: true */
-/*global $: false, module: false */
+/*global $: false, module: false, require: false */
 
-var Base64 = require('../vendor/base64.js');
+var Base64 = require('../vendor/base64.js'),
+    $ = require('jquery'),
+    select2 = require('select2-browserify');
 
 module.exports = function (options) {
-    options = options || {};
+    options = $.extend({}, options);
 
     return this.each(function () {
         var defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;

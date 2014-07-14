@@ -1,5 +1,5 @@
 /*jslint sloppy: true, unparam: true, nomen: true */
-/*global require: false, module: false, window: false, $: false*/
+/*global require: false, module: false, window: false */
 
 // String.trim() polyfill
 if (!String.prototype.trim) {
@@ -8,9 +8,11 @@ if (!String.prototype.trim) {
     };
 }
 
-var Base64 = require('../vendor/base64.js');
-var JST = require('../templates/compiled.js').JST;
-var _ = require('../../node_modules/underscore/underscore.js');
+var Base64 = require('../vendor/base64.js'),
+    _ = require('underscore'),
+    template = require('../templates/dashboard.html'),
+    contentTemplate = require('../templates/dashboard-content.html'),
+    $ = require('jquery');
 
 /**
  * @constructor
@@ -164,7 +166,16 @@ CoverMyDashboard.prototype.filter = function (clear) {
  */
 CoverMyDashboard.prototype.render = function () {
     // Render main template to DOM
-    this.elem.html(JST.dashboard({ folders: this.folders, currentFolder: this.currentFolder }));
+    this.elem.html(template({
+        folders: this.folders,
+        currentFolder: this.currentFolder,
+        active: function (one, two) {
+            if (one === two) {
+                return "active";
+            }
+            return "";
+        }
+    }));
 
     // Display content
     this.displayContent();
@@ -289,7 +300,17 @@ CoverMyDashboard.prototype.displayContent = function () {
     totalPages = Math.ceil(this.filteredData.length / this.perPage) - 1; // 0-index based
 
     // Render to DOM
-    $('.content', this.elem).html(JST.dashboardContent({ requests: this.filteredData.slice(begin, end), currentPage: this.currentPage, totalPages: totalPages }));
+    $('.content', this.elem).html(contentTemplate({
+        requests: this.filteredData.slice(begin, end),
+        currentPage: this.currentPage,
+        totalPages: totalPages,
+        active: function (one, two) {
+            if (one === two) {
+                return "active";
+            }
+            return "";
+        }
+    }));
 };
 
 module.exports = function (options) {

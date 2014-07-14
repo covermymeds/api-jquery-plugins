@@ -1,7 +1,8 @@
 /*jslint sloppy: true, unparam: true, todo: true */
 /*global module: false, require: false, $: false */
 
-var Base64 = require('../vendor/base64.js');
+var Base64 = require('../vendor/base64.js'),
+    $ = require('jquery');
 
 module.exports = function (options) {
     options = $.extend({}, options);

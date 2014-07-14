@@ -1,8 +1,12 @@
 /*jslint sloppy: true */
 /*global config: false, describe: false, it: false, expect: false, beforeEach: false, afterEach: false, $: false, runs: false, waitsFor: false */
+var config = {
+    apiId: '1vd9o4427lyi0ccb2uem',
+    version: 1
+};
 
 describe('"Create Request" button', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
         $('body').append('<button id="create-pa">Create PA</button><div id="success"></div>');
 
         $('#create-pa').createRequest({
@@ -25,25 +29,19 @@ describe('"Create Request" button', function () {
             },
             success: function () {
                 $('#success').text('Your request was created.');
+                done();
             }
         });
+
+        $('#create-pa').trigger('click');
     });
 
     afterEach(function () {
         $('#create-pa, #success').remove();
     });
 
-    it('creates a prior authorization request', function () {
-        runs(function () {
-            $('#create-pa').trigger('click');
-        });
-
-        waitsFor(function () {
-            return $('#success').text() === 'Your request was created.';
-        }, 'request to be created', 9000);
-
-        runs(function () {
-            expect($('#success').text()).toBe('Your request was created.');
-        });
+    it('creates a prior authorization request', function (done) {
+        expect($('#success').text()).toBe('Your request was created.');
+        done();
     });
 });

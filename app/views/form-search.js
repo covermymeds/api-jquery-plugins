@@ -1,8 +1,10 @@
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global $: false, module: false, require: false */
 
-var Base64 = require('../vendor/base64.js');
-var JST = require('../templates/compiled.js')['JST'];
+var Base64 = require('../vendor/base64.js'),
+    template = require('../templates/form-search.html'),
+    $ = require('jquery'),
+    select2 = require('select2-browserify');
 
 module.exports = function (options) {
     options = options || {};
@@ -67,7 +69,7 @@ module.exports = function (options) {
                 }
             },
             formatResult: function (form) {
-                return JST['templates/form-search.html']({ form: form });
+                return template({ form: form });
             }
         });
     });

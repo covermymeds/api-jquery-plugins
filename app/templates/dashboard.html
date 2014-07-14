@@ -7,7 +7,7 @@
         <hr>
         <ul class="folders nav nav-pills nav-stacked">
             <% _(folders).each(function (folder, name) { %>
-            <li class="<%= name === currentFolder ? "active" : "" %>"><a href="#<%= name %>"><span class="glyphicon glyphicon-folder-close"></span> <%= name %> <span class="badge pull-right"><%= folder.data.length %></span></a></li>
+            <li class="<%= active(name, currentFolder) %>"><a href="#<%= name %>"><span class="glyphicon glyphicon-folder-close"></span> <%= name %> <span class="badge pull-right"><%= folder.data.length %></span></a></li>
             <% }); %>
         </ul>
         <hr>
