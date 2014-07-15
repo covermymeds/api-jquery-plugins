@@ -12,17 +12,17 @@
             <% if (request.form_id) { %>
             <img src="https://www.covermymeds.com/forms/pdf/thumbs/90/highmark_west_virginia_prescription_drug_medication_6827.jpg">
             <% } else { %>
-            <img src="https://www.covermymeds.com/styles_r2/images/pick_the_form.png">
+            <img src="https://www.covermymeds.com/styles_r2/images/pick_the_form.png" alt="Pick the form">
             <% } %>
             </a>
         </td>
         <td>
-            <h4><%= request.patient.first_name %> <%= request.patient.last_name %> (Key: <%= request.id %>)</h4>
+            <h4><%= request.patient.first_name + ' ' + request.patient.last_name %> (Key: <%= request.id %>)</h4>
             <dl class="dl-horizontal request-details">
                 <dt>Status</dt><dd><span class="label label-info"><%= request.workflow_status %></span></dd>
                 <dt>Drug</dt><dd><%= request.prescription.name || "(Missing)" %></dd>
                 <dt>Created</dt><dd><%= new Date(Date.parse(request.created_at)).toLocaleDateString() %> <% if (request.memo) { %><%= request.memo %><% } %></dd>
-                <dt></dt><dd><a href="<%= request.tokens[0].html_url %>" target="_blank"><%= window.NEWCROP ? "Complete" : "View" %> this request &rarr;</a></dd>
+                <dt></dt><dd><a href="<%= request.tokens[0].html_url %>" target="_blank"><%= window.NEWCROP ? "Complete " : "View " %>this request &rarr;</a></dd>
            </dl>
         </td>
     </tr>
