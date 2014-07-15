@@ -1,6 +1,10 @@
 {
   "name": "api-jquery-plugins",
   "version": "1.1.0",
+  "scripts": {
+    "start": "./node_modules/grunt-cli/bin/grunt distribute",
+    "test": "./node_modules/grunt-cli/bin/grunt test"
+  },
   "browserify": {
     "transform": [
       "browserify-shim",
@@ -19,6 +23,8 @@
     "browserify-shim": "^3.6.0",
     "grunt": "~0.4.2",
     "grunt-browserify": "^2.1.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-cssmin": "^0.10.0",
     "grunt-contrib-jasmine": "^0.6.5",

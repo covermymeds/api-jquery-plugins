@@ -1,0 +1,36 @@
+.navbar-fixed-top {
+	.navbar-right { margin-top: -25px; }
+}
+
+/* Note: the underscore-prefixed rules apply to IE6 only: http://wellstyled.com/css-underscore-hack.html */
+#dashboard { width: 800px; _margin-top: -40px;
+	/* Columns */
+	.col-md-3 { padding: 0; margin: 0; float: left; width: 200px; _width: 185px; }
+	.col-md-9 { padding: 0 0 0 20px; margin: 0; float: right; width: 580px; }
+
+	/* Left nav ordering buttons */
+	.order {
+		.btn-group { display: block; width: 100%; }
+		button { display: block; width: 100%; }
+	}
+
+	/* Left nav folders */
+	.folders { margin: 0;
+		li { margin-bottom: 5px; padding-top: 5px;
+			.badge { margin: -30px 10px 0 0; _margin: -20px 10px 0 0; }
+		}
+	}
+
+	/* Search box */
+	.well {
+		input.search { width: 85%; height: auto; }
+		button.clear { display: none; }
+	}
+
+	/* Pagination */
+	.pagination {
+		li { width: auto; _width: 20px; margin-left: 5px; float: left; text-align: center; border: 1px solid #ccc;
+			a { display: inline; }
+		}
+	}
+}

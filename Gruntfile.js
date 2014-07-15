@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                 }
             }
         },
+        clean: ['app/stylesheets/main.css', 'app/stylesheets/old-ie.css'],
         copy: {
             main: {
                 files: [
@@ -21,8 +22,12 @@ module.exports = function (grunt) {
                             'node_modules/select2-browserify/select2/select2.png'
                         ],
                         dest: 'distribution/css/'
-                    },
-                    {
+                    }, {
+                        expand: true,
+                        flatten: true,
+                        src: ['app/vendor/html5shiv.min.js'],
+                        dest: 'distribution/js/vendor/'
+                    }, {
                         expand: true,
                         flatten: true,
                         src: ['node_modules/bootstrap/dist/fonts/**'],
@@ -42,17 +47,10 @@ module.exports = function (grunt) {
                         'node_modules/select2-browserify/select2/select2-bootstrap.css'
                     ]
                 }
-            }
-        },
-        uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                mangle: true,
-                compress: true
             },
-            dist: {
-                src: 'distribution/js/cover-my-meds-api-plugins.js',
-                dest: 'distribution/js/cover-my-meds-api-plugins.min.js'
+            minify: {
+                src: ['app/stylesheets/old-ie.css'],
+                dest: 'distribution/css/old-ie.css'
             }
         },
         jasmine: {
@@ -74,8 +72,20 @@ module.exports = function (grunt) {
                     paths: ["app/stylesheets"]
                 },
                 files: {
-                    "app/stylesheets/main.css": "app/stylesheets/main.less"
+                    "app/stylesheets/main.css": "app/stylesheets/main.less",
+                    "app/stylesheets/old-ie.css": "app/stylesheets/old-ie.less"
                 }
+            }
+        },
+        uglify: {
+            options: {
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                mangle: true,
+                compress: true
+            },
+            dist: {
+                src: 'distribution/js/cover-my-meds-api-plugins.js',
+                dest: 'distribution/js/cover-my-meds-api-plugins.min.js'
             }
         },
         watch: {
@@ -91,6 +101,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-less');
@@ -99,6 +110,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', 'watch');
     grunt.registerTask('css', ['copy', 'less', 'cssmin']);
-    grunt.registerTask('distribute', ['copy', 'less', 'cssmin', 'browserify', 'uglify']);
+    grunt.registerTask('distribute', ['copy', 'less', 'cssmin', 'clean', 'browserify', 'uglify']);
     grunt.registerTask('test', ['browserify', 'jasmine']);
 };
