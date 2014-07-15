@@ -1,46 +1,56 @@
 CoverMyMeds API jQuery Plugins
 ===============
 
-jQuery plugins to facilitate working with the CMM API. Easily search for drugs, PA forms, and
-create PA requests.
+jQuery plugins to facilitate working with the CMM API. Easily search for drugs, 
+PA forms, and create PA requests.
 
 ### Installation
 
-Uses Grunt for tasks, Bower for dependency management.
+This project is built using [Grunt](http://gruntjs.com/), 
+which requires [NodeJS](http://nodejs.org/download/).
 
-[NodeJS](http://nodejs.org/download/) is required to fetch the appropriate project dependencies.
+Instructions assume a Unix-compatible terminal.
 
-In a terminal, type:
-
-```
+```bash
+cd api-jquery-plugins
 npm install
-./node_modules/bower/bin/bower install
 ```
 
 ### Testing
 
-Load `SpecRunner.html` in a browser window.
+```bash
+npm test
+```
 
 ### Distribution
 
-In a terminal, `grunt distribute` will concatenate all the source files and put a compressed
-and uncompressed version in the `dist` directory. To add to your project, include
-the `dist/api-jquery-plugins.js` file, as well as the `src/config.js` and copies of Underscore.js
-and jQuery. In total, you will need:
+This command will concatenate all the source files into a `distribution` 
+directory:
+
+```bash
+npm start
+```
+
+To add to your project, copy the `distribution` directory, and include 
+the necessary JavaScript and CSS files:
 
 ```
-underscore.js
-api-jquery-plugins.js
-config.js
-jquery.js
-main.css
+distribution/css/stylesheet.css
+distribution/js/cover-my-meds-api-plugins.min.js
+```
+
+If your users are running < IE9, you'll need to include:
+
+```
+distribution/css/old-ie.css
+distribution/vendor/html5shiv.min.js
 ```
 
 ### Usage
 
-The CoverMyMeds API requires an API ID. [Contact us](mailto:developers@covermymeds.com)
-in order to obtain them. For quick testing, enter your ID in the `src/config.js`
-file, then load the `index.html` file.
+The CoverMyMeds API requires an API ID. [Contact us](mailto:developers@covermymeds.com) 
+to obtain them. For quick testing, open the `index.html` file in a text editor, 
+insert your own API ID, and then load the file in a browser.
 
 The basic workflow to create a new Prior Authorization request:
 
@@ -78,13 +88,6 @@ __Options__
 * `url` (optional) - The URL of an "API middleman" app (see "Usage" above)
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
 instead of production.
-
-To remove all event listeners created by the plugin, pass the string 'destroy'
-instead of an object:
-
-```
-$('#drug_search').drugSearch('destroy');
-```
 
 -------------------------------
 
@@ -124,12 +127,7 @@ with a "name" attribute of `request[state]`
 * `debug` (optional) - If the value is set to `true`, the plugin will use the CoverMyMeds test server
 instead of production.
 
-To remove all event listeners created by the plugin, pass the string 'destroy'
-instead of an object:
-
-```
-$('#form_search').formSearch('destroy');
-```
+-------------------------------
 
 #### "Create Request" button - $.createRequest(options)
 
@@ -169,13 +167,6 @@ those values.
 view the request again later, store the `id` of one of the request's tokens and pass it to the `dashboard` plugin.
 * `error` (optional) - a callback which is executed when there is an error creating the request. The callback method takes the
 following 3 arguments: the data returned from the server, a string describing the request status, and a jQuery `jqXHR` object.
-
-To remove all event listeners created by the plugin, pass the string 'destroy'
-instead of an object:
-
-```
-$('#create_request').createRequest('destroy');
-```
 
 -------------------------------
 
