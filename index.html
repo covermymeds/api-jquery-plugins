@@ -3,30 +3,22 @@
   <head>
     <meta charset="utf-8">
     <script src="node_modules/jquery/dist/jquery.js"></script>
-    <script src="distribution/cover-my-meds-api-plugins.js"></script>
-    <link rel="stylesheet" type="text/css" href="distribution/stylesheet.css">
-  <!--
-    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-    <link href="bower_components/select2/select2.css" rel="stylesheet" type="text/css" media="all">
-    <link href="bower_components/select2/select2-bootstrap.css" rel="stylesheet" type="text/css" media="all">
-    <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
-  -->
+    <script src="distribution/js/cover-my-meds-api-plugins.js"></script>
+    <link rel="stylesheet" type="text/css" href="distribution/css/stylesheet.css">
+
     <style type="text/css">
       body { padding: 20px; }
     </style>
 
     <script>
       $(function () {
-        var tokenIds,
-            config;
-
-        config = {
-          apiId: '1vd9o4427lyi0ccb2uem',
-          version: 1
-        };
+        var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [],
+            config = {
+              apiId: '1vd9o4427lyi0ccb2uem',
+              version: 1
+            };
 
         // Store some example PA IDs
-        tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
         if (tokenIds.length === 0) {
           tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
           localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
