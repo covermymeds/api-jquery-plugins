@@ -11,6 +11,7 @@ module.exports = function (grunt) {
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',
                     'src/jquery.dashboard.js',
+                    'src/jquery.requestpages.js',
                     'src/jquery.cmmhelp.js',
                     'lib/base64.js'
                 ],
@@ -36,6 +37,7 @@ module.exports = function (grunt) {
                     'src/jquery.drugsearch.js',
                     'src/jquery.createrequest.js',
                     'src/jquery.dashboard.js',
+                    'src/jquery.requestpages.js',
                     'src/jquery.cmmhelp.js'
                 ],
                 options: {

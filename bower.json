@@ -10,7 +10,7 @@
     "jquery": "~2.0.3",
     "bootstrap": "~3.0.3",
     "select2": "~3.4.5",
-    "underscore" : "~1.5.2"
+    "underscore": "~1.5.2"
   },
   "keywords": [
     "CoverMyMeds",
@@ -27,8 +27,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "resolutions": {
-    "jquery": "~2.0.3"
-  }
+  ]
 }
