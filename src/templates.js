@@ -139,7 +139,7 @@ window.JST.checkbox_question = function(obj) {
         '"\n           name="' +
         ((__t = ( question.questionId() )) == null ? '' : __t) +
         '"\n           value="' +
-        ((__t = ( question.value )) == null ? '' : __t) +
+        ((__t = ( question.checked_value )) == null ? '' : __t) +
         '"\n           ' +
         ((__t = ( question.isRequired() )) == null ? '' : __t) +
         '\n    />\n    ' +
