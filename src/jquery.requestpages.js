@@ -1,9 +1,8 @@
 
 (function($) {
-  $.fn.showRequestPagesForm = function(resourceUrl) {
+  $.fn.showRequestPagesForm = function(options) {
     $.each(this, _.bind(function() {
-      var requestPages   = new RequestPages(resourceUrl);
-
+      var requestPages   = new RequestPages(options);
       requestPages.container = this;
       requestPages.showForm();
     }, this));
@@ -11,13 +10,20 @@
   };
 }(jQuery));
 
-window.RequestPages = function(resourceUrl) {
+window.RequestPages = function(options) {
 
   this.defaultSelector = '.request-pages';
   this.container       = $(this.defaultSelector);
 
-  this._resourceUrl = resourceUrl;
+  this.version = options.version || 1;
+  this.apiId = options.apiId || '';
+  this.tokenId = options.tokenId || '';
+  this.requestId = options.requestId || '';
 
+  this.resourceUrl = options.url || 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/request-pages/' + this.requestId + 
+    '?v=' + this.version + '&api_id=' + this.apiId + '&token_id=' + this.tokenId;
+  console.log("this is the resourceURL "+this.resourceUrl);
+  
   this._getSuccessCallback = _.bind(function(data) {
     this.form = new RequestPages.Form(data['request_page']['forms'], data['request_page']['data'], data['request_page']['actions']);
     $(this.container).html(this.form.render());

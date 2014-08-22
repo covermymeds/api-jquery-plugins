@@ -139,9 +139,7 @@ window.JST.checkbox_question = function(obj) {
         '"\n           name="' +
         ((__t = ( question.questionId() )) == null ? '' : __t) +
         '"\n           value="' +
-        ((__t = ( question.value )) == null ? '' : __t) +
-        '"\n           placeholder="' +
-        ((__t = ( question.placeholder() )) == null ? '' : __t) +
+        ((__t = ( question.checked_value )) == null ? '' : __t) +
         '"\n           ' +
         ((__t = ( question.isRequired() )) == null ? '' : __t) +
         '\n    />\n    ' +
@@ -1016,10 +1014,9 @@ return __p
 
 
 (function($) {
-  $.fn.showRequestPagesForm = function(resourceUrl) {
+  $.fn.showRequestPagesForm = function(options) {
     $.each(this, _.bind(function() {
-      var requestPages   = new RequestPages(resourceUrl);
-
+      var requestPages   = new RequestPages(options);
       requestPages.container = this;
       requestPages.showForm();
     }, this));
@@ -1027,12 +1024,18 @@ return __p
   };
 }(jQuery));
 
-window.RequestPages = function(resourceUrl) {
+window.RequestPages = function(options) {
 
   this.defaultSelector = '.request-pages';
   this.container       = $(this.defaultSelector);
 
-  this._resourceUrl = resourceUrl;
+  this.version = options.version || 1;
+  this.apiId = options.apiId || '';
+  this.tokenId = options.tokenId || '';
+  this.requestId = options.requestId || '';
+
+  this.resourceUrl = options.url || 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/request-pages/' + this.requestId + 
+    '?v=' + this.version + '&api_id=' + this.apiId + '&token_id=' + this.tokenId;
 
   this._getSuccessCallback = _.bind(function(data) {
     this.form = new RequestPages.Form(data['request_page']['forms'], data['request_page']['data'], data['request_page']['actions']);

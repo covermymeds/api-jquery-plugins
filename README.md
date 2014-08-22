@@ -227,3 +227,39 @@ Show some text to help users get in touch with CoverMyMeds.
   });
 </script>
 ```
+
+-------------------------------
+
+#### "Show Request Page" widget - $.requestpages(options)
+
+Given a URL to a request-page, draw it in the given HTML element attached.  Request_Page objects represent the visual display of a given request in a particular state.  
+
+```
+<div id="request-pages"
+  <p>Loading Prior Authorization form...</p>
+</div>
+
+<script>
+  $(function() {
+    var options = {
+      apiId: '<Your API ID>',
+      version: 1,
+      requestId: 'PF6FK9',
+      tokenId: 'gq9vmqai2mkwewv1y55x'
+    };
+    $('.request-pages').showRequestPagesForm(options);
+  });
+</script>
+```
+__Options__
+
+`options` is an object with the following keys:
+
+* `url` - URL that gives back the request-pages JSON for the request you are drawing
+
+If `url` is not specified, the function assumes that you are calling directly against the CoverMyMeds api, and the following are required:
+
+* `requestId` - ID of the request being displayed
+* `tokenId` - corresponding authorization token for the request ID
+* `apiId` - API ID for your application
+
