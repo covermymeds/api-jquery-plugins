@@ -242,8 +242,7 @@ window.JST.form = function(obj) {
             ((__t = ( questionSet.render() )) == null ? '' : __t) +
             '\n  ';
         }); ;
-        __p += '\n\n  <fieldset class=\'controls\'>\n    '
-        += '<input type=\'hidden\' class=\'form_action\' name=\'form_action\' value=\'\' />\n\n    ';
+        __p += '\n\n  <fieldset class=\'controls\'>\n    <input type=\'hidden\' class=\'form_action\' name=\'form_action\' value=\'\' />\n\n    ';
         form.actions.forEach( function(action) { ;
             __p += '\n      ' +
             ((__t = ( action.render() )) == null ? '' : __t) +
