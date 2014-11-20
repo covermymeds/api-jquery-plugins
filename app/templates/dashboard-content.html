@@ -36,19 +36,19 @@
             return Math.abs(currentPage - page) <= window;
         } %>
         <% i = 0; %>
-        <li class="<%= active(i, currentPage) %>"><a href="<%= i %>"><%= (i + 1) %></a></li>
+        <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
         <% if (!insideWindow(i + 1, currentPage)) { %>
-            <li><a href="#">&hellip;</a></li>
+            <li><button>&hellip;</button></li>
         <% } %>
         <% for (i = 1; i <= totalPages - 1; i += 1) {
             if (insideWindow(i, currentPage)) { %>
-                <li class="<%= active(i, currentPage) %>"><a href="<%= i %>"><%= (i + 1) %></a></li>
+                <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
             <% }
         } %>
         <% i = totalPages; %>
         <% if (!insideWindow(i - 1, currentPage)) { %>
-            <li><a href="#">&hellip;</a></li>
+            <li><button>&hellip;</button></li>
         <% } %>
-        <li class="<%= active(i, currentPage) %>"><a href="<%= i %>"><%= (i + 1) %></a></li>
+        <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
     </ul>
 <% } %>

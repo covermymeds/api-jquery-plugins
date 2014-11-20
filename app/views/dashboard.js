@@ -19,7 +19,10 @@ var Base64 = require('../vendor/base64.js'),
  */
 var CoverMyDashboard = function (options) {
     // Ensure 'this' -> 'CoverMyDashboard' in all these methods
-    _.bindAll(this, 'load', 'sort', 'filter', 'render', 'paginate', 'search', 'selectFolder', 'order', 'bindEvents', 'unbindEvents');
+    _.bindAll(this, 'renderContent', 'selectPage', 'search', 'clearSearch', 'selectFolder', 'changeOrder', 'filter');
+
+    this.search = _.debounce(this.search, 500);
+    this.bindEvents();
 
     this.elem = options.elem;   // jQuery object to draw into
     this.url = options.url;
@@ -30,6 +33,8 @@ var CoverMyDashboard = function (options) {
 
     this.currentPage = 0;
     this.perPage = 10;
+
+    this.q = '';
 
     this.currentFolder = 'All';
     this.folders = {
@@ -49,124 +54,73 @@ var CoverMyDashboard = function (options) {
         };
     }
 
-    this.currentOrder = 'desc';
+    this.currentOrder = 'newest';
 
-    if (options.data === undefined) {
-        this.load(_.bind(function () {
-            this.sort();
-            this.filter();
-            this.render();
-        }, this));
+    this.render();
+
+    if (options.requests === undefined) {
+        this.loadData().done(this.renderContent());
     } else {
-        this.data = options.data;
-        this.sort();
-        this.filter();
-        this.render();
+        this.requests = options.requests;
+        this.renderContent();
     }
 };
 
 /**
- * @description Load data for dashboard to display
+ * @description Set up event handlers
  */
-CoverMyDashboard.prototype.load = function (callback) {
-    var self = this;
-
-    this.elem.html('<h3>Loading...</h3>');
-
-    $.ajax({
-        url: this.url || this.defaultUrl,
-        type: 'POST',
-        data: {
-            token_ids: this.tokenIds
-        },
-        beforeSend: function (xhr, settings) {
-            if (self.url === undefined) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + self.apiId + '+');
-            }
-        },
-        success: function (data, status, xhr) {
-            self.data = data.requests;
-
-            if (typeof callback === 'function') {
-                callback();
-            }
-        },
-        error: function (data, status, xhr) {
-            self.elem.empty().text('There was an error processing your request. Please try again.');
-        }
-    });
+CoverMyDashboard.prototype.bindEvents = function () {
+    $('.pagination button', this.elem).on('click', this.selectPage);
+    $('input.search', this.elem).on('keyup', this.search);
+    $('button.clear', this.elem).on('click', this.clearSearch);
+    $('.folders button', this.elem).on('click', this.selectFolder);
+    $('.order button', this.elem).on('click', this.changeOrder);
 };
 
 /**
- * @description Sort by "created_at" timestamp - newer first
+ * @description Count workflow statuses for each PA
  */
-CoverMyDashboard.prototype.sort = function () {
+CoverMyDashboard.prototype.countFolderContents = function () {
     var self = this;
 
-    this.data.sort(function sortByDate(a, b) {
-        if (a.created_at === b.created_at) {
-            return 0;
-        }
-
-        return a.created_at < b.created_at ? 1 : -1;
-    });
-
-    _.each(this.data, function sortIntoFolders(request) {
-        _.each(self.folders, function (folder, name) {
-            if (folder.workflow_statuses.indexOf(request.workflow_status) !== -1) {
-                folder.data.push(request);
+    _(this.requests).each(function (request) {
+        _(self.folders).each(function (folder, name) {
+            if (_(folder.workflow_statuses).contains(request.workflow_status)) {
+                folder.size += 1;
             }
         });
     });
 };
 
 /**
- * @description Filter data based on search input
+ * @description Load data for dashboard to display
  */
-CoverMyDashboard.prototype.filter = function (clear) {
-    var data,
-        request,
-        i,
-        j;
+CoverMyDashboard.prototype.loadData = function (callback) {
+    var self = this;
 
-    data = this.folders[this.currentFolder].data;
+    $('.content', this.elem).html('<h3>Loading...</h3>');
 
-    // Clear out previous filtered values
-    this.filteredData = [];
-    this.searchQuery = $('input[name=q]').val() || '';
-    this.searchQuery = this.searchQuery.trim().toLowerCase();
-
-    // Just use default data if no search query
-    if (this.searchQuery === '') {
-        this.filteredData = data;
-        return;
-    }
-
-    for (i = 0, j = data.length; i < j; i += 1) {
-        request = data[i];
-
-        // determine if request matches any of the searchable fields - first/last name, dob, drug name, or PA key (id)
-        // Only add the request one time if there's any kind of match
-        if (request.patient.first_name.toLowerCase().indexOf(this.searchQuery) !== -1) {
-            this.filteredData.push(request);
-        } else if (request.patient.last_name.toLowerCase().indexOf(this.searchQuery) !== -1) {
-            this.filteredData.push(request);
-        } else if (request.patient.date_of_birth.toLowerCase().indexOf(this.searchQuery) !== -1) {
-            this.filteredData.push(request);
-        } else if (request.prescription.name && request.prescription.name.toLowerCase().indexOf(this.searchQuery) !== -1) {
-            this.filteredData.push(request);
-        } else if (request.id.toLowerCase().indexOf(this.searchQuery) !== -1) {
-            this.filteredData.push(request);
+    return $.ajax({
+        method: 'POST',
+        url: this.url || this.defaultUrl,
+        data: { token_ids: this.tokenIds },
+        beforeSend: function (xhr, settings) {
+            if (self.url === undefined) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + self.apiId + '+');
+            }
         }
-    }
+    }).done(function (data, status, xhr) {
+        self.requests = data.requests;
+    }).fail(function (data, status, xhr) {
+        self.elem.empty().text('There was an error processing your request. Please try again.');
+    });
 };
 
 /**
  * @description Write main template to DOM
  */
 CoverMyDashboard.prototype.render = function () {
-    // Render main template to DOM
-    this.elem.html(template({
+    var compiledTemplate = template({
         folders: this.folders,
         currentFolder: this.currentFolder,
         active: function (one, two) {
@@ -175,133 +129,28 @@ CoverMyDashboard.prototype.render = function () {
             }
             return "";
         }
-    }));
+    });
 
-    // Display content
-    this.displayContent();
-
-    this.bindEvents();
-};
-
-/**
- * @description Set up event handlers
- */
-CoverMyDashboard.prototype.bindEvents = function () {
-    // Handle pagination
-    $('.pagination a', this.elem).on('click', this.paginate);
-
-    // Handle searching
-    $('input.search', this.elem).on('keyup', _.debounce(this.search, 500));
-    $('button.clear', this.elem).on('click', this.search);
-
-    // Handle folder selection
-    $('.folders a', this.elem).on('click', this.selectFolder);
-
-    // Handle date ordering
-    $('.order button', this.elem).on('click', this.order);
-};
-
-/**
- * @description Remove event handlers
- */
-CoverMyDashboard.prototype.unbindEvents = function () {
-    // Handle pagination
-    $('.pagination a', this.elem).off('click', this.paginate);
-
-    // Handle searching
-    $('input.search', this.elem).off('keyup', _.debounce(this.search, 500));
-    $('button.clear', this.elem).off('click', this.search);
-
-    // Handle folder selection
-    $('.folders a', this.elem).off('click', this.selectFolder);
-
-    // Handle date ordering
-    $('.order button', this.elem).off('click', this.order);
-};
-
-/*
- * @description Reverse sort order of requests
- */
-CoverMyDashboard.prototype.order = function (event) {
-    var button = $(event.target);
-
-    if (this.currentOrder !== button.data('direction')) {
-        button.addClass('active').parent('div').siblings('div').children('button').removeClass('active');
-        this.currentOrder = button.data('direction');
-        _.each(this.folders, function (folder) {
-            folder.data.reverse();
-        });
-        this.displayContent();
-    }
-};
-
-/**
- * @description Handle changing sub-folders of requests
- */
-CoverMyDashboard.prototype.selectFolder = function (event) {
-    var folder = $(event.target);
-
-    event.preventDefault();
-
-    $('.folders li', this.elem).removeClass('active');
-    folder.parent('li').addClass('active');
-    this.currentFolder = folder.attr('href').substring(1);
-    this.currentPage = 0;
-    this.filter();
-    this.displayContent();
-};
-
-/**
- * @description Handle search form input
- */
-CoverMyDashboard.prototype.search = function (event) {
-    var target = $(event.target);
-    event.preventDefault();
-
-    if (target.hasClass('clear')) {
-        $('input[name=q]', this.elem).val('');
-    }
-
-    this.currentPage = 0;
-    this.filter();
-    this.displayContent();
-};
-
-/**
- * @description Handle changing pages for request results
- */
-CoverMyDashboard.prototype.paginate = function (event) {
-    var page,
-        button;
-
-    event.preventDefault();
-    button = $(event.target);
-
-    page = parseInt(button.attr('href'), 10);
-
-    if (isNaN(page)) {
-        return;
-    }
-
-    this.currentPage = page;
-    this.displayContent();
+    this.elem.html(compiledTemplate);
 };
 
 /**
  * @description Write current page of requests to the DOM
  */
-CoverMyDashboard.prototype.displayContent = function () {
-    var begin,
+CoverMyDashboard.prototype.renderContent = function () {
+    var requests,
+        begin,
         end,
-        totalPages;
+        totalPages,
+        compiledTemplate;
 
+    requests = _(this.requests).filter(this.filter);
     begin = this.currentPage * this.perPage;
     end = begin + this.perPage;
-    totalPages = Math.ceil(this.filteredData.length / this.perPage) - 1; // 0-index based
+    totalPages = Math.ceil(requests.length / this.perPage) - 1; // 0-index based
 
-    // Render to DOM
-    $('.content', this.elem).html(contentTemplate({
-        requests: this.filteredData.slice(begin, end),
+    compiledTemplate = contentTemplate({
+        requests: requests.slice(begin, end),
         currentPage: this.currentPage,
         totalPages: totalPages,
         active: function (one, two) {
@@ -310,7 +159,147 @@ CoverMyDashboard.prototype.displayContent = function () {
             }
             return "";
         }
-    }));
+    });
+
+    $('.content', this.elem).html(compiledTemplate);
+};
+
+/*
+ * @description Change sort order of requests
+ */
+CoverMyDashboard.prototype.changeOrder = function (event) {
+    var element = $(event.target),
+        order = element.data('order');
+
+    if (order === this.currentOrder) {
+        return;
+    }
+
+    this.currentOrder = order;
+    this.requests.sort(function sortByDate(a, b) {
+        var val = 0;
+
+        if (a.created_at === b.created_at) {
+            return val;
+        }
+
+        if (a.created_at > b.created_at && order === 'newest') {
+            val = -1;
+        } else if (a.created_at < b.created_at) {
+            val = -1;
+        } else {
+            val = 1;
+        }
+
+        return val;
+    });
+
+    this.renderContent();
+};
+
+/**
+ * @description Handle changing sub-folders of requests
+ */
+CoverMyDashboard.prototype.selectFolder = function (event) {
+    var element = $(event.target),
+        folder = element.data('folder-name');
+
+    if (folder === this.currentFolder) {
+        return;
+    }
+
+    this.highlight(element);
+    this.currentFolder = folder;
+    this.currentPage = 0;
+
+    this.renderContent();
+};
+
+/**
+ * @description Handle search form input
+ */
+CoverMyDashboard.prototype.search = function (event) {
+    var element = $(event.target),
+        q = element.val();
+
+    if (q === this.q) {
+        return;
+    }
+
+    this.q = q;
+    this.currentPage = 0;
+
+    this.renderContent();
+};
+
+/**
+ * @description Clear search input
+ */
+CoverMyDashboard.prototype.clearSearch = function () {
+    var q = '';
+
+    if (q === this.q) {
+        return;
+    }
+
+    this.q = q;
+    this.currentPage = 0;
+
+    this.renderContent();
+    $('input[name=q]', this.elem).val(this.q);
+};
+
+/**
+ * @description Handle changing pages for request results
+ */
+CoverMyDashboard.prototype.selectPage = function (event) {
+    var element = $(event.target),
+        page = parseInt(element.data('page'), 10);
+
+    if (isNaN(page)) {
+        return;
+    }
+
+    this.currentPage = page;
+    this.renderContent();
+};
+
+/**
+ * @description Helper method to highlight active UI elements
+ */
+CoverMyDashboard.prototype.highlight = function (element) {
+    element.parent('li').addClass('active').siblings('li').removeClass('active');
+};
+
+
+CoverMyDashboard.prototype.filter = function (request) {
+    return this.searchFilter(request) && this.folderFilter(request);
+};
+
+CoverMyDashboard.prototype.folderFilter = function (request) {
+    return _(this.folders[this.currentFolder].workflow_statuses).contains(request.workflow_status);
+};
+
+CoverMyDashboard.prototype.searchFilter = function (request) {
+    var tokens = this.q.split(' '),
+        self = this;
+
+    return _(tokens).reduce(function (allMatched, token) {
+        return allMatched && self.requestMatchesToken(request, token);
+    });
+};
+
+CoverMyDashboard.prototype.matchesToken = function (request, token) {
+    if (request.patient.first_name.toLowerCase().indexOf(token) !== -1 ||
+            request.patient.last_name.toLowerCase().indexOf(token) !== -1 ||
+            (request.patient.date_of_birth && request.patient.date_of_birth.toLowerCase().indexOf(token) !== -1) ||
+            (request.prescription && request.prescription.name.toLowerCase().indexOf(token) !== -1) ||
+            request.id.toLowerCase().indexOf(token) !== -1) {
+
+        return true;
+    }
+
+    return false;
 };
 
 module.exports = function (options) {
