@@ -32,7 +32,7 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jslint": "~1.1.2",
-    "jquery": "^2.1.1",
+    "jquery": "^1.11.1",
     "jstify": "^0.2.0",
     "select2-browserify": "^3.4.5",
     "underscore": "^1.6.0"
