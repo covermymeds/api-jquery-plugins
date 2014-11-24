@@ -18,12 +18,6 @@ var Base64 = require('../vendor/base64.js'),
  * @constructor
  */
 var CoverMyDashboard = function (options) {
-    // Ensure 'this' -> 'CoverMyDashboard' in all these methods
-    _.bindAll(this, 'renderContent', 'selectPage', 'search', 'clearSearch', 'selectFolder', 'changeOrder', 'filter');
-
-    this.search = _.debounce(this.search, 500);
-    this.bindEvents();
-
     this.elem = options.elem;   // jQuery object to draw into
     this.url = options.url;
     this.defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
@@ -34,32 +28,27 @@ var CoverMyDashboard = function (options) {
     this.currentPage = 0;
     this.perPage = 10;
 
+    this.currentOrder = 'newest';
+
     this.q = '';
 
     this.currentFolder = 'All';
     this.folders = {
-        'All': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online", "Appealed", "Sent to Plan"], data: [] },
-        'New': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online"], data: [] },
-        'Open': { workflow_statuses: ["Appealed", "Sent to Plan"], data: [] }
+        'All': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online", "Appealed", "Sent to Plan", 'Archived'], count: 0 },
+        'New': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online"], count: 0 },
+        'Open': { workflow_statuses: ["Appealed", "Sent to Plan"], count: 0 },
+        'Archived': { workflow_statuses: ['Archived'], count: 0 }
     };
-
-    if (window.NEWCROP) {
-        this.folders = {
-            'All': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online", "Appealed", "Sent to Plan"], data: [] },
-            'Incomplete': { workflow_statuses: ["New", "Shared", "Shared \\ Accessed Online"], data: [] },
-            'Pending': { workflow_statuses: ["Appealed", "Sent to Plan"], data: [] },
-            // wat?
-            // 'New': { workflow_statuses: ["Appealed", "Sent to Plan"], data: [] },
-            'Archived': { workflow_statuses: ["Archived"], data: [] }
-        };
-    }
-
-    this.currentOrder = 'newest';
 
     this.render();
 
+    // Ensure 'this' -> 'CoverMyDashboard' in all these methods
+    _.bindAll(this, 'renderContent', 'selectPage', 'search', 'clearSearch', 'selectFolder', 'changeOrder', 'filter');
+    this.search = _.debounce(this.search, 500);
+    this.bindEvents();
+
     if (options.requests === undefined) {
-        this.loadData().done(this.renderContent());
+        this.loadData();
     } else {
         this.requests = options.requests;
         this.renderContent();
@@ -70,25 +59,29 @@ var CoverMyDashboard = function (options) {
  * @description Set up event handlers
  */
 CoverMyDashboard.prototype.bindEvents = function () {
-    $('.pagination button', this.elem).on('click', this.selectPage);
+    $('.pagination a', this.elem).on('click', this.selectPage);
     $('input.search', this.elem).on('keyup', this.search);
     $('button.clear', this.elem).on('click', this.clearSearch);
-    $('.folders button', this.elem).on('click', this.selectFolder);
-    $('.order button', this.elem).on('click', this.changeOrder);
+    $('.folders a', this.elem).on('click', this.selectFolder);
+    $('.order a', this.elem).on('click', this.changeOrder);
 };
 
 /**
  * @description Count workflow statuses for each PA
  */
-CoverMyDashboard.prototype.countFolderContents = function () {
+CoverMyDashboard.prototype.updateFolderCount = function () {
     var self = this;
 
     _(this.requests).each(function (request) {
         _(self.folders).each(function (folder, name) {
             if (_(folder.workflow_statuses).contains(request.workflow_status)) {
-                folder.size += 1;
+                folder.count += 1;
             }
         });
+    });
+
+    _(this.folders).each(function (folder, name) {
+        $('#folder-' + name.toLowerCase() + '-count', self.elem).html(folder.count);
     });
 };
 
@@ -111,6 +104,14 @@ CoverMyDashboard.prototype.loadData = function (callback) {
         }
     }).done(function (data, status, xhr) {
         self.requests = data.requests;
+        self.requests.sort(function sortByDate(a, b) {
+            if (a.created_at === b.created_at) {
+                return 0;
+            }
+            return a.created_at < b.created_at ? 1 : -1;
+        });
+        self.updateFolderCount();
+        self.renderContent();
     }).fail(function (data, status, xhr) {
         self.elem.empty().text('There was an error processing your request. Please try again.');
     });
@@ -158,6 +159,9 @@ CoverMyDashboard.prototype.renderContent = function () {
                 return "active";
             }
             return "";
+        },
+        insideWindow: function (page, currentPage) {
+            return Math.abs(currentPage - page) <= 2;
         }
     });
 
@@ -168,6 +172,8 @@ CoverMyDashboard.prototype.renderContent = function () {
  * @description Change sort order of requests
  */
 CoverMyDashboard.prototype.changeOrder = function (event) {
+    event.preventDefault();
+
     var element = $(event.target),
         order = element.data('order');
 
@@ -175,24 +181,9 @@ CoverMyDashboard.prototype.changeOrder = function (event) {
         return;
     }
 
+    this.highlight(element);
     this.currentOrder = order;
-    this.requests.sort(function sortByDate(a, b) {
-        var val = 0;
-
-        if (a.created_at === b.created_at) {
-            return val;
-        }
-
-        if (a.created_at > b.created_at && order === 'newest') {
-            val = -1;
-        } else if (a.created_at < b.created_at) {
-            val = -1;
-        } else {
-            val = 1;
-        }
-
-        return val;
-    });
+    this.requests.reverse();
 
     this.renderContent();
 };
@@ -201,6 +192,8 @@ CoverMyDashboard.prototype.changeOrder = function (event) {
  * @description Handle changing sub-folders of requests
  */
 CoverMyDashboard.prototype.selectFolder = function (event) {
+    event.preventDefault();
+
     var element = $(event.target),
         folder = element.data('folder-name');
 
@@ -285,8 +278,8 @@ CoverMyDashboard.prototype.searchFilter = function (request) {
         self = this;
 
     return _(tokens).reduce(function (allMatched, token) {
-        return allMatched && self.requestMatchesToken(request, token);
-    });
+        return allMatched && self.matchesToken(request, token);
+    }, true);
 };
 
 CoverMyDashboard.prototype.matchesToken = function (request, token) {

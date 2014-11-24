@@ -31,24 +31,20 @@
 
 <% if (totalPages > 0) { %>
     <ul class="pagination">
-        <% function insideWindow(page, currentPage) {
-            var window = 2;
-            return Math.abs(currentPage - page) <= window;
-        } %>
         <% i = 0; %>
-        <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
+        <li class="<%= active(i, currentPage) %>"><a href="#" data-page="<%= i %>"><%= (i + 1) %></a></li>
         <% if (!insideWindow(i + 1, currentPage)) { %>
-            <li><button>&hellip;</button></li>
+            <li><a href="#">&hellip;</a></li>
         <% } %>
         <% for (i = 1; i <= totalPages - 1; i += 1) {
             if (insideWindow(i, currentPage)) { %>
-                <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
+                <li class="<%= active(i, currentPage) %>"><a href="#" data-page="<%= i %>"><%= (i + 1) %></a></li>
             <% }
         } %>
         <% i = totalPages; %>
         <% if (!insideWindow(i - 1, currentPage)) { %>
-            <li><button>&hellip;</button></li>
+            <li><a href="#">&hellip;</a></li>
         <% } %>
-        <li class="<%= active(i, currentPage) %>"><button data-page="<%= i %>"><%= (i + 1) %></button></li>
+        <li class="<%= active(i, currentPage) %>"><a href="#" data-page="<%= i %>"><%= (i + 1) %></a></li>
     </ul>
 <% } %>
