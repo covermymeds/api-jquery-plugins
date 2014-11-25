@@ -12,7 +12,8 @@ var Base64 = require('../vendor/base64.js'),
     _ = require('underscore'),
     template = require('../templates/dashboard.html'),
     contentTemplate = require('../templates/dashboard-content.html'),
-    $ = require('jquery');
+    $ = require('jquery'),
+    moment = require('moment');
 
 /**
  * @constructor
@@ -43,14 +44,14 @@ var CoverMyDashboard = function (options) {
     this.render();
 
     // Ensure 'this' -> 'CoverMyDashboard' in all these methods
-    _.bindAll(this, 'renderContent', 'selectPage', 'search', 'clearSearch', 'selectFolder', 'changeOrder', 'filter');
+    _.bindAll(this, 'processData', 'renderContent', 'selectPage', 'search', 'clearSearch', 'selectFolder', 'changeOrder', 'filter');
     this.search = _.debounce(this.search, 500);
     this.bindEvents();
 
     if (options.requests === undefined) {
         this.loadData();
     } else {
-        this.requests = options.requests;
+        this.processData(options.requests);
         this.renderContent();
     }
 };
@@ -59,7 +60,7 @@ var CoverMyDashboard = function (options) {
  * @description Set up event handlers
  */
 CoverMyDashboard.prototype.bindEvents = function () {
-    $('.pagination a', this.elem).on('click', this.selectPage);
+    $('.content', this.elem).on('click', '.pagination a', this.selectPage);
     $('input.search', this.elem).on('keyup', this.search);
     $('button.clear', this.elem).on('click', this.clearSearch);
     $('.folders a', this.elem).on('click', this.selectFolder);
@@ -103,18 +104,24 @@ CoverMyDashboard.prototype.loadData = function (callback) {
             }
         }
     }).done(function (data, status, xhr) {
-        self.requests = data.requests;
-        self.requests.sort(function sortByDate(a, b) {
-            if (a.created_at === b.created_at) {
-                return 0;
-            }
-            return a.created_at < b.created_at ? 1 : -1;
-        });
-        self.updateFolderCount();
+        self.processData(data.requests);
         self.renderContent();
     }).fail(function (data, status, xhr) {
         self.elem.empty().text('There was an error processing your request. Please try again.');
     });
+};
+
+CoverMyDashboard.prototype.processData = function (requests) {
+    this.requests = requests;
+
+    this.requests.sort(function sortByDate(a, b) {
+        if (a.created_at === b.created_at) {
+            return 0;
+        }
+        return a.created_at < b.created_at ? 1 : -1;
+    });
+
+    this.updateFolderCount();
 };
 
 /**
@@ -154,6 +161,7 @@ CoverMyDashboard.prototype.renderContent = function () {
         requests: requests.slice(begin, end),
         currentPage: this.currentPage,
         totalPages: totalPages,
+        moment: moment,
         active: function (one, two) {
             if (one === two) {
                 return "active";
@@ -246,6 +254,8 @@ CoverMyDashboard.prototype.clearSearch = function () {
  * @description Handle changing pages for request results
  */
 CoverMyDashboard.prototype.selectPage = function (event) {
+    event.preventDefault();
+
     var element = $(event.target),
         page = parseInt(element.data('page'), 10);
 

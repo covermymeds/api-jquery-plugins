@@ -17,11 +17,11 @@
             </a>
         </td>
         <td>
-            <h4><%= request.patient.first_name + ' ' + request.patient.last_name %> (Key: <%= request.id %>)</h4>
+            <h4><%= request.patient.first_name + ' ' + request.patient.last_name + ' ' %> (Key: <%= request.id %>)</h4>
             <dl class="dl-horizontal request-details">
                 <dt>Status</dt><dd><span class="label label-info"><%= request.workflow_status %></span></dd>
                 <dt>Drug</dt><dd><%= request.prescription.name || "(Missing)" %></dd>
-                <dt>Created</dt><dd><%= new Date(Date.parse(request.created_at)).toLocaleDateString() %> <% if (request.memo) { %><%= request.memo %><% } %></dd>
+                <dt>Created</dt><dd><%= moment(request.created_at).format("L") %> <% if (request.memo) { %><%= request.memo %><% } %></dd>
                 <dt></dt><dd><a href="<%= request.tokens[0].html_url %>" target="_blank"><%= window.NEWCROP ? "Complete " : "View " %>this request &rarr;</a></dd>
            </dl>
         </td>

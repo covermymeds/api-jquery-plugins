@@ -1,6 +1,6 @@
 {
   "name": "api-jquery-plugins",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "scripts": {
     "start": "./node_modules/grunt-cli/bin/grunt distribute",
     "test": "./node_modules/grunt-cli/bin/grunt test"
@@ -34,6 +34,7 @@
     "grunt-jslint": "~1.1.2",
     "jquery": "^1.11.1",
     "jstify": "^0.2.0",
+    "moment": "^2.8.4",
     "select2-browserify": "^3.4.5",
     "underscore": "^1.6.0"
   }
