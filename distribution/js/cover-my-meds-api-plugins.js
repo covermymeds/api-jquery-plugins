@@ -757,18 +757,26 @@ module.exports = function (options) {
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../templates/dashboard-content.html":2,"../templates/dashboard.html":3,"../vendor/base64.js":6,"moment":12,"underscore":15}],9:[function(require,module,exports){
 (function (global){
-/*jslint sloppy: true, unparam: true, todo: true */
+/*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global $: false, module: false, require: false */
 
 var Base64 = require('../vendor/base64.js'),
     $ = (typeof window !== "undefined" ? window.$ : typeof global !== "undefined" ? global.$ : null),
-    select2 = require('select2-browserify');
+    select2 = require('select2-browserify'),
+    _ = require('underscore');
 
 module.exports = function (options) {
     options = $.extend({}, options);
 
     return this.each(function () {
-        var defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
+        var defaultUrl,
+            originalCorsSupport;
+
+        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
+        defaultUrl = 'https://t1-api.testing.covermymeds.com/drugs?v=' + options.version;
+
+        originalCorsSupport = $.support.cors;
+        $.support.cors = true;
 
         $(this).select2({
             placeholder: 'Begin typing the medication name and select from list',
@@ -776,16 +784,46 @@ module.exports = function (options) {
             ajax: {
                 quietMillis: 250,
                 url: options.url || defaultUrl,
-                transport: function (params) {
+                transport: function (xhrOptions) {
                     // Add authorization header if directly querying API;
                     // otherwise we assume our custom URL will handle authorization
                     if (!options.url) {
-                        params.beforeSend = function (xhr) {
-                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
-                        };
+                        _.extend(xhrOptions, {
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
+                            }
+                        });
                     }
 
-                    return $.ajax(params);
+                    xhrOptions.error = function (xhr, status) {
+                        alert(status);
+                        alert(xhr.statusText);
+                    };
+
+                    if (!originalCorsSupport) {
+                        _.extend(xhrOptions, {
+                            xhr: function () {
+                                var iframe,
+                                    xhr;
+
+                                iframe = $('iframe.cors')[0].contentWindow;
+
+                                if (iframe.XMLHttpRequest !== undefined) {
+                                    alert('creating regular ajax obj')
+                                    // xhr = new iframe.XMLHttpRequest();
+                                } else {
+                                    alert('creating MS XMLHTTP obj!');
+                                    // xhr = new iframe.ActiveXObject('Microsoft.XMLHTTP');
+                                }
+
+                                return xhr;
+                            }
+                        });
+                    }
+
+                    return _($.ajax(xhrOptions)).tap(function () {
+                        $.support.cors = originalCorsSupport;
+                    });
                 },
                 data: function (term, page) {
                     return {
@@ -818,7 +856,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../vendor/base64.js":6,"select2-browserify":13}],10:[function(require,module,exports){
+},{"../vendor/base64.js":6,"select2-browserify":13,"underscore":15}],10:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global $: false, module: false, require: false */
