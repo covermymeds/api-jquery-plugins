@@ -1,4 +1,4 @@
-#dashboard dt{width:60px}#dashboard dd{margin-left:75px}#dashboard td.form-thumbnail{width:120px;padding-top:16px}/*!
+dl.request-details{overflow:auto}dl.request-details dt{width:60px;float:left;clear:left}dl.request-details dd{float:left;margin-left:15px}td.form-thumbnail{width:120px;padding-top:16px}/*!
  * Bootstrap v3.2.0 (http://getbootstrap.com)
  * Copyright 2011-2014 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
