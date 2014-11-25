@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="navigation col-md-3">
+        <ul class="order nav nav-pills">
+            <li class="active"><a href="#" data-order="newest">Newest First</a></li>
+            <li><a href="#" data-order="oldest">Oldest First</a></li>
+        </ul>
+        <hr>
+        <ul class="folders nav nav-pills nav-stacked">
+            <% _(folders).each(function (folder, name) { %>
+            <li class="<%= active(name, currentFolder) %>"><a href="#" data-folder-name="<%= name %>"><span class="glyphicon glyphicon-folder-close"></span> <%= name %> <span class="badge pull-right" id="folder-<%= name.toLowerCase() %>-count">0</span></button></li>
+            <% }); %>
+        </ul>
+        <hr>
+        <form action="#" class="well" method="get" role="form">
+        <fieldset>
+            <legend>Search</legend>
+            <div class="input-group">
+                <input class="form-control search" name="q" placeholder="Search" type="search">
+                <span class="input-group-btn">
+                    <button class="clear btn btn-default" type="button"><span class="clear glyphicon glyphicon-remove"></span></button>
+                </span>
+            </div>
+          </fieldset>
+        </form>
+    </div>
+    <div class="content col-md-9">
+    </div> <!-- /.content -->
+</div> <!-- /.row -->

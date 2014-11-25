@@ -2,52 +2,43 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/select2/select2.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-
-    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css" media="all">
-    <link href="bower_components/select2/select2.css" rel="stylesheet" type="text/css" media="all">
-    <link href="bower_components/select2/select2-bootstrap.css" rel="stylesheet" type="text/css" media="all">
-
-    <link href="css/main.css" rel="stylesheet" type="text/css" media="all">
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="distribution/js/cover-my-meds-api-plugins.js"></script>
+    <link rel="stylesheet" type="text/css" href="distribution/css/stylesheet.css">
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="distribution/css/old-ie.css">
+    <![endif]-->
     <style type="text/css">
       body { padding: 20px; }
     </style>
 
-    <script src="lib/base64.js"></script>
-
-    <script src="src/config.js"></script>
-    <script src="src/templates.js"></script>
-    <script src="src/jquery.drugsearch.js"></script>
-    <script src="src/jquery.formsearch.js"></script>
-    <script src="src/jquery.createrequest.js"></script>
-    <script src="src/jquery.dashboard.js"></script>
-    <script src="src/jquery.cmmhelp.js"></script>
-
     <script>
       $(function () {
+        var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [],
+            config = {
+              apiId: '1vd9o4427lyi0ccb2uem',
+              version: 1
+            };
+
         // Store some example PA IDs
-        var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids')) || [];
         if (tokenIds.length === 0) {
           tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
           localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
         }
 
         $('#drug-search').drugSearch({
-          apiId: config.apiId,                // Specified in src/config.js
-          version: 1
+          apiId: config.apiId,
+          version: config.version
         });
 
         $('#form-search').formSearch({
           apiId: config.apiId,
-          version: 1
+          version: config.version
         });
 
         $('#start-request').createRequest({
           apiId: config.apiId,
-          version: 1,
+          version: config.version,
           success: function (data, status, xhr) {
             // Temporarily store data in localstorage, to be accessed later
             var tokenIds = JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'));
@@ -63,7 +54,7 @@
 
         $('#dashboard').dashboard({
           apiId: config.apiId,
-          version: 1,
+          version: config.version,
           // Search using the stored IDs from earlier, or some defaults if we haven't created any yet
           tokenIds: JSON.parse(localStorage.getItem('cmm_plugin_api_token_ids'))
         });

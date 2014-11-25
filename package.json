@@ -1,12 +1,41 @@
 {
   "name": "api-jquery-plugins",
-  "version": "1.1.0",
+  "version": "3.0.0",
+  "scripts": {
+    "start": "./node_modules/grunt-cli/bin/grunt distribute",
+    "test": "./node_modules/grunt-cli/bin/grunt test"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim",
+      "jstify"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:$"
+  },
+  "dependencies": {
+    "browserify-shim": "~3.2.0"
+  },
   "devDependencies": {
+    "bootstrap": "^3.2.0",
+    "browserify": "^4.2.0",
+    "browserify-shim": "^3.6.0",
     "grunt": "~0.4.2",
+    "grunt-browserify": "^2.1.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-copy": "^0.5.0",
+    "grunt-contrib-cssmin": "^0.10.0",
+    "grunt-contrib-jasmine": "^0.6.5",
+    "grunt-contrib-less": "^0.11.3",
     "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-contrib-concat": "~0.1.3",
+    "grunt-contrib-watch": "^0.6.1",
     "grunt-jslint": "~1.1.2",
-    "bower": "~1.2.8"
+    "jquery": "^1.11.1",
+    "jstify": "^0.2.0",
+    "moment": "^2.8.4",
+    "select2-browserify": "^3.4.5",
+    "underscore": "^1.6.0"
   }
 }

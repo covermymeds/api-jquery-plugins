@@ -3,18 +3,78 @@
 module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        concat: {
+        browserify: {
             dist: {
-                src: [
-                    'src/templates.js',
-                    'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js',
-                    'src/jquery.createrequest.js',
-                    'src/jquery.dashboard.js',
-                    'src/jquery.cmmhelp.js',
-                    'lib/base64.js'
-                ],
-                dest: 'dist/<%= pkg.name %>.js'
+                files: {
+                    'distribution/js/cover-my-meds-api-plugins.js': ['app/plugins.js']
+                }
+            }
+        },
+        clean: ['app/stylesheets/main.css', 'app/stylesheets/old-ie.css'],
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: [
+                            'node_modules/select2-browserify/select2/select2-spinner.gif',
+                            'node_modules/select2-browserify/select2/select2.png'
+                        ],
+                        dest: 'distribution/css/'
+                    }, {
+                        expand: true,
+                        flatten: true,
+                        src: ['app/vendor/html5shiv.min.js'],
+                        dest: 'distribution/js/vendor/'
+                    }, {
+                        expand: true,
+                        flatten: true,
+                        src: ['node_modules/bootstrap/dist/fonts/**'],
+                        dest: 'distribution/fonts/',
+                        filter: 'isFile'
+                    }
+                ]
+            }
+        },
+        cssmin: {
+            combine: {
+                files: {
+                    'distribution/css/stylesheet.css': [
+                        'app/stylesheets/main.css',
+                        'node_modules/bootstrap/dist/css/bootstrap.css',
+                        'node_modules/select2-browserify/select2/select2.css',
+                        'node_modules/select2-browserify/select2/select2-bootstrap.css'
+                    ]
+                }
+            },
+            minify: {
+                src: ['app/stylesheets/old-ie.css'],
+                dest: 'distribution/css/old-ie.css'
+            }
+        },
+        jasmine: {
+            customTemplate: {
+                src: ['distribution/js/cover-my-meds-api-plugins.js'],
+                options: {
+                    specs: 'spec/*-spec.js',
+                    vendor: [
+                        'node_modules/jquery/dist/jquery.min.js',
+                        'spec/vendor/mock-ajax.js'
+                    ],
+                    keepRunner: false
+                }
+            }
+        },
+        less: {
+            development: {
+                options: {
+                    paths: ["app/stylesheets"]
+                },
+                files: {
+                    "app/stylesheets/main.css": "app/stylesheets/main.less",
+                    "app/stylesheets/old-ie.css": "app/stylesheets/old-ie.less"
+                }
             }
         },
         uglify: {
@@ -24,52 +84,32 @@ module.exports = function (grunt) {
                 compress: true
             },
             dist: {
-                src: 'dist/<%= pkg.name %>.js',
-                dest: 'dist/<%= pkg.name %>.min.js'
+                src: 'distribution/js/cover-my-meds-api-plugins.js',
+                dest: 'distribution/js/cover-my-meds-api-plugins.min.js'
             }
         },
-        jasmine: {
-            customTemplate: {
-                src: [
-                    'src/templates.js',
-                    'src/jquery.formsearch.js',
-                    'src/jquery.drugsearch.js',
-                    'src/jquery.createrequest.js',
-                    'src/jquery.dashboard.js',
-                    'src/jquery.cmmhelp.js'
-                ],
+        watch: {
+            scripts: {
+                files: ['app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
+                tasks: ['browserify'],
                 options: {
-                    specs: 'spec/*Spec.js',
-                    vendor: [
-                        'src/config.js',
-                        'lib/base64.js',
-                        'bower_components/jquery/jquery.js',
-                        'bower_components/select2/select2.min.js',
-                        'bower_components/bootstrap/dist/js/bootstrap.js',
-                        'bower_components/underscore/underscore.js'
-                    ],
-                    keepRunner: true
+                    interrupt: true
                 }
             }
-        },
-        jslint: {
-          client: {
-            src: [
-              'src/*.js',
-              'spec/*.js'
-            ]
-          }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-browserify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
-    // Default task
-    grunt.registerTask('default', 'jasmine');
-    grunt.registerTask('distribute', ['concat', 'uglify']);
-    grunt.registerTask('lint', 'jslint');
-    grunt.registerTask('test', 'jasmine');
+    grunt.registerTask('default', 'watch');
+    grunt.registerTask('css', ['copy', 'less', 'cssmin']);
+    grunt.registerTask('distribute', ['copy', 'less', 'cssmin', 'clean', 'browserify', 'uglify']);
+    grunt.registerTask('test', ['browserify', 'jasmine']);
 };
