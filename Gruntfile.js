@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                     }, {
                         expand: true,
                         flatten: true,
-                        src: ['app/vendor/html5shiv.min.js'],
+                        src: ['app/vendor/html5shiv.min.js', 'app/vendor/respond.min.js'],
                         dest: 'distribution/js/vendor/'
                     }, {
                         expand: true,
