@@ -5,13 +5,9 @@
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="distribution/js/cover-my-meds-api-plugins.js"></script>
     <link rel="stylesheet" type="text/css" href="distribution/css/stylesheet.css">
-    <!--[if lte IE 7]>
+    <!--[if lte IE 9]>
     <link rel="stylesheet" type="text/css" href="distribution/css/old-ie.css">
     <![endif]-->
-    <script type="text/javascript">
-      // alert(document.domain);
-      document.domain = "covermymeds.com";
-    </script>
     <style type="text/css">
       body { padding: 20px; }
     </style>
@@ -87,7 +83,7 @@
           <label for="state">Patient State</label>
           <select id="state" name="request[state]" class="form-control">
             <option>Select a state</option>
-            <option value="OH">Ohio</option>
+            <option selected="selected" value="OH">Ohio</option>
           </select>
         </p>
         <p>
@@ -117,8 +113,6 @@
       <legend>Help!</legend>
       <div id="help"></div>
     </fieldset>
-
-    <iframe class="cors" src="https://t1-api.testing.covermymeds.com/cors-iframe.html"></iframe>
 
   </body>
 </html>
