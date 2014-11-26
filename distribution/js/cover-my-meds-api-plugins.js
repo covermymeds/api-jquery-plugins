@@ -1,16 +1,26 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*jslint sloppy: true */
-/*global require: false */
+/*global require: false, $: false */
 
-window.$.fn.extend({
-    dashboard: require('./views/dashboard.js'),
-    showHelp: require('./views/help.js'),
-    createRequest: require('./views/create-request.js'),
-    drugSearch: require('./views/drug-search.js'),
-    formSearch: require('./views/form-search.js')
+if (!$.support.cors) {
+    var xdomain = require("./vendor/xdomain.min").xdomain;
+
+    xdomain.slaves({
+        'https://api.covermymeds.com': '/xhr-proxy.html'
+    });
+
+    $.support.cors = true;
+}
+
+$.fn.extend({
+    dashboard: require('./views/dashboard'),
+    showHelp: require('./views/help'),
+    createRequest: require('./views/create-request'),
+    drugSearch: require('./views/drug-search'),
+    formSearch: require('./views/form-search')
 });
 
-},{"./views/create-request.js":7,"./views/dashboard.js":8,"./views/drug-search.js":9,"./views/form-search.js":10,"./views/help.js":11}],2:[function(require,module,exports){
+},{"./vendor/xdomain.min":7,"./views/create-request":8,"./views/dashboard":9,"./views/drug-search":10,"./views/form-search":11,"./views/help":12}],2:[function(require,module,exports){
 var _ = require('underscore');
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
@@ -95,7 +105,7 @@ __p+='';
 }
 return __p;
 };
-},{"underscore":15}],3:[function(require,module,exports){
+},{"underscore":16}],3:[function(require,module,exports){
 var _ = require('underscore');
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
@@ -116,7 +126,7 @@ __p+='</ul><hr><form action="#" class="well" method="get" role="form"><fieldset>
 }
 return __p;
 };
-},{"underscore":15}],4:[function(require,module,exports){
+},{"underscore":16}],4:[function(require,module,exports){
 var _ = require('underscore');
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
@@ -129,7 +139,7 @@ __p+='<table class="table"><tr><td><img src="'+
 }
 return __p;
 };
-},{"underscore":15}],5:[function(require,module,exports){
+},{"underscore":16}],5:[function(require,module,exports){
 var _ = require('underscore');
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
@@ -138,7 +148,7 @@ __p+='<h1>For assistance using CoverMyMeds&reg;</h1><ul><li>Phone: 1-866-452-501
 }
 return __p;
 };
-},{"underscore":15}],6:[function(require,module,exports){
+},{"underscore":16}],6:[function(require,module,exports){
 /**
  *
  *  Base64 encode / decode
@@ -284,6 +294,10 @@ var Base64 = {
 module.exports = Base64;
 
 },{}],7:[function(require,module,exports){
+// XDomain - v0.6.15 - https://github.com/jpillora/xdomain
+// Jaime Pillora <dev@jpillora.com> - MIT Copyright 2014
+(function(a,b){(function(a,b){var c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x=[].indexOf||function(a){for(var b=0,c=this.length;c>b;b++)if(b in this&&this[b]===a)return b;return-1};q=a.document,d="before",c="after",l="readyState",k="addEventListener",j="removeEventListener",g="dispatchEvent",o="XMLHttpRequest",h="FormData",m=["load","loadend","loadstart"],e=["progress","abort","error","timeout"],(w=Array.prototype).indexOf||(w.indexOf=function(a){var b,c,d,e;for(b=d=0,e=this.length;e>d;b=++d)if(c=this[b],c===a)return b;return-1}),u=function(a,b){return Array.prototype.slice.call(a,b)},s=function(a,b){var c,d;for(c in a)if(d=a[c],"returnValue"!==c)try{b[c]=a[c]}catch(e){}return b},t=function(a,b,c){var d,e,f,h;for(e=function(a){return function(d){var e,f,h;e={};for(f in d)"returnValue"!==f&&(h=d[f],e[f]=h===b?c:h);return c[g](a,e)}},f=0,h=a.length;h>f;f++)d=a[f],b["on"+d]=e(d)},r=function(a){var b;if(null!=q.createEventObject)return b=q.createEventObject(),b.type=a,b;try{return new Event(a)}catch(c){return{type:a}}},f=function(a){var c,d,e;return d={},e=function(a){return d[a]||[]},c={},c[k]=function(a,c,f){d[a]=e(a),d[a].indexOf(c)>=0||(f=f===b?d[a].length:f,d[a].splice(f,0,c))},c[j]=function(a,b){var c;c=e(a).indexOf(b),-1!==c&&e(a).splice(c,1)},c[g]=function(){var d,f,g,h,i,j,k,l;for(d=u(arguments),f=d.shift(),a||(d[0]=s(d[0],r(f))),h=c["on"+f],h&&h.apply(b,d),l=e(f).concat(e("*")),g=j=0,k=l.length;k>j;g=++j)i=l[g],i.apply(b,d)},a&&(c.listeners=function(a){return u(e(a))},c.on=c[k],c.off=c[j],c.fire=c[g],c.once=function(a,b){var d;return d=function(){return c.off(a,d),b.apply(null,arguments)},c.on(a,d)},c.destroy=function(){return d={}}),c},v=f(!0),v.EventEmitter=f,v[d]=function(a,b){if(a.length<1||a.length>2)throw"invalid hook";return v[k](d,a,b)},v[c]=function(a,b){if(a.length<2||a.length>3)throw"invalid hook";return v[k](c,a,b)},v.enable=function(){a[o]=n},v.disable=function(){a[o]=v[o]},p=v.headers=function(a,b){var c,d,e,f,g,h,i,j,k;switch(null==b&&(b={}),typeof a){case"object":d=[];for(e in a)g=a[e],f=e.toLowerCase(),d.push(""+f+":	"+g);return d.join("\n");case"string":for(d=a.split("\n"),i=0,j=d.length;j>i;i++)c=d[i],/([^:]+):\s*(.+)/.test(c)&&(f=null!=(k=RegExp.$1)?k.toLowerCase():void 0,h=RegExp.$2,null==b[f]&&(b[f]=h));return b}},i=a[h],i&&(v[h]=i,a[h]=function(a){var b;this.fd=a?new i(a):new i,this.form=a,b=[],Object.defineProperty(this,"entries",{get:function(){var c;return c=a?u(a.querySelectorAll("input,select")).filter(function(a){var b;return"checkbox"!==(b=a.type)&&"radio"!==b||a.checked}).map(function(a){return[a.name,"file"===a.type?a.files:a.value]}):[],c.concat(b)}}),this.append=function(a){return function(){var c;return c=u(arguments),b.push(c),a.fd.append.apply(a.fd,c)}}(this)}),v[o]=a[o],n=a[o]=function(){var b,i,j,n,q,r,u,w,y,z,A,B,C,D,E;return E=new v[o],q=!1,B=!1,y={},y.headers={},y.headerNames={},z={},z.headers={},w=function(){var a,b,c,d;z.status=E.status,z.statusText=E.statusText,d=p(E.getAllResponseHeaders());for(a in d)c=d[a],z.headers[a]||(b=a.toLowerCase(),z.headers[b]=c)},u=function(){try{z.text=E.responseText}catch(a){}try{z.xml=E.responseXML}catch(a){}z.data=E.response||z.text},D=function(){n.status=z.status,n.statusText=z.statusText},C=function(){z.hasOwnProperty("text")&&(n.responseText=z.text),z.hasOwnProperty("xml")&&(n.responseXML=z.xml),n.response=z.data||null},j=function(a){for(;a>b&&4>b;)n[l]=++b,1===b&&n[g]("loadstart",{}),2===b&&D(),4===b&&(D(),C()),n[g]("readystatechange",{}),4===b&&setTimeout(i,0)},i=function(){q||n[g]("load",{}),n[g]("loadend",{}),q&&(n[l]=0)},b=0,A=function(a){var b,d;return 4!==a?void j(a):(b=v.listeners(c),d=function(){var a;return b.length?(a=b.shift(),2===a.length?(a(y,z),d()):3===a.length&&y.async?a(y,z,d):d()):j(4)},void d())},n=y.xhr=f(),E.onreadystatechange=function(){try{2===E[l]&&w()}catch(a){}4===E[l]&&(B=!1,w(),u()),A(E[l])},r=function(){q=!0},n[k]("error",r),n[k]("timeout",r),n[k]("abort",r),n[k]("progress",function(){3>b?A(3):n[g]("readystatechange",{})}),t(e,E,n),("withCredentials"in E||v.addWithCredentials)&&(n.withCredentials=!1),n.status=0,n.open=function(a,b,c,d,e){y.method=a,y.url=b,y.async=c!==!1,y.user=d,y.pass=e,A(1)},n.send=function(b){var c,e,f,g,i,j,k,l;for(l=["type","timeout","withCredentials"],j=0,k=l.length;k>j;j++)e=l[j],f="type"===e?"responseType":e,f in n&&(y[e]=n[f]);y.body=b,i=function(){var b,c,d,g,i,j;for(B=!0,E.open(y.method,y.url,y.async,y.user,y.pass),i=["type","timeout","withCredentials"],d=0,g=i.length;g>d;d++)e=i[d],f="type"===e?"responseType":e,e in y&&(E[f]=y[e]);j=y.headers;for(b in j)c=j[b],E.setRequestHeader(b,c);a[h]&&y.body instanceof a[h]&&(y.body=y.body.fd),E.send(y.body)},c=v.listeners(d),(g=function(){var a,b;return c.length?(a=function(a){return"object"!=typeof a||"number"!=typeof a.status&&"number"!=typeof z.status?void g():(s(a,z),x.call(a,"data")<0&&(a.data=a.response||a.text),void A(4))},a.head=function(a){return s(a,z),A(2)},a.progress=function(a){return s(a,z),A(3)},b=c.shift(),1===b.length?a(b(y)):2===b.length&&y.async?b(y,a):a()):i()})()},n.abort=function(){B?E.abort():n[g]("abort",{})},n.setRequestHeader=function(a,b){var c,d;c=null!=a?a.toLowerCase():void 0,d=y.headerNames[c]=y.headerNames[c]||a,y.headers[d]&&(b=y.headers[d]+", "+b),y.headers[d]=b},n.getResponseHeader=function(a){var b;return b=null!=a?a.toLowerCase():void 0,z.headers[b]},n.getAllResponseHeaders=function(){return p(z.headers)},E.overrideMimeType&&(n.overrideMimeType=function(){return E.overrideMimeType.apply(E,arguments)}),E.upload&&(n.upload=y.upload=f(),t(e.concat(m),E.upload,n.upload)),n},"function"==typeof this.define&&this.define.amd?define("xhook",[],function(){return v}):(this.exports||this).xhook=v}).call(this,a);var c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N;C=null,g=function(a){var b,c;null===C&&(C={},r());for(b in a)c=a[b],x("adding slave: "+b),C[b]=c},n={},o=function(a,b){var c;return n[a]?n[a]:(c=l.createElement("iframe"),c.id=c.name=p(),x("creating iframe "+c.id),c.src=""+a+b,c.setAttribute("style","display:none;"),l.body.appendChild(c),n[a]=c.contentWindow)},r=function(){var a,b,c;return b=function(a,b){var c,d,e,f,g;return e=a[0],f=a[1],c=t(f,"Blob"),d=t(f,"File"),c||d?(g=new FileReader,g.onload=function(){return a[1]=null,d&&(a[2]=f.name),b(["XD_BLOB",a,this.result,f.type])},g.readAsArrayBuffer(f),1):0},a=function(a,c){var d;a.forEach(function(b,c){var d,e,f,g,h;if(e=b[0],f=b[1],t(f,"FileList"))for(a.splice(c,1),g=0,h=f.length;h>g;g++)d=f[g],a.splice(c,0,[e,d])}),d=0,a.forEach(function(e,f){d+=b(e,function(b){a[f]=b,0===--d&&c()})}),0===d&&c()},c=function(b,c){var d,e,f;return c.on("xhr-event",function(){return b.xhr.dispatchEvent.apply(null,arguments)}),c.on("xhr-upload-event",function(){return b.xhr.upload.dispatchEvent.apply(null,arguments)}),e=G(b),e.headers=b.headers,b.withCredentials&&(e.credentials=l.cookie),f=function(){return c.emit("request",e)},b.body&&(e.body=b.body,t(e.body,"FormData"))?(d=e.body.entries,e.body=["XD_FD",d],void a(d,f)):void f()},K.addWithCredentials=!0,K.before(function(a,b){var d,e,f;return e=B(a.url),e&&e.origin!==k?C[e.origin]?(x("proxying request to slave: '"+e.origin+"'"),a.async===!1?(I("sync not supported"),b()):(d=o(e.origin,C[e.origin]),f=h(d),f.on("response",function(a){return b(a),f.close()}),a.xhr.addEventListener("abort",function(){return f.emit("abort")}),void(f.ready?c(a,f):f.once("ready",function(){return c(a,f)})))):(e&&x("no slave matching: '"+e.origin+"'"),b()):b()})},z=null,f=function(a){var b,c;null===z&&(z={},s());for(b in a)c=a[b],x("adding master: "+b),z[b]=c},s=function(){return v(function(a,b){var c,d,e,f;"null"===a&&(a="*"),e=null;for(c in z){f=z[c];try{if(d=H(c),d.test(a)){e=H(f);break}}catch(g){}}return e?(b.once("request",function(a){var c,d,f,g,h,i,j,k,l,m,n;if(x("request: "+a.method+" "+a.url),i=B(a.url),!i||!e.test(i.path))return I("blocked request to path: '"+i.path+"' by regex: "+e),void b.close();k=new XMLHttpRequest,k.open(a.method,a.url),k.addEventListener("*",function(a){return b.emit("xhr-event",a.type,G(a))}),k.upload&&k.upload.addEventListener("*",function(a){return b.emit("xhr-upload-event",a.type,G(a))}),b.once("abort",function(){return k.abort()}),k.onreadystatechange=function(){var a;if(4===k.readyState){a={status:k.status,statusText:k.statusText,data:k.response,headers:K.headers(k.getAllResponseHeaders())};try{a.text=k.responseText}catch(c){}return b.emit("response",a)}},a.withCredentials&&(a.headers["XDomain-Cookie"]=a.credentials),a.timeout&&(k.timeout=a.timeout),a.type&&(k.responseType=a.type),n=a.headers;for(h in n)j=n[h],k.setRequestHeader(h,j);if(a.body instanceof Array&&"XD_FD"===a.body[0]){for(g=new K.FormData,f=a.body[1],l=0,m=f.length;m>l;l++)c=f[l],"XD_BLOB"===c[0]&&4===c.length&&(d=new Blob([c[2]],{type:c[3]}),c=c[1],c[1]=d),g.append.apply(g,c);a.body=g}k.send(a.body||null)}),void x("slave listening for requests on socket: "+b.id)):void I("blocked request from: '"+a+"'")}),a===a.parent?I("slaves must be in an iframe"):a.parent.postMessage("XDPING_"+d,"*")},A=function(b){return l.addEventListener?a.addEventListener("message",b):a.attachEvent("onmessage",b)},e="XD_CHECK",q=null,E={},u=!0,F=function(){return A(function(a){var c,e,f,g;if(c=a.data,"string"==typeof c){if(/^XDPING(_(V\d+))?$/.test(c)&&RegExp.$2!==d)return I("your master is not compatible with your slave, check your xdomain.js version");if(/^xdomain-/.test(c))c=c.split(",");else if(u)try{c=JSON.parse(c)}catch(h){return}}if(c instanceof Array&&(f=c.shift(),/^xdomain-/.test(f)&&(g=E[f],null!==g))){if(g===b){if(!q)return;g=j(f,a.source),q(a.origin,g)}e="string"==typeof c[1]?": '"+c[1]+"'":"",x("receive socket: "+f+": '"+c[0]+"'"+e),g.fire.apply(g,c)}})},j=function(a,b){var d,f,g,h,i,j;return i=!1,j=E[a]=K.EventEmitter(!0),j.id=a,j.once("close",function(){return j.destroy(),j.close()}),h=[],j.emit=function(){var b,c;b=D(arguments),c="string"==typeof b[1]?": '"+b[1]+"'":"",x("send socket: "+a+": "+b[0]+c),b.unshift(a),i?g(b):h.push(b)},g=function(a){u&&(a=JSON.stringify(a)),b.postMessage(a,"*")},j.close=function(){j.emit("close"),x("close socket: "+a),E[a]=null},j.once(e,function(b){for(u="string"==typeof b,i=j.ready=!0,j.emit("ready"),x("ready socket: "+a+" (emit #"+h.length+" pending)");h.length;)g(h.shift())}),f=0,d=function(){return function(){b.postMessage([a,e,{}],"*"),i||(f++===J.timeout/c?I("Timeout waiting on iframe socket"):setTimeout(d,c))}}(this),setTimeout(d),x("new socket: "+a),j},h=function(a){var b;return b=j(p(),a)},v=function(a){q=a},K=(this.exports||this).xhook,J=function(a){a&&(a.masters&&f(a.masters),a.slaves&&g(a.slaves))},J.masters=f,J.slaves=g,J.debug=!1,J.timeout=15e3,c=100,l=a.document,w=a.location,k=J.origin=w.protocol+"//"+w.host,p=function(){return"xdomain-"+Math.round(Math.random()*Math.pow(2,32)).toString(16)},D=function(a,b){return Array.prototype.slice.call(a,b)},i=a.console||{},y=function(a){return function(b){b="xdomain ("+k+"): "+b,a in J&&J[a](b),("log"!==a||J.debug)&&(a in i?i[a](b):"warn"===a&&alert(b))}},x=y("log"),I=y("warn"),N=["postMessage","JSON"];for(L=0,M=N.length;M>L;L++)if(m=N[L],!a[m])return void I("requires '"+m+"' and this browser does not support it");t=function(b,c){return c in a?b instanceof a[c]:!1},d="V1",B=J.parseUrl=function(a){return/^((https?:)?\/\/[^\/\?]+)(\/.*)?/.test(a)?{origin:(RegExp.$2?"":w.protocol)+RegExp.$1,path:RegExp.$3}:(x("failed to parse absolute url: "+a),null)},H=function(a){var b;return a instanceof RegExp?a:(b=a.toString().replace(/\W/g,function(a){return"\\"+a}).replace(/\\\*/g,".*"),new RegExp("^"+b+"$"))},G=function(a){var b,c,d,e;b={};for(c in a)"returnValue"!==c&&(d=a[c],"function"!=(e=typeof d)&&"object"!==e&&(b[c]=d));return b},function(){var a,b,c,d,e,h,i,j,k,m,n;for(a={debug:function(a){return"string"==typeof a?J.debug="false"!==a:void 0},slave:function(a){var b,c;if(a&&(b=B(a)))return c={},c[b.origin]=b.path,g(c)},master:function(a){var b,c;if(a&&(c="*"===a?{origin:"*",path:"*"}:B(a)))return b={},b[c.origin]=c.path.replace(/^\//,"")?c.path:"*",f(b)}},m=l.getElementsByTagName("script"),h=0,j=m.length;j>h;h++)if(e=m[h],/xdomain/.test(e.src))for(n=["","data-"],i=0,k=n.length;k>i;i++){d=n[i];for(c in a)(b=a[c])(e.getAttribute(d+c))}}(),F(),"function"==typeof this.define&&this.define.amd?define("xdomain",["xhook"],function(a){return K=a,J}):(this.exports||this).xdomain=J}).call(this,window);
+},{}],8:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true, unparam: true, todo: true */
 /*global module: false, require: false, $: false */
@@ -299,7 +313,8 @@ module.exports = function (options) {
             button,
             active;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
+        defaultUrl = 'https://api.covermymeds.com/requests?v=' + options.version;
+
         button = $(this);
         active = false;
 
@@ -437,7 +452,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../vendor/base64.js":6}],8:[function(require,module,exports){
+},{"../vendor/base64.js":6}],9:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true, unparam: true, nomen: true */
 /*global require: false, module: false, window: false */
@@ -460,9 +475,9 @@ var Base64 = require('../vendor/base64.js'),
  * @constructor
  */
 var CoverMyDashboard = function (options) {
-    this.elem = options.elem;   // jQuery object to draw into
+    this.elem = options.elem;
     this.url = options.url;
-    this.defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
+    this.defaultUrl = 'https://api.covermymeds.com/requests/search?v=' + options.version;
 
     this.tokenIds = options.tokenIds || [];
     this.apiId = options.apiId || '';
@@ -547,8 +562,9 @@ CoverMyDashboard.prototype.loadData = function (callback) {
     }).done(function (data, status, xhr) {
         self.processData(data.requests);
         self.renderContent();
-    }).fail(function (data, status, xhr) {
-        self.elem.empty().text('There was an error processing your request. Please try again.');
+    }).fail(function (xhr, status, errorThrown) {
+        $('.content', self.elem).html('There was an error processing your request. Please try again.');
+        $('.content', self.elem).html(xhr.statusText);
     });
 };
 
@@ -755,7 +771,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../templates/dashboard-content.html":2,"../templates/dashboard.html":3,"../vendor/base64.js":6,"moment":12,"underscore":15}],9:[function(require,module,exports){
+},{"../templates/dashboard-content.html":2,"../templates/dashboard.html":3,"../vendor/base64.js":6,"moment":13,"underscore":16}],10:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global $: false, module: false, require: false */
@@ -769,14 +785,9 @@ module.exports = function (options) {
     options = $.extend({}, options);
 
     return this.each(function () {
-        var defaultUrl,
-            originalCorsSupport;
+        var defaultUrl;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
-        defaultUrl = 'https://t1-api.testing.covermymeds.com/drugs?v=' + options.version;
-
-        originalCorsSupport = $.support.cors;
-        $.support.cors = true;
+        defaultUrl = 'https://api.covermymeds.com/drugs?v=' + options.version;
 
         $(this).select2({
             placeholder: 'Begin typing the medication name and select from list',
@@ -795,35 +806,7 @@ module.exports = function (options) {
                         });
                     }
 
-                    xhrOptions.error = function (xhr, status) {
-                        alert(status);
-                        alert(xhr.statusText);
-                    };
-
-                    if (!originalCorsSupport) {
-                        _.extend(xhrOptions, {
-                            xhr: function () {
-                                var iframe,
-                                    xhr;
-
-                                iframe = $('iframe.cors')[0].contentWindow;
-
-                                if (iframe.XMLHttpRequest !== undefined) {
-                                    alert('creating regular ajax obj')
-                                    // xhr = new iframe.XMLHttpRequest();
-                                } else {
-                                    alert('creating MS XMLHTTP obj!');
-                                    // xhr = new iframe.ActiveXObject('Microsoft.XMLHTTP');
-                                }
-
-                                return xhr;
-                            }
-                        });
-                    }
-
-                    return _($.ajax(xhrOptions)).tap(function () {
-                        $.support.cors = originalCorsSupport;
-                    });
+                    return $.ajax(xhrOptions);
                 },
                 data: function (term, page) {
                     return {
@@ -856,7 +839,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../vendor/base64.js":6,"select2-browserify":13,"underscore":15}],10:[function(require,module,exports){
+},{"../vendor/base64.js":6,"select2-browserify":14,"underscore":16}],11:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true, unparam: true, todo: true, nomen: true */
 /*global $: false, module: false, require: false */
@@ -864,6 +847,7 @@ module.exports = function (options) {
 var Base64 = require('../vendor/base64.js'),
     template = require('../templates/form-search.html'),
     $ = (typeof window !== "undefined" ? window.$ : typeof global !== "undefined" ? global.$ : null),
+    _ = require('underscore'),
     select2 = require('select2-browserify');
 
 module.exports = function (options) {
@@ -872,25 +856,26 @@ module.exports = function (options) {
     return this.each(function () {
         var defaultUrl;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
+        defaultUrl = 'https://api.covermymeds.com/forms?v=' + options.version;
 
-        // Initialize select2
         $(this).select2({
             placeholder: 'Plan, PBM, Form name, BIN, or Contract ID',
             minimumInputLength: 4,
             ajax: {
                 quietMillis: 250,
                 url: options.url || defaultUrl,
-                transport: function (params) {
+                transport: function (xhrOptions) {
                     // Add authorization header if directly querying API;
                     // otherwise we assume our custom URL will handle authorization
                     if (!options.url) {
-                        params.beforeSend = function (xhr) {
-                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
-                        };
+                        _.extend(xhrOptions, {
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
+                            }
+                        });
                     }
 
-                    return $.ajax(params);
+                    return $.ajax(xhrOptions);
                 },
                 data: function (term, page) {
                     var state,
@@ -936,7 +921,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../templates/form-search.html":4,"../vendor/base64.js":6,"select2-browserify":13}],11:[function(require,module,exports){
+},{"../templates/form-search.html":4,"../vendor/base64.js":6,"select2-browserify":14,"underscore":16}],12:[function(require,module,exports){
 (function (global){
 /*jslint sloppy: true */
 /*global require: false, module: false */
@@ -954,7 +939,7 @@ module.exports = function (options) {
 };
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../templates/help.html":5}],12:[function(require,module,exports){
+},{"../templates/help.html":5}],13:[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.8.4
@@ -3894,12 +3879,12 @@ module.exports = function (options) {
 }).call(this);
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 
 require('../select2/select2.js');
 module.exports = window.Select2;
 
-},{"../select2/select2.js":14}],14:[function(require,module,exports){
+},{"../select2/select2.js":15}],15:[function(require,module,exports){
 /*
 Copyright 2012 Igor Vaynberg
 
@@ -7156,8 +7141,8 @@ the specific language governing permissions and limitations under the Apache Lic
 
 }(jQuery));
 
-},{}],15:[function(require,module,exports){
-//     Underscore.js 1.6.0
+},{}],16:[function(require,module,exports){
+//     Underscore.js 1.7.0
 //     http://underscorejs.org
 //     (c) 2009-2014 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 //     Underscore may be freely distributed under the MIT license.
@@ -7173,9 +7158,6 @@ the specific language governing permissions and limitations under the Apache Lic
   // Save the previous value of the `_` variable.
   var previousUnderscore = root._;
 
-  // Establish the object that gets returned to break out of a loop iteration.
-  var breaker = {};
-
   // Save bytes in the minified (but not gzipped) version:
   var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
 
@@ -7190,15 +7172,6 @@ the specific language governing permissions and limitations under the Apache Lic
   // All **ECMAScript 5** native function implementations that we hope to use
   // are declared here.
   var
-    nativeForEach      = ArrayProto.forEach,
-    nativeMap          = ArrayProto.map,
-    nativeReduce       = ArrayProto.reduce,
-    nativeReduceRight  = ArrayProto.reduceRight,
-    nativeFilter       = ArrayProto.filter,
-    nativeEvery        = ArrayProto.every,
-    nativeSome         = ArrayProto.some,
-    nativeIndexOf      = ArrayProto.indexOf,
-    nativeLastIndexOf  = ArrayProto.lastIndexOf,
     nativeIsArray      = Array.isArray,
     nativeKeys         = Object.keys,
     nativeBind         = FuncProto.bind;
@@ -7212,8 +7185,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // Export the Underscore object for **Node.js**, with
   // backwards-compatibility for the old `require()` API. If we're in
-  // the browser, add `_` as a global object via a string identifier,
-  // for Closure Compiler "advanced" mode.
+  // the browser, add `_` as a global object.
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
       exports = module.exports = _;
@@ -7224,98 +7196,125 @@ the specific language governing permissions and limitations under the Apache Lic
   }
 
   // Current version.
-  _.VERSION = '1.6.0';
+  _.VERSION = '1.7.0';
+
+  // Internal function that returns an efficient (for current engines) version
+  // of the passed-in callback, to be repeatedly applied in other Underscore
+  // functions.
+  var createCallback = function(func, context, argCount) {
+    if (context === void 0) return func;
+    switch (argCount == null ? 3 : argCount) {
+      case 1: return function(value) {
+        return func.call(context, value);
+      };
+      case 2: return function(value, other) {
+        return func.call(context, value, other);
+      };
+      case 3: return function(value, index, collection) {
+        return func.call(context, value, index, collection);
+      };
+      case 4: return function(accumulator, value, index, collection) {
+        return func.call(context, accumulator, value, index, collection);
+      };
+    }
+    return function() {
+      return func.apply(context, arguments);
+    };
+  };
+
+  // A mostly-internal function to generate callbacks that can be applied
+  // to each element in a collection, returning the desired result — either
+  // identity, an arbitrary callback, a property matcher, or a property accessor.
+  _.iteratee = function(value, context, argCount) {
+    if (value == null) return _.identity;
+    if (_.isFunction(value)) return createCallback(value, context, argCount);
+    if (_.isObject(value)) return _.matches(value);
+    return _.property(value);
+  };
 
   // Collection Functions
   // --------------------
 
   // The cornerstone, an `each` implementation, aka `forEach`.
-  // Handles objects with the built-in `forEach`, arrays, and raw objects.
-  // Delegates to **ECMAScript 5**'s native `forEach` if available.
-  var each = _.each = _.forEach = function(obj, iterator, context) {
+  // Handles raw objects in addition to array-likes. Treats all
+  // sparse array-likes as if they were dense.
+  _.each = _.forEach = function(obj, iteratee, context) {
     if (obj == null) return obj;
-    if (nativeForEach && obj.forEach === nativeForEach) {
-      obj.forEach(iterator, context);
-    } else if (obj.length === +obj.length) {
-      for (var i = 0, length = obj.length; i < length; i++) {
-        if (iterator.call(context, obj[i], i, obj) === breaker) return;
+    iteratee = createCallback(iteratee, context);
+    var i, length = obj.length;
+    if (length === +length) {
+      for (i = 0; i < length; i++) {
+        iteratee(obj[i], i, obj);
       }
     } else {
       var keys = _.keys(obj);
-      for (var i = 0, length = keys.length; i < length; i++) {
-        if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
+      for (i = 0, length = keys.length; i < length; i++) {
+        iteratee(obj[keys[i]], keys[i], obj);
       }
     }
     return obj;
   };
 
-  // Return the results of applying the iterator to each element.
-  // Delegates to **ECMAScript 5**'s native `map` if available.
-  _.map = _.collect = function(obj, iterator, context) {
-    var results = [];
-    if (obj == null) return results;
-    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
-    each(obj, function(value, index, list) {
-      results.push(iterator.call(context, value, index, list));
-    });
+  // Return the results of applying the iteratee to each element.
+  _.map = _.collect = function(obj, iteratee, context) {
+    if (obj == null) return [];
+    iteratee = _.iteratee(iteratee, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        results = Array(length),
+        currentKey;
+    for (var index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      results[index] = iteratee(obj[currentKey], currentKey, obj);
+    }
     return results;
   };
 
   var reduceError = 'Reduce of empty array with no initial value';
 
   // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
-  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
+  // or `foldl`.
+  _.reduce = _.foldl = _.inject = function(obj, iteratee, memo, context) {
     if (obj == null) obj = [];
-    if (nativeReduce && obj.reduce === nativeReduce) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index = 0, currentKey;
+    if (arguments.length < 3) {
+      if (!length) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[index++] : index++];
     }
-    each(obj, function(value, index, list) {
-      if (!initial) {
-        memo = value;
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, value, index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
+    for (; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
+    }
     return memo;
   };
 
   // The right-associative version of reduce, also known as `foldr`.
-  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
-  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
-    var initial = arguments.length > 2;
+  _.reduceRight = _.foldr = function(obj, iteratee, memo, context) {
     if (obj == null) obj = [];
-    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
-      if (context) iterator = _.bind(iterator, context);
-      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
+    iteratee = createCallback(iteratee, context, 4);
+    var keys = obj.length !== + obj.length && _.keys(obj),
+        index = (keys || obj).length,
+        currentKey;
+    if (arguments.length < 3) {
+      if (!index) throw new TypeError(reduceError);
+      memo = obj[keys ? keys[--index] : --index];
     }
-    var length = obj.length;
-    if (length !== +length) {
-      var keys = _.keys(obj);
-      length = keys.length;
+    while (index--) {
+      currentKey = keys ? keys[index] : index;
+      memo = iteratee(memo, obj[currentKey], currentKey, obj);
     }
-    each(obj, function(value, index, list) {
-      index = keys ? keys[--length] : --length;
-      if (!initial) {
-        memo = obj[index];
-        initial = true;
-      } else {
-        memo = iterator.call(context, memo, obj[index], index, list);
-      }
-    });
-    if (!initial) throw new TypeError(reduceError);
     return memo;
   };
 
   // Return the first value which passes a truth test. Aliased as `detect`.
   _.find = _.detect = function(obj, predicate, context) {
     var result;
-    any(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) {
+    predicate = _.iteratee(predicate, context);
+    _.some(obj, function(value, index, list) {
+      if (predicate(value, index, list)) {
         result = value;
         return true;
       }
@@ -7324,61 +7323,58 @@ the specific language governing permissions and limitations under the Apache Lic
   };
 
   // Return all the elements that pass a truth test.
-  // Delegates to **ECMAScript 5**'s native `filter` if available.
   // Aliased as `select`.
   _.filter = _.select = function(obj, predicate, context) {
     var results = [];
     if (obj == null) return results;
-    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(predicate, context);
-    each(obj, function(value, index, list) {
-      if (predicate.call(context, value, index, list)) results.push(value);
+    predicate = _.iteratee(predicate, context);
+    _.each(obj, function(value, index, list) {
+      if (predicate(value, index, list)) results.push(value);
     });
     return results;
   };
 
   // Return all the elements for which a truth test fails.
   _.reject = function(obj, predicate, context) {
-    return _.filter(obj, function(value, index, list) {
-      return !predicate.call(context, value, index, list);
-    }, context);
+    return _.filter(obj, _.negate(_.iteratee(predicate)), context);
   };
 
   // Determine whether all of the elements match a truth test.
-  // Delegates to **ECMAScript 5**'s native `every` if available.
   // Aliased as `all`.
   _.every = _.all = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = true;
-    if (obj == null) return result;
-    if (nativeEvery && obj.every === nativeEvery) return obj.every(predicate, context);
-    each(obj, function(value, index, list) {
-      if (!(result = result && predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
+    if (obj == null) return true;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (!predicate(obj[currentKey], currentKey, obj)) return false;
+    }
+    return true;
   };
 
   // Determine if at least one element in the object matches a truth test.
-  // Delegates to **ECMAScript 5**'s native `some` if available.
   // Aliased as `any`.
-  var any = _.some = _.any = function(obj, predicate, context) {
-    predicate || (predicate = _.identity);
-    var result = false;
-    if (obj == null) return result;
-    if (nativeSome && obj.some === nativeSome) return obj.some(predicate, context);
-    each(obj, function(value, index, list) {
-      if (result || (result = predicate.call(context, value, index, list))) return breaker;
-    });
-    return !!result;
+  _.some = _.any = function(obj, predicate, context) {
+    if (obj == null) return false;
+    predicate = _.iteratee(predicate, context);
+    var keys = obj.length !== +obj.length && _.keys(obj),
+        length = (keys || obj).length,
+        index, currentKey;
+    for (index = 0; index < length; index++) {
+      currentKey = keys ? keys[index] : index;
+      if (predicate(obj[currentKey], currentKey, obj)) return true;
+    }
+    return false;
   };
 
   // Determine if the array or object contains a given value (using `===`).
   // Aliased as `include`.
   _.contains = _.include = function(obj, target) {
     if (obj == null) return false;
-    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
-    return any(obj, function(value) {
-      return value === target;
-    });
+    if (obj.length !== +obj.length) obj = _.values(obj);
+    return _.indexOf(obj, target) >= 0;
   };
 
   // Invoke a method (with arguments) on every item in a collection.
@@ -7407,51 +7403,67 @@ the specific language governing permissions and limitations under the Apache Lic
     return _.find(obj, _.matches(attrs));
   };
 
-  // Return the maximum element or (element-based computation).
-  // Can't optimize arrays of integers longer than 65,535 elements.
-  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
-  _.max = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.max.apply(Math, obj);
-    }
-    var result = -Infinity, lastComputed = -Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed > lastComputed) {
-        result = value;
-        lastComputed = computed;
+  // Return the maximum element (or element-based computation).
+  _.max = function(obj, iteratee, context) {
+    var result = -Infinity, lastComputed = -Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value > result) {
+          result = value;
+        }
       }
-    });
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
     return result;
   };
 
   // Return the minimum element (or element-based computation).
-  _.min = function(obj, iterator, context) {
-    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
-      return Math.min.apply(Math, obj);
-    }
-    var result = Infinity, lastComputed = Infinity;
-    each(obj, function(value, index, list) {
-      var computed = iterator ? iterator.call(context, value, index, list) : value;
-      if (computed < lastComputed) {
-        result = value;
-        lastComputed = computed;
+  _.min = function(obj, iteratee, context) {
+    var result = Infinity, lastComputed = Infinity,
+        value, computed;
+    if (iteratee == null && obj != null) {
+      obj = obj.length === +obj.length ? obj : _.values(obj);
+      for (var i = 0, length = obj.length; i < length; i++) {
+        value = obj[i];
+        if (value < result) {
+          result = value;
+        }
       }
-    });
+    } else {
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index, list) {
+        computed = iteratee(value, index, list);
+        if (computed < lastComputed || computed === Infinity && result === Infinity) {
+          result = value;
+          lastComputed = computed;
+        }
+      });
+    }
     return result;
   };
 
-  // Shuffle an array, using the modern version of the
+  // Shuffle a collection, using the modern version of the
   // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
   _.shuffle = function(obj) {
-    var rand;
-    var index = 0;
-    var shuffled = [];
-    each(obj, function(value) {
-      rand = _.random(index++);
-      shuffled[index - 1] = shuffled[rand];
-      shuffled[rand] = value;
-    });
+    var set = obj && obj.length === +obj.length ? obj : _.values(obj);
+    var length = set.length;
+    var shuffled = Array(length);
+    for (var index = 0, rand; index < length; index++) {
+      rand = _.random(0, index);
+      if (rand !== index) shuffled[index] = shuffled[rand];
+      shuffled[rand] = set[index];
+    }
     return shuffled;
   };
 
@@ -7466,21 +7478,14 @@ the specific language governing permissions and limitations under the Apache Lic
     return _.shuffle(obj).slice(0, Math.max(0, n));
   };
 
-  // An internal function to generate lookup iterators.
-  var lookupIterator = function(value) {
-    if (value == null) return _.identity;
-    if (_.isFunction(value)) return value;
-    return _.property(value);
-  };
-
-  // Sort the object's values by a criterion produced by an iterator.
-  _.sortBy = function(obj, iterator, context) {
-    iterator = lookupIterator(iterator);
+  // Sort the object's values by a criterion produced by an iteratee.
+  _.sortBy = function(obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context);
     return _.pluck(_.map(obj, function(value, index, list) {
       return {
         value: value,
         index: index,
-        criteria: iterator.call(context, value, index, list)
+        criteria: iteratee(value, index, list)
       };
     }).sort(function(left, right) {
       var a = left.criteria;
@@ -7495,12 +7500,12 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // An internal function used for aggregate "group by" operations.
   var group = function(behavior) {
-    return function(obj, iterator, context) {
+    return function(obj, iteratee, context) {
       var result = {};
-      iterator = lookupIterator(iterator);
-      each(obj, function(value, index) {
-        var key = iterator.call(context, value, index, obj);
-        behavior(result, key, value);
+      iteratee = _.iteratee(iteratee, context);
+      _.each(obj, function(value, index) {
+        var key = iteratee(value, index, obj);
+        behavior(result, value, key);
       });
       return result;
     };
@@ -7508,32 +7513,32 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // Groups the object's values by a criterion. Pass either a string attribute
   // to group by, or a function that returns the criterion.
-  _.groupBy = group(function(result, key, value) {
-    _.has(result, key) ? result[key].push(value) : result[key] = [value];
+  _.groupBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key].push(value); else result[key] = [value];
   });
 
   // Indexes the object's values by a criterion, similar to `groupBy`, but for
   // when you know that your index values will be unique.
-  _.indexBy = group(function(result, key, value) {
+  _.indexBy = group(function(result, value, key) {
     result[key] = value;
   });
 
   // Counts instances of an object that group by a certain criterion. Pass
   // either a string attribute to count by, or a function that returns the
   // criterion.
-  _.countBy = group(function(result, key) {
-    _.has(result, key) ? result[key]++ : result[key] = 1;
+  _.countBy = group(function(result, value, key) {
+    if (_.has(result, key)) result[key]++; else result[key] = 1;
   });
 
   // Use a comparator function to figure out the smallest index at which
   // an object should be inserted so as to maintain order. Uses binary search.
-  _.sortedIndex = function(array, obj, iterator, context) {
-    iterator = lookupIterator(iterator);
-    var value = iterator.call(context, obj);
+  _.sortedIndex = function(array, obj, iteratee, context) {
+    iteratee = _.iteratee(iteratee, context, 1);
+    var value = iteratee(obj);
     var low = 0, high = array.length;
     while (low < high) {
-      var mid = (low + high) >>> 1;
-      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+      var mid = low + high >>> 1;
+      if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
     }
     return low;
   };
@@ -7549,7 +7554,18 @@ the specific language governing permissions and limitations under the Apache Lic
   // Return the number of elements in an object.
   _.size = function(obj) {
     if (obj == null) return 0;
-    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
+    return obj.length === +obj.length ? obj.length : _.keys(obj).length;
+  };
+
+  // Split a collection into two arrays: one whose elements all satisfy the given
+  // predicate, and one whose elements all do not satisfy the predicate.
+  _.partition = function(obj, predicate, context) {
+    predicate = _.iteratee(predicate, context);
+    var pass = [], fail = [];
+    _.each(obj, function(value, key, obj) {
+      (predicate(value, key, obj) ? pass : fail).push(value);
+    });
+    return [pass, fail];
   };
 
   // Array Functions
@@ -7560,7 +7576,7 @@ the specific language governing permissions and limitations under the Apache Lic
   // allows it to work with `_.map`.
   _.first = _.head = _.take = function(array, n, guard) {
     if (array == null) return void 0;
-    if ((n == null) || guard) return array[0];
+    if (n == null || guard) return array[0];
     if (n < 0) return [];
     return slice.call(array, 0, n);
   };
@@ -7570,14 +7586,14 @@ the specific language governing permissions and limitations under the Apache Lic
   // the array, excluding the last N. The **guard** check allows it to work with
   // `_.map`.
   _.initial = function(array, n, guard) {
-    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
+    return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
   };
 
   // Get the last element of an array. Passing **n** will return the last N
   // values in the array. The **guard** check allows it to work with `_.map`.
   _.last = function(array, n, guard) {
     if (array == null) return void 0;
-    if ((n == null) || guard) return array[array.length - 1];
+    if (n == null || guard) return array[array.length - 1];
     return slice.call(array, Math.max(array.length - n, 0));
   };
 
@@ -7586,7 +7602,7 @@ the specific language governing permissions and limitations under the Apache Lic
   // the rest N values in the array. The **guard**
   // check allows it to work with `_.map`.
   _.rest = _.tail = _.drop = function(array, n, guard) {
-    return slice.call(array, (n == null) || guard ? 1 : n);
+    return slice.call(array, n == null || guard ? 1 : n);
   };
 
   // Trim out all falsy values from an array.
@@ -7595,23 +7611,26 @@ the specific language governing permissions and limitations under the Apache Lic
   };
 
   // Internal implementation of a recursive `flatten` function.
-  var flatten = function(input, shallow, output) {
+  var flatten = function(input, shallow, strict, output) {
     if (shallow && _.every(input, _.isArray)) {
       return concat.apply(output, input);
     }
-    each(input, function(value) {
-      if (_.isArray(value) || _.isArguments(value)) {
-        shallow ? push.apply(output, value) : flatten(value, shallow, output);
+    for (var i = 0, length = input.length; i < length; i++) {
+      var value = input[i];
+      if (!_.isArray(value) && !_.isArguments(value)) {
+        if (!strict) output.push(value);
+      } else if (shallow) {
+        push.apply(output, value);
       } else {
-        output.push(value);
+        flatten(value, shallow, strict, output);
       }
-    });
+    }
     return output;
   };
 
   // Flatten out an array, either recursively (by default), or just one level.
   _.flatten = function(array, shallow) {
-    return flatten(array, shallow, []);
+    return flatten(array, shallow, false, []);
   };
 
   // Return a version of the array that does not contain the specified value(s).
@@ -7619,68 +7638,77 @@ the specific language governing permissions and limitations under the Apache Lic
     return _.difference(array, slice.call(arguments, 1));
   };
 
-  // Split an array into two arrays: one whose elements all satisfy the given
-  // predicate, and one whose elements all do not satisfy the predicate.
-  _.partition = function(array, predicate) {
-    var pass = [], fail = [];
-    each(array, function(elem) {
-      (predicate(elem) ? pass : fail).push(elem);
-    });
-    return [pass, fail];
-  };
-
   // Produce a duplicate-free version of the array. If the array has already
   // been sorted, you have the option of using a faster algorithm.
   // Aliased as `unique`.
-  _.uniq = _.unique = function(array, isSorted, iterator, context) {
-    if (_.isFunction(isSorted)) {
-      context = iterator;
-      iterator = isSorted;
+  _.uniq = _.unique = function(array, isSorted, iteratee, context) {
+    if (array == null) return [];
+    if (!_.isBoolean(isSorted)) {
+      context = iteratee;
+      iteratee = isSorted;
       isSorted = false;
     }
-    var initial = iterator ? _.map(array, iterator, context) : array;
-    var results = [];
+    if (iteratee != null) iteratee = _.iteratee(iteratee, context);
+    var result = [];
     var seen = [];
-    each(initial, function(value, index) {
-      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
-        seen.push(value);
-        results.push(array[index]);
+    for (var i = 0, length = array.length; i < length; i++) {
+      var value = array[i];
+      if (isSorted) {
+        if (!i || seen !== value) result.push(value);
+        seen = value;
+      } else if (iteratee) {
+        var computed = iteratee(value, i, array);
+        if (_.indexOf(seen, computed) < 0) {
+          seen.push(computed);
+          result.push(value);
+        }
+      } else if (_.indexOf(result, value) < 0) {
+        result.push(value);
       }
-    });
-    return results;
+    }
+    return result;
   };
 
   // Produce an array that contains the union: each distinct element from all of
   // the passed-in arrays.
   _.union = function() {
-    return _.uniq(_.flatten(arguments, true));
+    return _.uniq(flatten(arguments, true, true, []));
   };
 
   // Produce an array that contains every item shared between all the
   // passed-in arrays.
   _.intersection = function(array) {
-    var rest = slice.call(arguments, 1);
-    return _.filter(_.uniq(array), function(item) {
-      return _.every(rest, function(other) {
-        return _.contains(other, item);
-      });
-    });
+    if (array == null) return [];
+    var result = [];
+    var argsLength = arguments.length;
+    for (var i = 0, length = array.length; i < length; i++) {
+      var item = array[i];
+      if (_.contains(result, item)) continue;
+      for (var j = 1; j < argsLength; j++) {
+        if (!_.contains(arguments[j], item)) break;
+      }
+      if (j === argsLength) result.push(item);
+    }
+    return result;
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
-    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
-    return _.filter(array, function(value){ return !_.contains(rest, value); });
+    var rest = flatten(slice.call(arguments, 1), true, true, []);
+    return _.filter(array, function(value){
+      return !_.contains(rest, value);
+    });
   };
 
   // Zip together multiple lists into a single array -- elements that share
   // an index go together.
-  _.zip = function() {
-    var length = _.max(_.pluck(arguments, 'length').concat(0));
-    var results = new Array(length);
+  _.zip = function(array) {
+    if (array == null) return [];
+    var length = _.max(arguments, 'length').length;
+    var results = Array(length);
     for (var i = 0; i < length; i++) {
-      results[i] = _.pluck(arguments, '' + i);
+      results[i] = _.pluck(arguments, i);
     }
     return results;
   };
@@ -7701,10 +7729,8 @@ the specific language governing permissions and limitations under the Apache Lic
     return result;
   };
 
-  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
-  // we need this function. Return the position of the first occurrence of an
-  // item in an array, or -1 if the item is not included in the array.
-  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
+  // Return the position of the first occurrence of an item in an array,
+  // or -1 if the item is not included in the array.
   // If the array is large and already in sort order, pass `true`
   // for **isSorted** to use binary search.
   _.indexOf = function(array, item, isSorted) {
@@ -7712,26 +7738,23 @@ the specific language governing permissions and limitations under the Apache Lic
     var i = 0, length = array.length;
     if (isSorted) {
       if (typeof isSorted == 'number') {
-        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
+        i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
       } else {
         i = _.sortedIndex(array, item);
         return array[i] === item ? i : -1;
       }
     }
-    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
     for (; i < length; i++) if (array[i] === item) return i;
     return -1;
   };
 
-  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
   _.lastIndexOf = function(array, item, from) {
     if (array == null) return -1;
-    var hasIndex = from != null;
-    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
-      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
+    var idx = array.length;
+    if (typeof from == 'number') {
+      idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
     }
-    var i = (hasIndex ? from : array.length);
-    while (i--) if (array[i] === item) return i;
+    while (--idx >= 0) if (array[idx] === item) return idx;
     return -1;
   };
 
@@ -7743,15 +7766,13 @@ the specific language governing permissions and limitations under the Apache Lic
       stop = start || 0;
       start = 0;
     }
-    step = arguments[2] || 1;
+    step = step || 1;
 
     var length = Math.max(Math.ceil((stop - start) / step), 0);
-    var idx = 0;
-    var range = new Array(length);
+    var range = Array(length);
 
-    while(idx < length) {
-      range[idx++] = start;
-      start += step;
+    for (var idx = 0; idx < length; idx++, start += step) {
+      range[idx] = start;
     }
 
     return range;
@@ -7761,7 +7782,7 @@ the specific language governing permissions and limitations under the Apache Lic
   // ------------------
 
   // Reusable constructor function for prototype setting.
-  var ctor = function(){};
+  var Ctor = function(){};
 
   // Create a function bound to a given object (assigning `this`, and arguments,
   // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
@@ -7769,17 +7790,18 @@ the specific language governing permissions and limitations under the Apache Lic
   _.bind = function(func, context) {
     var args, bound;
     if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
-    if (!_.isFunction(func)) throw new TypeError;
+    if (!_.isFunction(func)) throw new TypeError('Bind must be called on a function');
     args = slice.call(arguments, 2);
-    return bound = function() {
+    bound = function() {
       if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
-      ctor.prototype = func.prototype;
-      var self = new ctor;
-      ctor.prototype = null;
+      Ctor.prototype = func.prototype;
+      var self = new Ctor;
+      Ctor.prototype = null;
       var result = func.apply(self, args.concat(slice.call(arguments)));
-      if (Object(result) === result) return result;
+      if (_.isObject(result)) return result;
       return self;
     };
+    return bound;
   };
 
   // Partially apply a function by creating a version that has had some of its
@@ -7802,27 +7824,34 @@ the specific language governing permissions and limitations under the Apache Lic
   // are the method names to be bound. Useful for ensuring that all callbacks
   // defined on an object belong to it.
   _.bindAll = function(obj) {
-    var funcs = slice.call(arguments, 1);
-    if (funcs.length === 0) throw new Error('bindAll must be passed function names');
-    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+    var i, length = arguments.length, key;
+    if (length <= 1) throw new Error('bindAll must be passed function names');
+    for (i = 1; i < length; i++) {
+      key = arguments[i];
+      obj[key] = _.bind(obj[key], obj);
+    }
     return obj;
   };
 
   // Memoize an expensive function by storing its results.
   _.memoize = function(func, hasher) {
-    var memo = {};
-    hasher || (hasher = _.identity);
-    return function() {
-      var key = hasher.apply(this, arguments);
-      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
+    var memoize = function(key) {
+      var cache = memoize.cache;
+      var address = hasher ? hasher.apply(this, arguments) : key;
+      if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+      return cache[address];
     };
+    memoize.cache = {};
+    return memoize;
   };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   _.delay = function(func, wait) {
     var args = slice.call(arguments, 2);
-    return setTimeout(function(){ return func.apply(null, args); }, wait);
+    return setTimeout(function(){
+      return func.apply(null, args);
+    }, wait);
   };
 
   // Defers a function, scheduling it to run after the current call stack has
@@ -7840,12 +7869,12 @@ the specific language governing permissions and limitations under the Apache Lic
     var context, args, result;
     var timeout = null;
     var previous = 0;
-    options || (options = {});
+    if (!options) options = {};
     var later = function() {
       previous = options.leading === false ? 0 : _.now();
       timeout = null;
       result = func.apply(context, args);
-      context = args = null;
+      if (!timeout) context = args = null;
     };
     return function() {
       var now = _.now();
@@ -7853,12 +7882,12 @@ the specific language governing permissions and limitations under the Apache Lic
       var remaining = wait - (now - previous);
       context = this;
       args = arguments;
-      if (remaining <= 0) {
+      if (remaining <= 0 || remaining > wait) {
         clearTimeout(timeout);
         timeout = null;
         previous = now;
         result = func.apply(context, args);
-        context = args = null;
+        if (!timeout) context = args = null;
       } else if (!timeout && options.trailing !== false) {
         timeout = setTimeout(later, remaining);
       }
@@ -7875,13 +7904,14 @@ the specific language governing permissions and limitations under the Apache Lic
 
     var later = function() {
       var last = _.now() - timestamp;
-      if (last < wait) {
+
+      if (last < wait && last > 0) {
         timeout = setTimeout(later, wait - last);
       } else {
         timeout = null;
         if (!immediate) {
           result = func.apply(context, args);
-          context = args = null;
+          if (!timeout) context = args = null;
         }
       }
     };
@@ -7891,28 +7921,13 @@ the specific language governing permissions and limitations under the Apache Lic
       args = arguments;
       timestamp = _.now();
       var callNow = immediate && !timeout;
-      if (!timeout) {
-        timeout = setTimeout(later, wait);
-      }
+      if (!timeout) timeout = setTimeout(later, wait);
       if (callNow) {
         result = func.apply(context, args);
         context = args = null;
       }
 
       return result;
-    };
-  };
-
-  // Returns a function that will be executed at most one time, no matter how
-  // often you call it. Useful for lazy initialization.
-  _.once = function(func) {
-    var ran = false, memo;
-    return function() {
-      if (ran) return memo;
-      ran = true;
-      memo = func.apply(this, arguments);
-      func = null;
-      return memo;
     };
   };
 
@@ -7923,16 +7938,23 @@ the specific language governing permissions and limitations under the Apache Lic
     return _.partial(wrapper, func);
   };
 
+  // Returns a negated version of the passed-in predicate.
+  _.negate = function(predicate) {
+    return function() {
+      return !predicate.apply(this, arguments);
+    };
+  };
+
   // Returns a function that is the composition of a list of functions, each
   // consuming the return value of the function that follows.
   _.compose = function() {
-    var funcs = arguments;
+    var args = arguments;
+    var start = args.length - 1;
     return function() {
-      var args = arguments;
-      for (var i = funcs.length - 1; i >= 0; i--) {
-        args = [funcs[i].apply(this, args)];
-      }
-      return args[0];
+      var i = start;
+      var result = args[start].apply(this, arguments);
+      while (i--) result = args[i].call(this, result);
+      return result;
     };
   };
 
@@ -7944,6 +7966,23 @@ the specific language governing permissions and limitations under the Apache Lic
       }
     };
   };
+
+  // Returns a function that will only be executed before being called N times.
+  _.before = function(times, func) {
+    var memo;
+    return function() {
+      if (--times > 0) {
+        memo = func.apply(this, arguments);
+      } else {
+        func = null;
+      }
+      return memo;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = _.partial(_.before, 2);
 
   // Object Functions
   // ----------------
@@ -7962,7 +8001,7 @@ the specific language governing permissions and limitations under the Apache Lic
   _.values = function(obj) {
     var keys = _.keys(obj);
     var length = keys.length;
-    var values = new Array(length);
+    var values = Array(length);
     for (var i = 0; i < length; i++) {
       values[i] = obj[keys[i]];
     }
@@ -7973,7 +8012,7 @@ the specific language governing permissions and limitations under the Apache Lic
   _.pairs = function(obj) {
     var keys = _.keys(obj);
     var length = keys.length;
-    var pairs = new Array(length);
+    var pairs = Array(length);
     for (var i = 0; i < length; i++) {
       pairs[i] = [keys[i], obj[keys[i]]];
     }
@@ -8002,45 +8041,62 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // Extend a given object with all the properties in passed-in object(s).
   _.extend = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          obj[prop] = source[prop];
+    if (!_.isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      source = arguments[i];
+      for (prop in source) {
+        if (hasOwnProperty.call(source, prop)) {
+            obj[prop] = source[prop];
         }
       }
-    });
+    }
     return obj;
   };
 
   // Return a copy of the object only containing the whitelisted properties.
-  _.pick = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    each(keys, function(key) {
-      if (key in obj) copy[key] = obj[key];
-    });
-    return copy;
+  _.pick = function(obj, iteratee, context) {
+    var result = {}, key;
+    if (obj == null) return result;
+    if (_.isFunction(iteratee)) {
+      iteratee = createCallback(iteratee, context);
+      for (key in obj) {
+        var value = obj[key];
+        if (iteratee(value, key, obj)) result[key] = value;
+      }
+    } else {
+      var keys = concat.apply([], slice.call(arguments, 1));
+      obj = new Object(obj);
+      for (var i = 0, length = keys.length; i < length; i++) {
+        key = keys[i];
+        if (key in obj) result[key] = obj[key];
+      }
+    }
+    return result;
   };
 
    // Return a copy of the object without the blacklisted properties.
-  _.omit = function(obj) {
-    var copy = {};
-    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
-    for (var key in obj) {
-      if (!_.contains(keys, key)) copy[key] = obj[key];
+  _.omit = function(obj, iteratee, context) {
+    if (_.isFunction(iteratee)) {
+      iteratee = _.negate(iteratee);
+    } else {
+      var keys = _.map(concat.apply([], slice.call(arguments, 1)), String);
+      iteratee = function(value, key) {
+        return !_.contains(keys, key);
+      };
     }
-    return copy;
+    return _.pick(obj, iteratee, context);
   };
 
   // Fill in a given object with default properties.
   _.defaults = function(obj) {
-    each(slice.call(arguments, 1), function(source) {
-      if (source) {
-        for (var prop in source) {
-          if (obj[prop] === void 0) obj[prop] = source[prop];
-        }
+    if (!_.isObject(obj)) return obj;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      var source = arguments[i];
+      for (var prop in source) {
+        if (obj[prop] === void 0) obj[prop] = source[prop];
       }
-    });
+    }
     return obj;
   };
 
@@ -8062,7 +8118,7 @@ the specific language governing permissions and limitations under the Apache Lic
   var eq = function(a, b, aStack, bStack) {
     // Identical objects are equal. `0 === -0`, but they aren't identical.
     // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
-    if (a === b) return a !== 0 || 1 / a == 1 / b;
+    if (a === b) return a !== 0 || 1 / a === 1 / b;
     // A strict comparison is necessary because `null == undefined`.
     if (a == null || b == null) return a === b;
     // Unwrap any wrapped objects.
@@ -8070,29 +8126,27 @@ the specific language governing permissions and limitations under the Apache Lic
     if (b instanceof _) b = b._wrapped;
     // Compare `[[Class]]` names.
     var className = toString.call(a);
-    if (className != toString.call(b)) return false;
+    if (className !== toString.call(b)) return false;
     switch (className) {
-      // Strings, numbers, dates, and booleans are compared by value.
+      // Strings, numbers, regular expressions, dates, and booleans are compared by value.
+      case '[object RegExp]':
+      // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
       case '[object String]':
         // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
         // equivalent to `new String("5")`.
-        return a == String(b);
+        return '' + a === '' + b;
       case '[object Number]':
-        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
-        // other numeric values.
-        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+        // `NaN`s are equivalent, but non-reflexive.
+        // Object(NaN) is equivalent to NaN
+        if (+a !== +a) return +b !== +b;
+        // An `egal` comparison is performed for other numeric values.
+        return +a === 0 ? 1 / +a === 1 / b : +a === +b;
       case '[object Date]':
       case '[object Boolean]':
         // Coerce dates and booleans to numeric primitive values. Dates are compared by their
         // millisecond representations. Note that invalid dates with millisecond representations
         // of `NaN` are not equivalent.
-        return +a == +b;
-      // RegExps are compared by their source patterns and flags.
-      case '[object RegExp]':
-        return a.source == b.source &&
-               a.global == b.global &&
-               a.multiline == b.multiline &&
-               a.ignoreCase == b.ignoreCase;
+        return +a === +b;
     }
     if (typeof a != 'object' || typeof b != 'object') return false;
     // Assume equality for cyclic structures. The algorithm for detecting cyclic
@@ -8101,25 +8155,29 @@ the specific language governing permissions and limitations under the Apache Lic
     while (length--) {
       // Linear search. Performance is inversely proportional to the number of
       // unique nested structures.
-      if (aStack[length] == a) return bStack[length] == b;
+      if (aStack[length] === a) return bStack[length] === b;
     }
     // Objects with different constructors are not equivalent, but `Object`s
     // from different frames are.
     var aCtor = a.constructor, bCtor = b.constructor;
-    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
-                             _.isFunction(bCtor) && (bCtor instanceof bCtor))
-                        && ('constructor' in a && 'constructor' in b)) {
+    if (
+      aCtor !== bCtor &&
+      // Handle Object.create(x) cases
+      'constructor' in a && 'constructor' in b &&
+      !(_.isFunction(aCtor) && aCtor instanceof aCtor &&
+        _.isFunction(bCtor) && bCtor instanceof bCtor)
+    ) {
       return false;
     }
     // Add the first object to the stack of traversed objects.
     aStack.push(a);
     bStack.push(b);
-    var size = 0, result = true;
+    var size, result;
     // Recursively compare objects and arrays.
-    if (className == '[object Array]') {
+    if (className === '[object Array]') {
       // Compare array lengths to determine if a deep comparison is necessary.
       size = a.length;
-      result = size == b.length;
+      result = size === b.length;
       if (result) {
         // Deep compare the contents, ignoring non-numeric properties.
         while (size--) {
@@ -8128,20 +8186,16 @@ the specific language governing permissions and limitations under the Apache Lic
       }
     } else {
       // Deep compare objects.
-      for (var key in a) {
-        if (_.has(a, key)) {
-          // Count the expected number of properties.
-          size++;
-          // Deep compare each member.
+      var keys = _.keys(a), key;
+      size = keys.length;
+      // Ensure that both objects contain the same number of properties before comparing deep equality.
+      result = _.keys(b).length === size;
+      if (result) {
+        while (size--) {
+          // Deep compare each member
+          key = keys[size];
           if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
         }
-      }
-      // Ensure that both objects contain the same number of properties.
-      if (result) {
-        for (key in b) {
-          if (_.has(b, key) && !(size--)) break;
-        }
-        result = !size;
       }
     }
     // Remove the first object from the stack of traversed objects.
@@ -8159,7 +8213,7 @@ the specific language governing permissions and limitations under the Apache Lic
   // An "empty" object has no enumerable own-properties.
   _.isEmpty = function(obj) {
     if (obj == null) return true;
-    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    if (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)) return obj.length === 0;
     for (var key in obj) if (_.has(obj, key)) return false;
     return true;
   };
@@ -8172,18 +8226,19 @@ the specific language governing permissions and limitations under the Apache Lic
   // Is a given value an array?
   // Delegates to ECMA5's native Array.isArray
   _.isArray = nativeIsArray || function(obj) {
-    return toString.call(obj) == '[object Array]';
+    return toString.call(obj) === '[object Array]';
   };
 
   // Is a given variable an object?
   _.isObject = function(obj) {
-    return obj === Object(obj);
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
   };
 
   // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
-  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+  _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
     _['is' + name] = function(obj) {
-      return toString.call(obj) == '[object ' + name + ']';
+      return toString.call(obj) === '[object ' + name + ']';
     };
   });
 
@@ -8191,14 +8246,14 @@ the specific language governing permissions and limitations under the Apache Lic
   // there isn't any inspectable "Arguments" type.
   if (!_.isArguments(arguments)) {
     _.isArguments = function(obj) {
-      return !!(obj && _.has(obj, 'callee'));
+      return _.has(obj, 'callee');
     };
   }
 
-  // Optimize `isFunction` if appropriate.
-  if (typeof (/./) !== 'function') {
+  // Optimize `isFunction` if appropriate. Work around an IE 11 bug.
+  if (typeof /./ !== 'function') {
     _.isFunction = function(obj) {
-      return typeof obj === 'function';
+      return typeof obj == 'function' || false;
     };
   }
 
@@ -8209,12 +8264,12 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // Is the given value `NaN`? (NaN is the only number which does not equal itself).
   _.isNaN = function(obj) {
-    return _.isNumber(obj) && obj != +obj;
+    return _.isNumber(obj) && obj !== +obj;
   };
 
   // Is a given value a boolean?
   _.isBoolean = function(obj) {
-    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
+    return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
   };
 
   // Is a given value equal to null?
@@ -8230,7 +8285,7 @@ the specific language governing permissions and limitations under the Apache Lic
   // Shortcut function for checking if an object has a given property directly
   // on itself (in other words, not on a prototype).
   _.has = function(obj, key) {
-    return hasOwnProperty.call(obj, key);
+    return obj != null && hasOwnProperty.call(obj, key);
   };
 
   // Utility Functions
@@ -8243,16 +8298,18 @@ the specific language governing permissions and limitations under the Apache Lic
     return this;
   };
 
-  // Keep the identity function around for default iterators.
+  // Keep the identity function around for default iteratees.
   _.identity = function(value) {
     return value;
   };
 
   _.constant = function(value) {
-    return function () {
+    return function() {
       return value;
     };
   };
+
+  _.noop = function(){};
 
   _.property = function(key) {
     return function(obj) {
@@ -8262,20 +8319,23 @@ the specific language governing permissions and limitations under the Apache Lic
 
   // Returns a predicate for checking whether an object has a given set of `key:value` pairs.
   _.matches = function(attrs) {
+    var pairs = _.pairs(attrs), length = pairs.length;
     return function(obj) {
-      if (obj === attrs) return true; //avoid comparing an object to itself.
-      for (var key in attrs) {
-        if (attrs[key] !== obj[key])
-          return false;
+      if (obj == null) return !length;
+      obj = new Object(obj);
+      for (var i = 0; i < length; i++) {
+        var pair = pairs[i], key = pair[0];
+        if (pair[1] !== obj[key] || !(key in obj)) return false;
       }
       return true;
-    }
+    };
   };
 
   // Run a function **n** times.
-  _.times = function(n, iterator, context) {
+  _.times = function(n, iteratee, context) {
     var accum = Array(Math.max(0, n));
-    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
+    iteratee = createCallback(iteratee, context, 1);
+    for (var i = 0; i < n; i++) accum[i] = iteratee(i);
     return accum;
   };
 
@@ -8289,54 +8349,44 @@ the specific language governing permissions and limitations under the Apache Lic
   };
 
   // A (possibly faster) way to get the current timestamp as an integer.
-  _.now = Date.now || function() { return new Date().getTime(); };
-
-  // List of HTML entities for escaping.
-  var entityMap = {
-    escape: {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;'
-    }
+  _.now = Date.now || function() {
+    return new Date().getTime();
   };
-  entityMap.unescape = _.invert(entityMap.escape);
 
-  // Regexes containing the keys and values listed immediately above.
-  var entityRegexes = {
-    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
-    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
+   // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
   };
+  var unescapeMap = _.invert(escapeMap);
 
   // Functions for escaping and unescaping strings to/from HTML interpolation.
-  _.each(['escape', 'unescape'], function(method) {
-    _[method] = function(string) {
-      if (string == null) return '';
-      return ('' + string).replace(entityRegexes[method], function(match) {
-        return entityMap[method][match];
-      });
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
     };
-  });
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + _.keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+  _.escape = createEscaper(escapeMap);
+  _.unescape = createEscaper(unescapeMap);
 
   // If the value of the named `property` is a function then invoke it with the
   // `object` as context; otherwise, return it.
   _.result = function(object, property) {
     if (object == null) return void 0;
     var value = object[property];
-    return _.isFunction(value) ? value.call(object) : value;
-  };
-
-  // Add your own custom functions to the Underscore object.
-  _.mixin = function(obj) {
-    each(_.functions(obj), function(name) {
-      var func = _[name] = obj[name];
-      _.prototype[name] = function() {
-        var args = [this._wrapped];
-        push.apply(args, arguments);
-        return result.call(this, func.apply(_, args));
-      };
-    });
+    return _.isFunction(value) ? object[property]() : value;
   };
 
   // Generate a unique integer id (unique within the entire client session).
@@ -8367,22 +8417,26 @@ the specific language governing permissions and limitations under the Apache Lic
     '\\':     '\\',
     '\r':     'r',
     '\n':     'n',
-    '\t':     't',
     '\u2028': 'u2028',
     '\u2029': 'u2029'
   };
 
-  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+  var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escapeChar = function(match) {
+    return '\\' + escapes[match];
+  };
 
   // JavaScript micro-templating, similar to John Resig's implementation.
   // Underscore templating handles arbitrary delimiters, preserves whitespace,
   // and correctly escapes quotes within interpolated code.
-  _.template = function(text, data, settings) {
-    var render;
+  // NB: `oldSettings` only exists for backwards compatibility.
+  _.template = function(text, settings, oldSettings) {
+    if (!settings && oldSettings) settings = oldSettings;
     settings = _.defaults({}, settings, _.templateSettings);
 
     // Combine delimiters into one regular expression via alternation.
-    var matcher = new RegExp([
+    var matcher = RegExp([
       (settings.escape || noMatch).source,
       (settings.interpolate || noMatch).source,
       (settings.evaluate || noMatch).source
@@ -8392,19 +8446,18 @@ the specific language governing permissions and limitations under the Apache Lic
     var index = 0;
     var source = "__p+='";
     text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-      source += text.slice(index, offset)
-        .replace(escaper, function(match) { return '\\' + escapes[match]; });
+      source += text.slice(index, offset).replace(escaper, escapeChar);
+      index = offset + match.length;
 
       if (escape) {
         source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-      }
-      if (interpolate) {
+      } else if (interpolate) {
         source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-      }
-      if (evaluate) {
+      } else if (evaluate) {
         source += "';\n" + evaluate + "\n__p+='";
       }
-      index = offset + match.length;
+
+      // Adobe VMs need the match returned to produce the correct offest.
       return match;
     });
     source += "';\n";
@@ -8414,29 +8467,31 @@ the specific language governing permissions and limitations under the Apache Lic
 
     source = "var __t,__p='',__j=Array.prototype.join," +
       "print=function(){__p+=__j.call(arguments,'');};\n" +
-      source + "return __p;\n";
+      source + 'return __p;\n';
 
     try {
-      render = new Function(settings.variable || 'obj', '_', source);
+      var render = new Function(settings.variable || 'obj', '_', source);
     } catch (e) {
       e.source = source;
       throw e;
     }
 
-    if (data) return render(data, _);
     var template = function(data) {
       return render.call(this, data, _);
     };
 
-    // Provide the compiled function source as a convenience for precompilation.
-    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+    // Provide the compiled source as a convenience for precompilation.
+    var argument = settings.variable || 'obj';
+    template.source = 'function(' + argument + '){\n' + source + '}';
 
     return template;
   };
 
-  // Add a "chain" function, which will delegate to the wrapper.
+  // Add a "chain" function. Start chaining a wrapped Underscore object.
   _.chain = function(obj) {
-    return _(obj).chain();
+    var instance = _(obj);
+    instance._chain = true;
+    return instance;
   };
 
   // OOP
@@ -8450,42 +8505,44 @@ the specific language governing permissions and limitations under the Apache Lic
     return this._chain ? _(obj).chain() : obj;
   };
 
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    _.each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
   // Add all of the Underscore functions to the wrapper object.
   _.mixin(_);
 
   // Add all mutator Array functions to the wrapper.
-  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+  _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
       var obj = this._wrapped;
       method.apply(obj, arguments);
-      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
+      if ((name === 'shift' || name === 'splice') && obj.length === 0) delete obj[0];
       return result.call(this, obj);
     };
   });
 
   // Add all accessor Array functions to the wrapper.
-  each(['concat', 'join', 'slice'], function(name) {
+  _.each(['concat', 'join', 'slice'], function(name) {
     var method = ArrayProto[name];
     _.prototype[name] = function() {
       return result.call(this, method.apply(this._wrapped, arguments));
     };
   });
 
-  _.extend(_.prototype, {
-
-    // Start chaining a wrapped Underscore object.
-    chain: function() {
-      this._chain = true;
-      return this;
-    },
-
-    // Extracts the result from a wrapped and chained object.
-    value: function() {
-      return this._wrapped;
-    }
-
-  });
+  // Extracts the result from a wrapped and chained object.
+  _.prototype.value = function() {
+    return this._wrapped;
+  };
 
   // AMD registration happens at the end for compatibility with AMD loaders
   // that may not enforce next-turn semantics on modules. Even though general
@@ -8499,6 +8556,6 @@ the specific language governing permissions and limitations under the Apache Lic
       return _;
     });
   }
-}).call(this);
+}.call(this));
 
 },{}]},{},[1]);
