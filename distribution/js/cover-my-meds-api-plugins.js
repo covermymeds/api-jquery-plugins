@@ -564,7 +564,6 @@ CoverMyDashboard.prototype.loadData = function (callback) {
         self.renderContent();
     }).fail(function (xhr, status, errorThrown) {
         $('.content', self.elem).html('There was an error processing your request. Please try again.');
-        $('.content', self.elem).html(xhr.statusText);
     });
 };
 
