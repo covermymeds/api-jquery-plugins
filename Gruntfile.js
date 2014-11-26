@@ -90,7 +90,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
+                files: ['app/plugins.js', 'app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
                 tasks: ['browserify'],
                 options: {
                     interrupt: true
