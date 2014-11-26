@@ -19,9 +19,9 @@ var Base64 = require('../vendor/base64.js'),
  * @constructor
  */
 var CoverMyDashboard = function (options) {
-    this.elem = options.elem;   // jQuery object to draw into
+    this.elem = options.elem;
     this.url = options.url;
-    this.defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests/search?v=' + options.version;
+    this.defaultUrl = 'https://api.covermymeds.com/requests/search?v=' + options.version;
 
     this.tokenIds = options.tokenIds || [];
     this.apiId = options.apiId || '';
@@ -106,8 +106,8 @@ CoverMyDashboard.prototype.loadData = function (callback) {
     }).done(function (data, status, xhr) {
         self.processData(data.requests);
         self.renderContent();
-    }).fail(function (data, status, xhr) {
-        self.elem.empty().text('There was an error processing your request. Please try again.');
+    }).fail(function (xhr, status, errorThrown) {
+        $('.content', self.elem).html('There was an error processing your request. Please try again.');
     });
 };
 

@@ -4,6 +4,7 @@
 var Base64 = require('../vendor/base64.js'),
     template = require('../templates/form-search.html'),
     $ = require('jquery'),
+    _ = require('underscore'),
     select2 = require('select2-browserify');
 
 module.exports = function (options) {
@@ -12,25 +13,26 @@ module.exports = function (options) {
     return this.each(function () {
         var defaultUrl;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/forms?v=' + options.version;
+        defaultUrl = 'https://api.covermymeds.com/forms?v=' + options.version;
 
-        // Initialize select2
         $(this).select2({
             placeholder: 'Plan, PBM, Form name, BIN, or Contract ID',
             minimumInputLength: 4,
             ajax: {
                 quietMillis: 250,
                 url: options.url || defaultUrl,
-                transport: function (params) {
+                transport: function (xhrOptions) {
                     // Add authorization header if directly querying API;
                     // otherwise we assume our custom URL will handle authorization
                     if (!options.url) {
-                        params.beforeSend = function (xhr) {
-                            xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
-                        };
+                        _.extend(xhrOptions, {
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + Base64.encode(options.apiId + ':x-no-pass'));
+                            }
+                        });
                     }
 
-                    return $.ajax(params);
+                    return $.ajax(xhrOptions);
                 },
                 data: function (term, page) {
                     var state,
