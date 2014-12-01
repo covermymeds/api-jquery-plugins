@@ -12,7 +12,8 @@ module.exports = function (options) {
             button,
             active;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/requests?v=' + options.version;
+        defaultUrl = 'https://api.covermymeds.com/requests?v=' + options.version;
+
         button = $(this);
         active = false;
 

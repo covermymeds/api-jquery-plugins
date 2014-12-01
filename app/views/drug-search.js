@@ -10,14 +10,9 @@ module.exports = function (options) {
     options = $.extend({}, options);
 
     return this.each(function () {
-        var defaultUrl,
-            originalCorsSupport;
+        var defaultUrl;
 
-        defaultUrl = 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/drugs?v=' + options.version;
-        defaultUrl = 'https://t1-api.testing.covermymeds.com/drugs?v=' + options.version;
-
-        originalCorsSupport = $.support.cors;
-        $.support.cors = true;
+        defaultUrl = 'https://api.covermymeds.com/drugs?v=' + options.version;
 
         $(this).select2({
             placeholder: 'Begin typing the medication name and select from list',
@@ -36,35 +31,7 @@ module.exports = function (options) {
                         });
                     }
 
-                    xhrOptions.error = function (xhr, status) {
-                        alert(status);
-                        alert(xhr.statusText);
-                    };
-
-                    if (!originalCorsSupport) {
-                        _.extend(xhrOptions, {
-                            xhr: function () {
-                                var iframe,
-                                    xhr;
-
-                                iframe = $('iframe.cors')[0].contentWindow;
-
-                                if (iframe.XMLHttpRequest !== undefined) {
-                                    alert('creating regular ajax obj')
-                                    // xhr = new iframe.XMLHttpRequest();
-                                } else {
-                                    alert('creating MS XMLHTTP obj!');
-                                    // xhr = new iframe.ActiveXObject('Microsoft.XMLHTTP');
-                                }
-
-                                return xhr;
-                            }
-                        });
-                    }
-
-                    return _($.ajax(xhrOptions)).tap(function () {
-                        $.support.cors = originalCorsSupport;
-                    });
+                    return $.ajax(xhrOptions);
                 },
                 data: function (term, page) {
                     return {
