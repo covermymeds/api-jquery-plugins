@@ -60,6 +60,7 @@ module.exports = function (grunt) {
                     specs: 'spec/*-spec.js',
                     vendor: [
                         'node_modules/jquery/dist/jquery.min.js',
+                        'node_modules/underscore/underscore-min.js',
                         'spec/vendor/mock-ajax.js'
                     ],
                     keepRunner: false
