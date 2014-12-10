@@ -2,11 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--[if lte IE 9]>
+      <script src="distribution/js/vendor/html5shiv.min.js"></script>
+      <script src="distribution/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="distribution/js/cover-my-meds-api-plugins.js"></script>
     <link rel="stylesheet" type="text/css" href="distribution/css/stylesheet.css">
     <!--[if lte IE 7]>
-    <link rel="stylesheet" type="text/css" href="distribution/css/old-ie.css">
+      <link rel="stylesheet" type="text/css" href="distribution/css/old-ie.css">
     <![endif]-->
     <style type="text/css">
       body { padding: 20px; }
@@ -83,7 +88,7 @@
           <label for="state">Patient State</label>
           <select id="state" name="request[state]" class="form-control">
             <option>Select a state</option>
-            <option value="OH">Ohio</option>
+            <option selected="selected" value="OH">Ohio</option>
           </select>
         </p>
         <p>

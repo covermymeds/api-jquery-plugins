@@ -50,6 +50,8 @@ describe('"Create Request" button', function () {
 
         $('#create-pa').trigger('click');
 
-        expect($('#success').text()).toBe('Your request was created.');
+        _.defer(function () {
+            expect($('#success').text()).toBe('Your request was created.');
+        });
     });
 });

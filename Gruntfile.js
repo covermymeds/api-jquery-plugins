@@ -25,7 +25,7 @@ module.exports = function (grunt) {
                     }, {
                         expand: true,
                         flatten: true,
-                        src: ['app/vendor/html5shiv.min.js'],
+                        src: ['app/vendor/html5shiv.min.js', 'app/vendor/respond.min.js'],
                         dest: 'distribution/js/vendor/'
                     }, {
                         expand: true,
@@ -60,6 +60,7 @@ module.exports = function (grunt) {
                     specs: 'spec/*-spec.js',
                     vendor: [
                         'node_modules/jquery/dist/jquery.min.js',
+                        'node_modules/underscore/underscore-min.js',
                         'spec/vendor/mock-ajax.js'
                     ],
                     keepRunner: false
@@ -90,7 +91,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
+                files: ['app/plugins.js', 'app/views/*.js', 'app/templates/*.html', 'spec/*.js'],
                 tasks: ['browserify'],
                 options: {
                     interrupt: true

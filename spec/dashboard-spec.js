@@ -32,6 +32,8 @@ describe('PA Dashboard', function () {
             tokenIds: ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o']
         });
 
-        expect($('table.requests').find('tr').length).not.toBe(0);
+        _.defer(function () {
+            expect($('table.requests').find('tr').length).not.toBe(0);
+        });
     });
 });
