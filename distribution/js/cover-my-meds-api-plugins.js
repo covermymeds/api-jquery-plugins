@@ -477,12 +477,12 @@ var Base64 = require('../vendor/base64.js'),
 var CoverMyDashboard = function (options) {
     this.elem = options.elem;
     this.url = options.url;
-    this.defaultUrl = 'https://api.covermymeds.com/requests/search?v=' + options.version;
+    this.defaultUrl = 'https://api.covermymeds.com/requests?v=' + options.version;
 
     this.tokenIds = options.tokenIds || [];
     this.apiId = options.apiId || '';
 
-    this.currentPage = 0;
+    this.currentPage = 0; 
     this.perPage = 10;
 
     this.currentOrder = 'newest';
@@ -551,7 +551,7 @@ CoverMyDashboard.prototype.loadData = function (callback) {
     $('.content', this.elem).html('<h3>Loading...</h3>');
 
     return $.ajax({
-        method: 'POST',
+        method: 'GET',
         url: this.url || this.defaultUrl,
         data: { token_ids: this.tokenIds },
         beforeSend: function (xhr, settings) {
