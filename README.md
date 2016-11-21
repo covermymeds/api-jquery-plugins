@@ -230,12 +230,12 @@ Show some text to help users get in touch with CoverMyMeds.
 
 -------------------------------
 
-#### "Show Request Page" widget - $.requestpages(options)
+#### "Show Request Page" widget - $.showRequestPagesForm(options)
 
 Given a URL to a request-page, draw it in the given HTML element attached.  Request_Page objects represent the visual display of a given request in a particular state.  
 
 ```
-<div id="request-pages"
+<div id="request-pages">
   <p>Loading Prior Authorization form...</p>
 </div>
 

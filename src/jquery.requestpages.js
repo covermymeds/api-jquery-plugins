@@ -22,7 +22,6 @@ window.RequestPages = function(options) {
 
   this.resourceUrl = options.url || 'https://' + (options.debug ? 'staging.' : '') + 'api.covermymeds.com/request-pages/' + this.requestId + 
     '?v=' + this.version + '&api_id=' + this.apiId + '&token_id=' + this.tokenId;
-  console.log("this is the resourceURL "+this.resourceUrl);
   
   this._getSuccessCallback = _.bind(function(data) {
     this.form = new RequestPages.Form(data['request_page']['forms'], data['request_page']['data'], data['request_page']['actions']);
