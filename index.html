@@ -7,7 +7,7 @@
       <script src="distribution/js/vendor/html5shiv.min.js"></script>
       <script src="distribution/js/vendor/respond.min.js"></script>
     <![endif]-->
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="distribution/js/cover-my-meds-api-plugins.js"></script>
     <link rel="stylesheet" type="text/css" href="distribution/css/stylesheet.css">
     <!--[if lte IE 7]>
@@ -27,8 +27,8 @@
 
         // Store some example PA IDs
         if (tokenIds.length === 0) {
-          tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
-          localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
+           tokenIds = ['gq9vmqai2mkwewv1y55x', '33lhqakhtmas8r965w39', 's4c85zi3ku0b9re5sg1o'];
+           localStorage.setItem('cmm_plugin_api_token_ids', JSON.stringify(tokenIds));
         }
 
         $('#drug-search').drugSearch({
